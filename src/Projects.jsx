@@ -1,10 +1,55 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from './LanguageContext';
 
 const Projects = () => {
+  const { language } = useLanguage();
   const [selectedId, setSelectedId] = useState(null);
 
-  const projects = [
+  const projects = language === 'en' ? [
+    {
+      id: 1,
+      title: "Medtrack",
+      description:
+        "This is a website similar to a health center, where there is health information such as how to care for the stomach, healthy waste disposal, health tips, and also a medicine shop consisting of medicines for stomach aches, headaches, flu, etc. at affordable prices.",
+      image: "src/assets/img/MedTrackLogo.png",
+      designImages: [
+        "src/assets/img/MedTrack1.png",
+        "src/assets/img/MedTrack2.png",
+        "src/assets/img/MedTrack3.png",
+      ],
+      url: "https://www.figma.com/design/lsYYkr3WivyFrGkZNYAWK5/MedTrack--nai-archive?node-id=0-1&node-type=CANVAS&t=Q0nZ34F9n1mB65PE-0",
+      urlname: "Figma Link",
+    },
+    {
+      id: 2,
+      title: "Online Store",
+      description:
+        "Online Store is a simple e-commerce application with CRUD auth features, data manipulation for managing or purchasing products. This application also has an admin feature that can manage user and product data.",
+      image: "src/assets/img/TokoOnline.jpeg",
+      designImages: [
+        "src/assets/img/TokoOnline2.jpeg",
+        "src/assets/img/TokoOnline3.jpeg",
+        "src/assets/img/TokoOnline4.jpeg",
+      ],
+      url: "https://github.com/RadjaShiqnals/TokoOnline",
+      urlname: "Github Link",
+    },
+    {
+      id: 3,
+      title: "Java Project",
+      description:
+        "This program is a simple program made using the Java programming language. This program can calculate the area and volume of geometric shapes such as blocks, cubes, and tubes.",
+      image: "src/assets/img/Java.png",
+      designImages: [
+        "src/assets/img/Java1.png",
+        "src/assets/img/Java2.png",
+        "src/assets/img/Java3.png",
+      ],
+      url: "https://github.com/RadjaShiqnals/JavaProject",
+      urlname: "Github Link",
+    },
+  ] : [
     {
       id: 1,
       title: "Medtrack",
@@ -80,22 +125,6 @@ const Projects = () => {
             >
               {project.description}
             </p>
-            {selectedId === project.id && (
-              <div className="flex flex-wrap">
-                {project.designImages.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    className="w-full md:w-1/2 p-2"
-                  >
-                    <img
-                      src={image}
-                      alt={project.title}
-                      className="h-48 w-full object-cover object-center"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            )}
           </motion.div>
         ))}
 
@@ -158,8 +187,3 @@ const Projects = () => {
 };
 
 export default Projects;
-
-
-
-
-
