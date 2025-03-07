@@ -1,0 +1,41 @@
+/* Section base styling - hidden by default */
+.section {
+  /* Positioning for animations */
+  position: absolute;
+  width: 100%;
+  
+  /* Initial state for animations */
+  opacity: 0;
+  transform: translateX(100px);
+  
+  /* Animation settings */
+  transition: all 0.5s ease-in-out;
+  display: none;
+}
+
+/* Active section styling - visible and animated */
+.active {
+  opacity: 1;
+  transform: translateX(0);
+  display: block;
+}
+
+/* Container for all sections */
+.container {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* 404 page styling */
+#not-found {
+  text-align: center;
+  padding-top: 4rem;
+}
+
+/* 404 page heading */
+#not-found h1 {
+  font-size: 2.5rem;
+  color: #ff4444;
+  margin-bottom: 1rem;
+}
