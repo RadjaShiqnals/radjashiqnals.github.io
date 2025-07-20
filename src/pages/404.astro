@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+import cuteVideo from '/cute.mp4';
+---
+
+<Layout title="404: Not Found">
+    <div class="relative font-sans text-white">
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
+        >
+            <source src={cuteVideo} type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="absolute top-0 left-0 -z-10 h-full w-full bg-black bg-opacity-60"></div>
+
+        <div
+            class="relative z-10 flex min-h-screen flex-col items-center justify-center p-4 text-center"
+        >
+            <h1 class="text-9xl font-bold text-kita-red [text-shadow:0_4px_8px_rgba(0,0,0,0.4)]">
+                404
+            </h1>
+            <p class="mt-4 text-2xl font-semibold md:text-3xl [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]">
+                Page Not Found
+            </p>
+            <p class="mt-2 text-lg text-gray-400 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
+                Sorry, we couldn't find the page you were looking for.
+            </p>
+            <a
+                href="/"
+                class="mt-8 inline-flex items-center rounded-lg bg-kita-red px-6 py-3 font-bold text-white transition-colors duration-300 hover:bg-kita-red-dark"
+            >
+                <Icon name="mdi:home" class="mr-2 h-6 w-6" />
+                Go to Homepage
+            </a>
+        </div>
+    </div>
+</Layout>
