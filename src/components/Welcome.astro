@@ -1,6 +1,5 @@
 ---
 import { Icon } from 'astro-icon/components';
-import cuteVideo from '/output.mp4';
 const projects = [
   {
     title: 'Java Project',
@@ -34,7 +33,7 @@ const projects = [
             playsinline
             class="h-full w-full object-cover"
         >
-            <source src={cuteVideo} type="video/mp4" />
+            <source src="/output.mp4" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
         <!-- The separate audio tag is no longer needed -->
