@@ -1,6 +1,29 @@
 ---
 import { Icon } from 'astro-icon/components';
 import cuteVideo from '/cute.mp4';
+const projects = [
+  {
+    title: 'Java Project',
+    logo: '/projects/Java.png',
+    images: ['/projects/Java1.png', '/projects/Java2.png', '/projects/Java3.png'],
+    link: 'https://github.com/RadjaShiqnals/JavaProject',
+    description: 'A collection of Java OOP and geometry projects, including inheritance and volume calculations for 3D shapes.',
+  },
+  {
+    title: 'Toko Online (Online Shop)',
+    logo: '/projects/TokoOnline.jpeg',
+    images: ['/projects/TokoOnline2.jpeg', '/projects/TokoOnline3.jpeg', '/projects/TokoOnline4.jpeg'],
+    link: 'https://github.com/RadjaShiqnals/TokoOnline',
+    description: 'A full-featured online shop web application with product management, cart, and transaction features.',
+  },
+  {
+    title: 'Medtrack',
+    logo: '/projects/MedTrackLogo.png',
+    images: ['/projects/MedTrack1.png', '/projects/MedTrack2.png', '/projects/MedTrack3.png'],
+    link: 'https://www.figma.com/design/lsYYkr3WivyFrGkZNYAWK5/MedTrack--nai-archive?node-id=0-1&node-type=CANVAS&t=Q0nZ34F9n1mB65PE-0',
+    description: 'A mobile app UI/UX prototype for tracking medication schedules, designed in Figma.',
+  },
+];
 ---
 
 <div class="relative font-sans text-white">
@@ -99,82 +122,37 @@ import cuteVideo from '/cute.mp4';
 
         <!-- Projects Section -->
         <section id="projects" class="py-20">
-            <div class="container mx-auto px-4">
-                <h2
-                    class="mb-12 text-center text-3xl font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]"
+          <div class="container mx-auto px-4">
+            <h2 class="mb-12 text-center text-3xl font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]">
+              My Projects
+            </h2>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project, idx) => (
+                <div
+                  class="cursor-pointer transform overflow-hidden rounded-lg bg-kita-shirt transition-transform duration-300 hover:-translate-y-2"
+                  onclick={`window.showProjectModal(${idx})`}
                 >
-                    My Projects
-                </h2>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    <!-- Project Card 1 -->
-                    <div
-                        class="transform overflow-hidden rounded-lg bg-kita-shirt transition-transform duration-300 hover:-translate-y-2"
-                    >
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Vehicle Reservation System</h3>
-                            <p class="mb-4 text-gray-400">
-                                Handles hierarchical approval, driver assignment, and tracking. Features JWT-based
-                                auth and exportable reports.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >Laravel 11</span
-                                >
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >React</span
-                                >
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >JWT</span
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Project Card 2 -->
-                    <div
-                        class="transform overflow-hidden rounded-lg bg-kita-shirt transition-transform duration-300 hover:-translate-y-2"
-                    >
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">MedTrack UI/UX Prototype</h3>
-                            <p class="mb-4 text-gray-400">
-                                Designed and prototyped a mobile app UI to track medication schedules, created in
-                                collaboration with health professionals.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >Figma</span
-                                >
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >UI/UX Design</span
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Project Card 3 -->
-                    <div
-                        class="transform overflow-hidden rounded-lg bg-kita-shirt transition-transform duration-300 hover:-translate-y-2"
-                    >
-                        <div class="p-6">
-                            <h3 class="mb-2 text-xl font-bold">Wikusama Café App</h3>
-                            <p class="mb-4 text-gray-400">
-                                Internal school project for a digital café ordering system with a modular admin
-                                interface and responsive design.
-                            </p>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >Vue.js</span
-                                >
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >Laravel</span
-                                >
-                                <span class="rounded-full bg-kita-red px-2.5 py-1 text-xs font-semibold"
-                                    >Tailwind</span
-                                >
-                            </div>
-                        </div>
-                    </div>
+                  <div class="p-6 flex flex-col items-center">
+                    <img src={project.logo} alt={project.title + ' logo'} class="mb-4 h-20 w-20 object-contain rounded-lg" />
+                    <h3 class="mb-2 text-xl font-bold">{project.title}</h3>
+                    <p class="mb-4 text-gray-400 text-center">{project.description}</p>
+                    <a href={project.link} target="_blank" class="mt-2 text-kita-red underline">View Project</a>
+                  </div>
                 </div>
+              ))}
             </div>
+          </div>
         </section>
+
+        <dialog id="project-modal" class="p-0 bg-transparent">
+          <div id="modal-content" class="bg-kita-shirt rounded-lg max-w-lg w-full p-6 relative text-white hidden"></div>
+        </dialog>
+
+        <dialog id="image-modal" class="p-0 bg-transparent">
+          <div id="image-modal-content" class="relative flex items-center justify-center">
+            <!-- Image will be injected here -->
+          </div>
+        </dialog>
     </main>
 
     <footer class="relative z-10 py-8 text-center">
@@ -184,7 +162,24 @@ import cuteVideo from '/cute.mp4';
     </footer>
 </div>
 
+<style>
+    dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+    dialog {
+        border: none;
+    }
+</style>
+
 <script>
+    declare global {
+        interface Window {
+            showProjectModal: (idx: number) => void;
+            closeProjectModal: () => void;
+            showImageModal: (imgSrc: string) => void;
+            closeImageModal: () => void;
+        }
+    }
     document.addEventListener('DOMContentLoaded', () => {
         const video = document.getElementById('bg-video') as HTMLVideoElement;
         const playPauseBtn = document.getElementById('play-pause-btn');
@@ -207,7 +202,6 @@ import cuteVideo from '/cute.mp4';
                 video.pause();
             } else {
                 video.play().catch(() => {
-                    // Autoplay was prevented, update state and UI
                     localStorage.setItem('videoPaused', 'true');
                     updateButton();
                 });
@@ -227,5 +221,88 @@ import cuteVideo from '/cute.mp4';
             video.addEventListener('play', updateButton);
             video.addEventListener('pause', updateButton);
         }
+
+        const imageModal = document.getElementById('image-modal') as HTMLDialogElement;
+        if (imageModal) {
+            imageModal.addEventListener('click', (event) => {
+                if (event.target === imageModal) {
+                    window.closeImageModal();
+                }
+            });
+        }
     });
+
+    const projectsData = [
+        {
+            title: 'Java Project',
+            logo: '/projects/Java.png',
+            images: ['/projects/Java1.png', '/projects/Java2.png', '/projects/Java3.png'],
+            link: 'https://github.com/RadjaShiqnals/JavaProject',
+            description: 'A collection of Java OOP and geometry projects, including inheritance and volume calculations for 3D shapes.',
+        },
+        {
+            title: 'Toko Online (Online Shop)',
+            logo: '/projects/TokoOnline.jpeg',
+            images: ['/projects/TokoOnline2.jpeg', '/projects/TokoOnline3.jpeg', '/projects/TokoOnline4.jpeg'],
+            link: 'https://github.com/RadjaShiqnals/TokoOnline',
+            description: 'A full-featured online shop web application with product management, cart, and transaction features.',
+        },
+        {
+            title: 'Medtrack',
+            logo: '/projects/MedTrackLogo.png',
+            images: ['/projects/MedTrack1.png', '/projects/MedTrack2.png', '/projects/MedTrack3.png'],
+            link: 'https://www.figma.com/design/lsYYkr3WivyFrGkZNYAWK5/MedTrack--nai-archive?node-id=0-1&node-type=CANVAS&t=Q0nZ34F9n1mB65PE-0',
+            description: 'A mobile app UI/UX prototype for tracking medication schedules, designed in Figma.',
+        },
+    ];
+
+    window.showProjectModal = function(idx: number) {
+        const modal = document.getElementById('project-modal') as HTMLDialogElement;
+        const content = document.getElementById('modal-content');
+        const project = projectsData[idx];
+        if (modal && content && project) {
+            content.innerHTML = `
+                <button class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl z-10" onclick="window.closeProjectModal()" aria-label="Close">&times;</button>
+                <img src="${project.logo}" alt="${project.title} logo" class="mb-4 h-24 w-24 object-contain mx-auto rounded-lg" />
+                <h3 class="mb-2 text-2xl font-bold text-center">${project.title}</h3>
+                <p class="mb-4 text-gray-300 text-center">${project.description}</p>
+                <div class="flex flex-wrap justify-center gap-4 mb-4">
+                  ${project.images.map(img => `<img src="${img}" alt="Project detail" class="h-32 w-32 object-cover rounded-md border border-gray-700 cursor-zoom-in" onclick="window.showImageModal('${img}')"/>`).join('')}
+                </div>
+                <a href="${project.link}" target="_blank" class="block text-center text-kita-red underline font-bold">Open Project</a>
+            `;
+            content.classList.remove('hidden');
+            modal.showModal();
+        }
+    };
+
+    window.closeProjectModal = function() {
+        const modal = document.getElementById('project-modal') as HTMLDialogElement;
+        const content = document.getElementById('modal-content');
+        if (modal && content) {
+            modal.close();
+            content.classList.add('hidden');
+            content.innerHTML = '';
+        }
+    };
+
+    window.showImageModal = function(imgSrc: string) {
+        const modal = document.getElementById('image-modal') as HTMLDialogElement;
+        const content = document.getElementById('image-modal-content');
+        if (modal && content) {
+            content.innerHTML = `
+                <img src="${imgSrc}" alt="Zoomed Image" class="max-w-[90vw] max-h-[90vh] rounded-lg shadow-lg" />
+            `;
+            modal.showModal();
+        }
+    };
+
+    window.closeImageModal = function() {
+        const modal = document.getElementById('image-modal') as HTMLDialogElement;
+        const content = document.getElementById('image-modal-content');
+        if (modal && content) {
+            modal.close();
+            content.innerHTML = '';
+        }
+    };
 </script>
