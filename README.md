@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Website
+
+A modern, responsive portfolio website built with Next.js, React, TypeScript, and Tailwind CSS.
+
+## Features
+
+- **Responsive Design**: Fully responsive layout that works on all devices
+- **Modern UI**: Clean and professional design with dark mode support
+- **Interactive Project Gallery**: Expandable project cards with image galleries
+- **Social Media Integration**: Font Awesome icons for social media links
+- **Performance Optimized**: Built with Next.js for optimal performance
+- **Type Safe**: Full TypeScript support for better development experience
+
+## Pages
+
+### Homepage
+- Hero section with profile image and introduction
+- Services/skills overview with icons
+- Call-to-action sections
+- Smooth scrolling and animations
+
+### Projects Page
+- Grid layout of project cards
+- Click-to-expand modal with:
+  - Image gallery with navigation
+  - Detailed project descriptions
+  - Technology stack badges
+  - Links to live demo and source code
+
+### About Page
+- Personal introduction with profile photo
+- Skills and technologies organized by category
+- Experience timeline
+- Social media links (LinkedIn, GitHub, Twitter, Email)
+- Download resume button
+
+## Tech Stack
+
+- **Framework**: Next.js 15.5.2
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Icons**: Font Awesome
+- **Linting**: Biome
+- **Image Placeholders**: Placehold.co
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Available Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production with Turbopack
+- `npm run start` - Start production server
+- `npm run lint` - Run Biome linter
+- `npm run format` - Format code with Biome
+
+## Customization
+
+### Personal Information
+Update the following files with your personal information:
+- Replace placeholder text in `src/app/page.tsx`
+- Update profile information in `src/app/about/page.tsx`
+- Add your projects to the projects array in `src/app/projects/page.tsx`
+
+### Styling
+- Modify colors and themes in `src/app/globals.css`
+- Update component styles using Tailwind CSS classes
+- Customize the navigation in `src/components/Navigation.tsx`
+
+### Images
+- Replace placeholder images with your actual photos
+- Add your project screenshots to the projects data
+- Update social media links with your actual profiles
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── about/
+│   │   └── page.tsx          # About page
+│   ├── projects/
+│   │   └── page.tsx          # Projects page
+│   ├── globals.css           # Global styles
+│   ├── layout.tsx            # Root layout
+│   └── page.tsx              # Homepage
+├── components/
+│   └── Navigation.tsx        # Navigation component
+└── lib/
+    └── fontawesome.ts        # Font Awesome configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project is ready to be deployed on platforms like:
+- Vercel (recommended for Next.js)
+- Netlify
+- GitHub Pages
+- Any hosting service that supports Node.js
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
+This project is open source and available under the [MIT License](LICENSE).
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Feel free to submit issues and enhancement requests!
