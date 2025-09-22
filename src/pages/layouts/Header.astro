@@ -1,0 +1,29 @@
+---
+---
+
+<header class="header">
+  <div class="header-content">
+    <a href="/" class="logo">Your Portfolio</a>
+
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon" id="theme-icon"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  (function() {
+    const savedTheme = localStorage.getItem('theme');
+    const html = document.documentElement;
+
+    if (savedTheme === 'dark') {
+      html.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>

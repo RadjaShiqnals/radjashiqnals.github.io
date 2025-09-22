@@ -1,0 +1,165 @@
+---
+import Header from './layouts/Header.astro';
+import Sidebar from './layouts/Sidebar.astro';
+import Footer from './layouts/Footer.astro';
+import '../styles/global.css';
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Your Portfolio</title>
+		<meta name="description" content="A modern, fast portfolio website" />
+	</head>
+	<body>
+		<Header />
+
+		<Sidebar />
+
+		<main class="main-content">
+			<div class="content-container">
+				<div class="content-card fade-in">
+					<h1 class="content-title">
+						Welcome to My Portfolio
+					</h1>
+
+					<p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2rem;">
+						This is your main content area where you can showcase your projects, blog posts,
+						or any other content you'd like to display.
+					</p>
+
+					<section class="content-card">
+						<h2 class="section-title">Featured Projects</h2>
+						<div class="project-grid">
+							<div class="project-card">
+								<h3 class="project-title">Project One</h3>
+								<p class="project-description">Description of your amazing project goes here. Built with modern technologies.</p>
+							</div>
+							<div class="project-card">
+								<h3 class="project-title">Project Two</h3>
+								<p class="project-description">Description of another fantastic project. Focused on performance and user experience.</p>
+							</div>
+							<div class="project-card">
+								<h3 class="project-title">Project Three</h3>
+								<p class="project-description">A third project showcasing different skills and technologies.</p>
+							</div>
+							<div class="project-card">
+								<h3 class="project-title">Project Four</h3>
+								<p class="project-description">Another example of your work demonstrating your capabilities.</p>
+							</div>
+						</div>
+					</section>
+
+					<section class="content-card">
+						<h2 class="section-title">About Me</h2>
+						<p style="color: var(--text-secondary); line-height: 1.7;">
+							Add more detailed information about yourself, your skills, experience,
+							and what makes you passionate about development. This content area is
+							fully customizable to match your needs. The new design is optimized
+							for performance while maintaining a clean, professional appearance.
+						</p>
+					</section>
+
+					<section class="content-card">
+						<h2 class="section-title">Skills & Technologies</h2>
+						<div class="skills-container">
+							<span class="skill-tag">JavaScript</span>
+							<span class="skill-tag">TypeScript</span>
+							<span class="skill-tag">React</span>
+							<span class="skill-tag">Astro</span>
+							<span class="skill-tag">Node.js</span>
+							<span class="skill-tag">CSS</span>
+							<span class="skill-tag">HTML</span>
+							<span class="skill-tag">Git</span>
+							<span class="skill-tag">Web Performance</span>
+							<span class="skill-tag">Responsive Design</span>
+						</div>
+					</section>
+
+					<section class="content-card">
+						<h2 class="section-title">Recent Blog Posts</h2>
+						<div style="display: flex; flex-direction: column; gap: 1rem;">
+							<article style="padding: 1rem; background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 0.5rem;">
+								<h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Optimizing Web Performance</h3>
+								<p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">Learn how to make your websites blazingly fast with these optimization techniques...</p>
+								<time style="color: var(--text-secondary); font-size: 0.8rem;">Dec 2024</time>
+							</article>
+							<article style="padding: 1rem; background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 0.5rem;">
+								<h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Building with Astro</h3>
+								<p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">A comprehensive guide to building modern websites with Astro framework...</p>
+								<time style="color: var(--text-secondary); font-size: 0.8rem;">Nov 2024</time>
+							</article>
+						</div>
+					</section>
+				</div>
+			</div>
+		</main>
+
+		<Footer />
+
+		<script>
+			function toggleTheme() {
+				const html = document.documentElement;
+				const themeIcon = document.getElementById('theme-icon');
+
+				if (html.getAttribute('data-theme') === 'dark') {
+					html.removeAttribute('data-theme');
+					themeIcon.className = 'fas fa-moon';
+					localStorage.setItem('theme', 'light');
+				} else {
+					html.setAttribute('data-theme', 'dark');
+					themeIcon.className = 'fas fa-sun';
+					localStorage.setItem('theme', 'dark');
+				}
+			}
+
+			function toggleSidebar() {
+				const sidebar = document.querySelector('.sidebar');
+				sidebar.classList.toggle('open');
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				const themeToggle = document.getElementById('theme-toggle');
+				const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+				const themeIcon = document.getElementById('theme-icon');
+
+				if (themeToggle) {
+					themeToggle.addEventListener('click', toggleTheme);
+				}
+
+				if (mobileMenuToggle) {
+					mobileMenuToggle.addEventListener('click', toggleSidebar);
+				}
+
+				const savedTheme = localStorage.getItem('theme');
+				if (savedTheme === 'dark') {
+					themeIcon.className = 'fas fa-sun';
+				} else {
+					themeIcon.className = 'fas fa-moon';
+				}
+			});
+
+			document.addEventListener('click', function(event) {
+				const sidebar = document.querySelector('.sidebar');
+				const menuToggle = document.querySelector('.mobile-menu-toggle');
+
+				if (window.innerWidth <= 1024 &&
+					!sidebar.contains(event.target) &&
+					!menuToggle.contains(event.target) &&
+					sidebar.classList.contains('open')) {
+					sidebar.classList.remove('open');
+				}
+			});
+
+			window.addEventListener('resize', function() {
+				const sidebar = document.querySelector('.sidebar');
+				if (window.innerWidth > 1024) {
+					sidebar.classList.remove('open');
+				}
+			});
+		</script>
+	</body>
+</html>
