@@ -19,7 +19,7 @@ const Sidebar = ({ setSelectedTag, selectedTag }) => {
   const visibleTags = showAllTags ? sortedTags : sortedTags.slice(0, 4);
 
   return (
-    <aside className="bg-transparent text-white w-full md:w-80 p-4 flex flex-col items-center flex-shrink-0">
+    <aside className="bg-transparent text-white w-full md:w-80 p-4 flex flex-col items-center flex-shrink-0 md:sticky md:top-20 self-start">
       {/* Profile Card */}
       <div className="bg-slate-800/50 backdrop-blur-lg rounded-lg p-6 w-full flex flex-col items-center mb-8">
         <img src={profileData.profile_picture} alt={profileData.profile_name} className="rounded-full h-36 w-36 mb-4" />
