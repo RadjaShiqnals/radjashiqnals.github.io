@@ -1,0 +1,94 @@
+{
+    "profile": {
+        "name": "RadjaShiqnals",
+        "fullName": "Radja Genta Saputra",
+        "title": "Tech Lead & Fullstack Developer",
+        "image": "https://placehold.co/200x200/6366f1/ffffff?text=RGS&font=roboto",
+        "bio": "19-year-old Software Engineering student specializing in Web Development. Tech Lead with professional experience at SIDIGS and Jagoan Hosting.",
+        "location": "Malang, Sawojajar",
+        "age": 19,
+        "education": "SMK Telkom Malang"
+    },
+    "socialMedia": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/radjashiqnals",
+            "icon": "github"
+        },
+        {
+            "name": "LinkedIn",
+            "url": "https://linkedin.com/in/radjashiqnals",
+            "icon": "linkedin"
+        },
+        {
+            "name": "X",
+            "url": "https://x.com/radjashiqnals",
+            "icon": "x"
+        },
+        {
+            "name": "Instagram",
+            "url": "https://instagram.com/radjashiqnals",
+            "icon": "instagram"
+        },
+        {
+            "name": "YouTube",
+            "url": "https://youtube.com/@radjashiqnals",
+            "icon": "youtube"
+        }
+    ],
+    "about": {
+        "introduction": "I am a 19-year-old Software Engineering student at SMK Telkom Malang, specializing in Web Development. I am currently based in Malang (specifically in the Sawojajar area), though I'm always exploring new places—digital or physical!",
+        "experience": "I identify as a Tech Lead and Fullstack Developer. Despite my age, I have over a year of professional experience, having worked with companies like SIDIGS and Jagoan Hosting, alongside various freelance projects.",
+        "specializations": [
+            "Web Development: Proficient in the TALL/VALL stack (Laravel, Vue.js, Vite, Tailwind CSS) and React",
+            "System Customization: Avid Linux (Ubuntu) user who loves tweaking desktop environment and customizing Neovim",
+            "Fullstack Development: Building robust systems from frontend to backend"
+        ],
+        "currentFocus": [
+            "Deepening knowledge in Rust (tackling Rustlings exercises)",
+            "Experimenting with mobile development (Android/Custom ROMs)",
+            "Exploring AI-driven coding tools"
+        ]
+    },
+    "projects": [
+        {
+            "id": 1,
+            "title": "ns-daily",
+            "description": "A Progressive Web App (PWA) for daily Islamic practices and reminders. Built with modern web technologies.",
+            "image": "https://placehold.co/600x400/8b5cf6/ffffff?text=ns-daily+PWA&font=roboto",
+            "technologies": [
+                "PWA",
+                "Laravel",
+                "Vue.js",
+                "Tailwind CSS"
+            ],
+            "link": "https://github.com/radjashiqnals/ns-daily"
+        },
+        {
+            "id": 2,
+            "title": "Kadevacademy Backend",
+            "description": "Backend system for Kadevacademy with integrated Midtrans payment gateway. Handles course management and transactions.",
+            "image": "https://placehold.co/600x400/ec4899/ffffff?text=Kadevacademy&font=roboto",
+            "technologies": [
+                "Laravel",
+                "Midtrans",
+                "API",
+                "Payment Gateway"
+            ],
+            "link": "https://github.com/radjashiqnals/kadevacademy"
+        },
+        {
+            "id": 3,
+            "title": "Automation Tools",
+            "description": "Various automation solutions using n8n to streamline workflows and daily tasks. Constantly automating life.",
+            "image": "https://placehold.co/600x400/10b981/ffffff?text=Automation&font=roboto",
+            "technologies": [
+                "n8n",
+                "Workflow Automation",
+                "APIs",
+                "Integration"
+            ],
+            "link": "#"
+        }
+    ]
+}

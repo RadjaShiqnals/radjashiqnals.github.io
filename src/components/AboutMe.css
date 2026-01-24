@@ -1,0 +1,139 @@
+.about-me {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.about-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.about-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.about-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+}
+
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.about-section {
+    padding: 2rem;
+    border-radius: 16px;
+    display: flex;
+    gap: 1.5rem;
+    transition: all var(--transition-base);
+}
+
+.about-section:hover {
+    transform: translateX(8px);
+}
+
+.section-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.section-content {
+    flex: 1;
+}
+
+.section-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.section-text {
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 12px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.skills-list,
+.focus-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.skill-item,
+.focus-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+}
+
+.skill-item:hover,
+.focus-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.skill-bullet,
+.focus-bullet {
+    color: var(--primary-500);
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .about-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .about-section {
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+    .section-icon {
+        font-size: 2rem;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

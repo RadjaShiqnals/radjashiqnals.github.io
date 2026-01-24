@@ -1,0 +1,20 @@
+**Hello! I’m Radja Genta Saputra.**
+
+I am a 19-year-old **Software Engineering student** at **SMK Telkom Malang**, specializing in Web Development. I am currently based in **Malang** (specifically in the Sawojajar area), though I’m always exploring new places—digital or physical!
+
+**What I Do:**
+I identify as a **Tech Lead** and **Fullstack Developer**. Despite my age, I have over a year of professional experience, having worked with companies like **SIDIGS** and **Jagoan Hosting**, alongside various freelance projects.
+
+My passion lies in building robust systems. I specialize in:
+
+* **Web Development:** Proficient in the **TALL/VALL stack** (Laravel, Vue.js, Vite, Tailwind CSS) and React.
+* **System Customization:** I am an avid **Linux (Ubuntu)** user who loves tweaking my desktop environment and customizing **Neovim** for the perfect workflow.
+* **Current Focus:** Right now, I’m deepening my knowledge in **Rust** (tackling those Rustlings exercises!), experimenting with **mobile development** (Android/Custom ROMs), and exploring **AI-driven coding tools**.
+
+**Projects:**
+I’ve built full-stack solutions like the **ns-daily** PWA and the backend for **Kadevacademy** (integrating Midtrans payments). I’m also constantly automating my life using tools like **n8n**.
+
+**Connect With Me:**
+
+* **GitHub / Portfolio:** (While I don't have your specific URL stored in my current memory, this is where your code lives!)
+* *Note: I don't have your specific Instagram, LinkedIn, or Twitter handles in my current database.*
