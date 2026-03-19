@@ -25,382 +25,110 @@ const projects = [
 ];
 ---
 
-<div class="relative font-sans text-white">
-    <div class="fixed top-0 left-0 -z-10 h-full w-full">
-        <video
-            id="bg-video"
-            loop
-            playsinline
-            class="h-full w-full object-cover"
-        >
-            <source src="/output.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-        </video>
-        <!-- The separate audio tag is no longer needed -->
-        <div class="absolute top-0 left-0 h-full w-full bg-black bg-opacity-60"></div>
-    </div>
-
-    <div
-        class="fixed top-5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-4 rounded-full bg-black/50 p-2 px-4 backdrop-blur-sm"
-    >
-        <!-- Volume Slider -->
-        <label for="volume-slider" class="sr-only">Volume</label>
-        <input
-            type="range"
-            id="volume-slider"
-            min="0"
-            max="1"
-            step="0.01"
-            value="0.5"
-            class="w-20"
-            aria-label="Volume"
-        />
-
-        <!-- Play/Pause Button -->
-        <button id="play-pause-btn" aria-label="Pause/Play Video" class="flex-shrink-0">
-            <Icon name="mdi:pause" class="h-6 w-6" id="pause-icon" />
-            <Icon name="mdi:play" class="hidden h-6 w-6" id="play-icon" />
-        </button>
-
-        <!-- Speed Slider -->
-        <label for="speed-slider" class="sr-only">Speed</label>
-        <input
-            type="range"
-            id="speed-slider"
-            min="0.5"
-            max="2"
-            step="0.25"
-            value="1"
-            class="w-20"
-            aria-label="Playback Speed"
-        />
-    </div>
-
-    <main class="relative z-10">
-        <!-- Hero Section -->
-        <section
-            id="hero"
-            class="flex min-h-screen flex-col items-center justify-center p-4 text-center"
-        >
-            <div class="mb-6 h-32 w-32 rounded-full bg-kita-red"></div>
-            <h1 class="mb-2 text-5xl font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]">
-                Radja Genta Saputra
+<div class="px-6 lg:px-12 pb-24 max-w-5xl mx-auto w-full">
+    
+    <!-- Hero Section -->
+    <section id="home" class="flex flex-col justify-center min-h-[85vh] py-12">
+        <div class="space-y-6 animate-fade-in-up">
+            <span class="inline-block py-1 px-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold text-sm tracking-wide border border-blue-200 dark:border-blue-800">
+                Hi there, Welcome back!
+            </span>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight">
+                I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400 dark:from-blue-400 dark:to-sky-300">Radja Genta</span><br/> Saputra
             </h1>
-            <p class="mb-6 text-xl text-gray-400 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]">
-                Full-Stack Web Developer | UI/UX Enthusiast | Junior Software Engineer
+            
+            <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl font-light leading-relaxed">
+                Full-Stack Web Developer <span class="text-blue-500">•</span> UI/UX Enthusiast <span class="text-blue-500">•</span> Junior Software Engineer
             </p>
-            <div class="flex justify-center space-x-6">
-                <a
-                    href="https://github.com/RadjaShiqnals"
-                    target="_blank"
-                    aria-label="GitHub"
-                    class="text-gray-400 transition-colors hover:text-white"
-                >
-                    <Icon name="mdi:github" class="h-8 w-8" />
+
+            <div class="flex gap-4 pt-6">
+                <a href="https://github.com/RadjaShiqnals" target="_blank" aria-label="GitHub" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                    <Icon name="mdi:github" class="w-7 h-7" />
                 </a>
-                <a
-                    href="https://www.linkedin.com/in/radja-genta-saputra/"
-                    target="_blank"
-                    aria-label="LinkedIn"
-                    class="text-gray-400 transition-colors hover:text-white"
-                >
-                    <Icon name="mdi:linkedin" class="h-8 w-8" />
+                <a href="https://www.linkedin.com/in/radja-genta-saputra/" target="_blank" aria-label="LinkedIn" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                    <Icon name="mdi:linkedin" class="w-7 h-7" />
                 </a>
-                <a
-                    href="https://x.com/RadjaShiqnals"
-                    target="_blank"
-                    aria-label="Twitter"
-                    class="text-gray-400 transition-colors hover:text-white"
-                >
-                    <Icon name="mdi:twitter" class="h-8 w-8" />
+                <a href="https://x.com/RadjaShiqnals" target="_blank" aria-label="Twitter" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                    <Icon name="mdi:twitter" class="w-7 h-7" />
                 </a>
-                <a
-                    href="https://www.instagram.com/radjashiqnals/"
-                    target="_blank"
-                    aria-label="Instagram"
-                    class="text-gray-400 transition-colors hover:text-white"
-                >
-                    <Icon name="mdi:instagram" class="h-8 w-8" />
+                <a href="https://www.instagram.com/radjashiqnals/" target="_blank" aria-label="Instagram" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                    <Icon name="mdi:instagram" class="w-7 h-7" />
                 </a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- About Me Section -->
-        <section id="about" class="py-20">
-            <div class="container mx-auto max-w-3xl px-4">
-                <h2
-                    class="mb-8 text-center text-3xl font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]"
-                >
-                    About Me
-                </h2>
-                <p
-                    class="text-center text-lg leading-relaxed text-gray-300 [text-shadow:0_1px_3px_rgba(0,0,0,0.8)]"
-                >
-                    A passionate and driven full-stack web developer with a strong foundation in Laravel and
-                    Vue.js. I bring a mix of curiosity, creativity, and professionalism to every line of
-                    code I write. Whether building responsive UIs in React, designing APIs in Laravel, or
-                    styling components with TailwindCSS, I strive to make every experience seamless,
-                    scalable, and impactful.
-                </p>
+    <!-- About Me Section -->
+    <section id="about" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+            <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
+            About Me
+        </h2>
+        
+        <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/50 dark:border-slate-700/50 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all">
+            <p class="text-lg md:text-xl leading-relaxed text-slate-700 dark:text-slate-300">
+                A passionate and driven full-stack web developer with a strong foundation in <span class="text-red-500 font-medium">Laravel</span> and <span class="text-green-500 font-medium">Vue.js</span>. I bring a mix of curiosity, creativity, and professionalism to every line of code I write. Whether building responsive UIs in <span class="text-cyan-500 font-medium">React</span>, designing APIs in Laravel, or styling components with <span class="text-sky-500 font-medium">TailwindCSS</span>, I strive to make every experience seamless, scalable, and impactful.
+            </p>
+            
+            <div class="mt-8 flex flex-wrap gap-3">
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Laravel</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Vue.js</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#React</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#TailwindCSS</span>
+                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Figma</span>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="py-20">
-          <div class="container mx-auto px-4">
-            <h2 class="mb-12 text-center text-3xl font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.8)]">
-              My Projects
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
+                My Projects
             </h2>
-            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project, idx) => (
-                <div
-                  class="cursor-pointer transform overflow-hidden rounded-lg bg-kita-shirt transition-transform duration-300 hover:-translate-y-2"
-                  onclick={`window.showProjectModal(${idx})`}
-                >
-                  <div class="p-6 flex flex-col items-center">
-                    <img src={project.logo} alt={project.title + ' logo'} class="mb-4 h-20 w-20 object-contain rounded-lg" />
-                    <h3 class="mb-2 text-xl font-bold">{project.title}</h3>
-                    <p class="mb-4 text-gray-400 text-center">{project.description}</p>
-                    <a href={project.link} target="_blank" class="mt-2 text-kita-red underline">View Project</a>
-                  </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project) => (
+                <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 transition-all duration-300 flex flex-col h-full">
+                    
+                    <div class="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-900 relative">
+                        {project.images[0] ? (
+                            <img src={project.images[0]} alt={`${project.title} Preview`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
+                        ) : (
+                            <div class="flex items-center justify-center h-full text-slate-400">No Image</div>
+                        )}
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center gap-4 mb-4">
+                            {project.logo && (
+                                <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600">
+                                    <img src={project.logo} alt="Logo" class="w-full h-full object-cover" />
+                                </div>
+                            )}
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                                {project.title}
+                            </h3>
+                        </div>
+                        
+                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
+                            {project.description}
+                        </p>
+                        
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-xl font-medium border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-500 transition-colors">
+                            View Project
+                            <Icon name="mdi:arrow-top-right" class="w-4 h-4" />
+                        </a>
+                    </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <dialog id="project-modal" class="p-0 bg-transparent">
-          <div id="modal-content" class="bg-kita-shirt rounded-lg max-w-lg w-full p-6 relative text-white hidden"></div>
-        </dialog>
-
-        <dialog id="image-modal" class="p-0 bg-transparent">
-          <div id="image-modal-content" class="relative flex items-center justify-center">
-            <!-- Image will be injected here -->
-          </div>
-        </dialog>
-    </main>
-
-    <footer class="relative z-10 py-8 text-center">
-        <p class="text-gray-500">
-            &copy; {new Date().getFullYear()} Radja Genta Saputra. All rights reserved.
-        </p>
+            ))}
+        </div>
+    </section>
+    
+    <footer class="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm pb-8">
+        © {new Date().getFullYear()} Radja Genta Saputra. System Design.
     </footer>
-</div>
-
-<style>
-    dialog::backdrop {
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-    dialog {
-        border: none;
-    }
-
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-    }
-
-    input[type='range'] {
-        -webkit-appearance: none;
-        appearance: none;
-        background: transparent;
-        cursor: pointer;
-    }
-    /* Track */
-    input[type='range']::-webkit-slider-runnable-track {
-        background: #555;
-        height: 0.25rem;
-        border-radius: 1rem;
-    }
-    input[type='range']::-moz-range-track {
-        background: #555;
-        height: 0.25rem;
-        border-radius: 1rem;
-    }
-    /* Thumb */
-    input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        margin-top: -6px;
-        background-color: #fff;
-        height: 1rem;
-        width: 1rem;
-        border-radius: 50%;
-        transition: background-color 150ms;
-    }
-    input[type='range']::-moz-range-thumb {
-        border: none;
-        background-color: #fff;
-        height: 1rem;
-        width: 1rem;
-        border-radius: 50%;
-        transition: background-color 150ms;
-    }
-    input[type='range']:hover::-webkit-slider-thumb {
-        background-color: #ccc;
-    }
-    input[type='range']:hover::-moz-range-thumb {
-        background-color: #ccc;
-    }
-</style>
-
-<script>
-    declare global {
-        interface Window {
-            showProjectModal: (idx: number) => void;
-            closeProjectModal: () => void;
-            showImageModal: (imgSrc: string) => void;
-            closeImageModal: () => void;
-        }
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        const video = document.getElementById('bg-video') as HTMLVideoElement;
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const volumeSlider = document.getElementById('volume-slider') as HTMLInputElement;
-        const speedSlider = document.getElementById('speed-slider') as HTMLInputElement;
-
-        if (video && playPauseBtn && playIcon && pauseIcon && volumeSlider && speedSlider) {
-            video.playbackRate = parseFloat(speedSlider.value);
-
-            const updateButton = () => {
-                if (video.paused) {
-                    playIcon.classList.remove('hidden');
-                    pauseIcon.classList.add('hidden');
-                } else {
-                    playIcon.classList.add('hidden');
-                    pauseIcon.classList.remove('hidden');
-                }
-            };
-
-            video.muted = true;
-            video.volume = parseFloat(volumeSlider.value); 
-            video.play().catch(() => {
-                updateButton();
-            });
-
-            playPauseBtn.addEventListener('click', () => {
-                if (video.paused) {
-                    video.play();
-                } else {
-                    video.pause();
-                }
-                if (video.muted) {
-                    video.muted = false;
-                }
-            });
-
-            video.addEventListener('play', updateButton);
-            video.addEventListener('pause', updateButton);
-
-            // Listeners for sliders
-            volumeSlider.addEventListener('input', (e) => {
-                const target = e.target as HTMLInputElement;
-                const newVolume = parseFloat(target.value);
-                video.volume = newVolume;
-
-                video.muted = newVolume === 0;
-            });
-
-            speedSlider.addEventListener('input', (e) => {
-                const target = e.target as HTMLInputElement;
-                video.playbackRate = parseFloat(target.value);
-
-                if (video.muted) {
-                    video.muted = false;
-                }
-            });
-        }
-
-        const imageModal = document.getElementById('image-modal') as HTMLDialogElement;
-        if (imageModal) {
-            imageModal.addEventListener('click', (event) => {
-                if (event.target === imageModal) {
-                    window.closeImageModal();
-                }
-            });
-        }
-    });
-
-    const projectsData = [
-        {
-            title: 'Java Project',
-            logo: '/projects/Java.png',
-            images: ['/projects/Java1.png', '/projects/Java2.png', '/projects/Java3.png'],
-            link: 'https://github.com/RadjaShiqnals/JavaProject',
-            description: 'A collection of Java OOP and geometry projects, including inheritance and volume calculations for 3D shapes.',
-        },
-        {
-            title: 'Toko Online (Online Shop)',
-            logo: '/projects/TokoOnline.jpeg',
-            images: ['/projects/TokoOnline2.jpeg', '/projects/TokoOnline3.jpeg', '/projects/TokoOnline4.jpeg'],
-            link: 'https://github.com/RadjaShiqnals/TokoOnline',
-            description: 'A full-featured online shop web application with product management, cart, and transaction features.',
-        },
-        {
-            title: 'Medtrack',
-            logo: '/projects/MedTrackLogo.png',
-            images: ['/projects/MedTrack1.png', '/projects/MedTrack2.png', '/projects/MedTrack3.png'],
-            link: 'https://www.figma.com/design/lsYYkr3WivyFrGkZNYAWK5/MedTrack--nai-archive?node-id=0-1&node-type=CANVAS&t=Q0nZ34F9n1mB65PE-0',
-            description: 'A mobile app UI/UX prototype for tracking medication schedules, designed in Figma.',
-        },
-    ];
-
-    window.showProjectModal = function(idx: number) {
-        const modal = document.getElementById('project-modal') as HTMLDialogElement;
-        const content = document.getElementById('modal-content');
-        const project = projectsData[idx];
-        if (modal && content && project) {
-            content.innerHTML = `
-                <button class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl z-10" onclick="window.closeProjectModal()" aria-label="Close">&times;</button>
-                <img src="${project.logo}" alt="${project.title} logo" class="mb-4 h-24 w-24 object-contain mx-auto rounded-lg" />
-                <h3 class="mb-2 text-2xl font-bold text-center">${project.title}</h3>
-                <p class="mb-4 text-gray-300 text-center">${project.description}</p>
-                <div class="flex flex-wrap justify-center gap-4 mb-4">
-                  ${project.images.map(img => `<img src="${img}" alt="Project detail" class="h-32 w-32 object-cover rounded-md border border-gray-700 cursor-zoom-in" onclick="window.showImageModal('${img}')"/>`).join('')}
-                </div>
-                <a href="${project.link}" target="_blank" class="block text-center text-kita-red underline font-bold">Open Project</a>
-            `;
-            content.classList.remove('hidden');
-            modal.showModal();
-        }
-    };
-
-    window.closeProjectModal = function() {
-        const modal = document.getElementById('project-modal') as HTMLDialogElement;
-        const content = document.getElementById('modal-content');
-        if (modal && content) {
-            modal.close();
-            content.classList.add('hidden');
-            content.innerHTML = '';
-        }
-    };
-
-    window.showImageModal = function(imgSrc: string) {
-        const modal = document.getElementById('image-modal') as HTMLDialogElement;
-        const content = document.getElementById('image-modal-content');
-        if (modal && content) {
-            content.innerHTML = `
-                <img src="${imgSrc}" alt="Zoomed Image" class="max-w-[90vw] max-h-[90vh] rounded-lg shadow-lg" />
-            `;
-            modal.showModal();
-        }
-    };
-
-    window.closeImageModal = function() {
-        const modal = document.getElementById('image-modal') as HTMLDialogElement;
-        const content = document.getElementById('image-modal-content');
-        if (modal && content) {
-            modal.close();
-            content.innerHTML = '';
-        }
-    };
-</script>
