@@ -30,30 +30,33 @@ const projects = [
     <!-- Hero Section -->
     <section id="home" class="flex flex-col justify-center min-h-[85vh] py-12">
         <div class="space-y-6 animate-fade-in-up">
-            <span class="inline-block py-1 px-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold text-sm tracking-wide border border-blue-200 dark:border-blue-800">
+            <span class="badge">
                 Hi there, Welcome back!
             </span>
             
-            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-slate-50 tracking-tight leading-tight">
-                I'm <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-sky-400 dark:from-blue-400 dark:to-sky-300">Radja Genta</span><br/> Saputra
+            <h1 class="heading-display">
+                I'm <span class="text-gradient">Radja Genta</span><br/> Saputra
             </h1>
             
-            <p class="text-xl md:text-2xl text-slate-600 dark:text-slate-400 max-w-2xl font-light leading-relaxed">
+            <p class="text-lead">
                 Full-Stack Web Developer <span class="text-blue-500">•</span> UI/UX Enthusiast <span class="text-blue-500">•</span> Junior Software Engineer
             </p>
 
             <div class="flex gap-4 pt-6">
-                <a href="https://github.com/RadjaShiqnals" target="_blank" aria-label="GitHub" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                <a href="https://github.com/RadjaShiqnals" target="_blank" aria-label="GitHub" class="btn-icon">
                     <Icon name="mdi:github" class="w-7 h-7" />
                 </a>
-                <a href="https://www.linkedin.com/in/radja-genta-saputra/" target="_blank" aria-label="LinkedIn" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                <a href="https://www.linkedin.com/in/radja-genta-saputra/" target="_blank" aria-label="LinkedIn" class="btn-icon">
                     <Icon name="mdi:linkedin" class="w-7 h-7" />
                 </a>
-                <a href="https://x.com/RadjaShiqnals" target="_blank" aria-label="Twitter" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                <a href="https://x.com/RadjaShiqnals" target="_blank" aria-label="Twitter" class="btn-icon">
                     <Icon name="mdi:twitter" class="w-7 h-7" />
                 </a>
-                <a href="https://www.instagram.com/radjashiqnals/" target="_blank" aria-label="Instagram" class="p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700">
+                <a href="https://www.instagram.com/radjashiqnals/" target="_blank" aria-label="Instagram" class="btn-icon">
                     <Icon name="mdi:instagram" class="w-7 h-7" />
+                </a>
+                <a href="#support" aria-label="Support Me" class="p-3 bg-[#FF5E5B] dark:bg-[#FF5E5B] rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-[#FF5E5B]/30 text-white transition-all border border-[#E05250] dark:border-[#E05250] group relative">
+                    <Icon name="mdi:hand-heart" class="w-7 h-7 group-hover:scale-110 transition-transform duration-300" />
                 </a>
             </div>
         </div>
@@ -61,22 +64,22 @@ const projects = [
 
     <!-- About Me Section -->
     <section id="about" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
-        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+        <h2 class="heading-1 mb-8 flex items-center gap-3">
             <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
             About Me
         </h2>
         
-        <div class="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/50 dark:border-slate-700/50 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all">
-            <p class="text-lg md:text-xl leading-relaxed text-slate-700 dark:text-slate-300">
+        <div class="glass-card">
+            <p class="text-body">
                 A passionate and driven full-stack web developer with a strong foundation in <span class="text-red-500 font-medium">Laravel</span> and <span class="text-green-500 font-medium">Vue.js</span>. I bring a mix of curiosity, creativity, and professionalism to every line of code I write. Whether building responsive UIs in <span class="text-cyan-500 font-medium">React</span>, designing APIs in Laravel, or styling components with <span class="text-sky-500 font-medium">TailwindCSS</span>, I strive to make every experience seamless, scalable, and impactful.
             </p>
             
             <div class="mt-8 flex flex-wrap gap-3">
-                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Laravel</span>
-                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Vue.js</span>
-                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#React</span>
-                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#TailwindCSS</span>
-                <span class="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium border border-slate-200 dark:border-slate-700">#Figma</span>
+                <span class="badge-secondary">#Laravel</span>
+                <span class="badge-secondary">#Vue.js</span>
+                <span class="badge-secondary">#React</span>
+                <span class="badge-secondary">#TailwindCSS</span>
+                <span class="badge-secondary">#Figma</span>
             </div>
         </div>
     </section>
@@ -84,7 +87,7 @@ const projects = [
     <!-- Projects Section -->
     <section id="projects" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
         <div class="flex items-center justify-between mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+            <h2 class="heading-1 flex items-center gap-3">
                 <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
                 My Projects
             </h2>
@@ -92,9 +95,9 @@ const projects = [
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project) => (
-                <div class="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 transition-all duration-300 flex flex-col h-full">
+                <div class="card group">
                     
-                    <div class="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-900 relative">
+                    <div class="card-image-wrap">
                         {project.images[0] ? (
                             <img src={project.images[0]} alt={`${project.title} Preview`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
                         ) : (
@@ -110,16 +113,16 @@ const projects = [
                                     <img src={project.logo} alt="Logo" class="w-full h-full object-cover" />
                                 </div>
                             )}
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white leading-tight">
+                            <h3 class="heading-3">
                                 {project.title}
                             </h3>
                         </div>
                         
-                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
+                        <p class="text-muted mb-6 flex-grow">
                             {project.description}
                         </p>
                         
-                        <a href={project.link} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-xl font-medium border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-500 transition-colors">
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-primary mt-auto w-full">
                             View Project
                             <Icon name="mdi:arrow-top-right" class="w-4 h-4" />
                         </a>
@@ -128,7 +131,50 @@ const projects = [
             ))}
         </div>
     </section>
+
+    <!-- Support Section -->
+    <section id="support" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
+        <h2 class="heading-1 mb-12 flex items-center gap-3">
+            <span class="w-8 h-1 bg-[#FF5E5B] rounded-full inline-block"></span>
+            Payment & Support
+        </h2>
+        
+        <div class="glass-card !p-0 overflow-hidden flex flex-col md:flex-row transform hover:shadow-[#FF5E5B]/5 transition-all">
+            
+            <!-- Left: Saweria -->
+            <div class="flex-1 p-8 md:p-12 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 relative bg-white/50 dark:bg-slate-800/50">
+                <div class="kofi-icon-container shadow-orange-500/10 group-hover:border-orange-500/30">
+                    <Icon name="mdi:wallet-giftcard" class="w-12 h-12 md:w-16 md:h-16 text-orange-500" />
+                </div>
+                <h4 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3 text-center">Local Support</h4>
+                <p class="text-center text-slate-500 dark:text-slate-400 mb-8 max-w-[250px] leading-relaxed">
+                    If you're Indonesian and want to donate using local e-wallets or QRIS.
+                </p>
+                <a href="https://saweria.co/radjashiqnals" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium w-full max-w-[250px] bg-orange-500 text-white border border-transparent hover:bg-transparent hover:text-orange-500 hover:border-orange-500 dark:hover:bg-slate-800 transition-colors duration-300">
+                    <Icon name="mdi:open-in-new" class="w-5 h-5" />
+                    Support via Saweria
+                </a>
+            </div>
+            
+            <!-- Right: Ko-Fi -->
+            <div class="flex-1 p-8 md:p-12 flex flex-col items-center justify-center bg-slate-50/50 dark:bg-slate-900/30">
+                <div class="kofi-icon-container shadow-[#FF5E5B]/10 hover:border-[#FF5E5B]/30">
+                    <Icon name="mdi:wallet-giftcard" class="w-12 h-12 md:w-16 md:h-16 text-[#FF5E5B]" />
+                </div>
+                <h4 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3 text-center">Global Support</h4>
+                <p class="text-center text-slate-500 dark:text-slate-400 mb-8 max-w-[250px] leading-relaxed">
+                    If you're outside Indonesia and want to support my work globally.
+                </p>
+                <a href="https://ko-fi.com/radjashiqnals" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium w-full max-w-[250px] bg-[#FF5E5B] text-white border border-transparent hover:bg-transparent hover:text-[#FF5E5B] hover:border-[#FF5E5B] dark:hover:bg-slate-800 transition-colors duration-300">
+                    <Icon name="mdi:open-in-new" class="w-5 h-5" />
+                    Support on Ko-fi
+                </a>
+            </div>
+            
+        </div>
+    </section>
     
     <footer class="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm pb-8">
         © {new Date().getFullYear()} Radja Genta Saputra. System Design.
     </footer>
+</div>
