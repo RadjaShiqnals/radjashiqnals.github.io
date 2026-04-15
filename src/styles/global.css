@@ -36,21 +36,21 @@
 
   /* Buttons */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 py-3 px-6 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-xl font-medium border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20;
+    @apply inline-flex items-center justify-center gap-2 py-3 px-6 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 rounded-xl font-medium border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-500 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 transform-gpu will-change-transform;
   }
   .btn-icon {
-    @apply p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700;
+    @apply p-3 bg-white dark:bg-slate-800 rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all border border-slate-200 dark:border-slate-700 transform-gpu will-change-transform;
   }
 
   /* Cards */
   .glass-card {
-    @apply bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/50 dark:border-slate-700/50 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all;
+    @apply bg-white/90 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-slate-200/80 dark:border-slate-700/50 shadow-xl shadow-slate-200/80 dark:shadow-none transition-all transform-gpu will-change-transform;
   }
   .card {
-    @apply bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 transition-all duration-300 flex flex-col h-full;
+    @apply bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500 shadow-md shadow-slate-200/60 dark:shadow-none hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 transition-all duration-300 flex flex-col h-full transform-gpu will-change-transform;
   }
   .card-image-wrap {
-    @apply aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-900 relative;
+    @apply aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-900 relative transform-gpu;
   }
 
   /* Navigation */
