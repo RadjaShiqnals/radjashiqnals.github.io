@@ -1,117 +1,95 @@
 ---
 import { Icon } from 'astro-icon/components';
-const projects = [
-  {
-    title: 'Java Project',
-    logo: '/projects/Java.png',
-    images: ['/projects/Java1.png', '/projects/Java2.png', '/projects/Java3.png'],
-    link: 'https://github.com/RadjaShiqnals/JavaProject',
-    description: 'A collection of Java OOP and geometry projects, including inheritance and volume calculations for 3D shapes.',
-  },
-  {
-    title: 'Toko Online (Online Shop)',
-    logo: '/projects/TokoOnline.jpeg',
-    images: ['/projects/TokoOnline2.jpeg', '/projects/TokoOnline3.jpeg', '/projects/TokoOnline4.jpeg'],
-    link: 'https://github.com/RadjaShiqnals/TokoOnline',
-    description: 'A full-featured online shop web application with product management, cart, and transaction features.',
-  },
-  {
-    title: 'Medtrack',
-    logo: '/projects/MedTrackLogo.png',
-    images: ['/projects/MedTrack1.png', '/projects/MedTrack2.png', '/projects/MedTrack3.png'],
-    link: 'https://www.figma.com/design/lsYYkr3WivyFrGkZNYAWK5/MedTrack--nai-archive?node-id=0-1&node-type=CANVAS&t=Q0nZ34F9n1mB65PE-0',
-    description: 'A mobile app UI/UX prototype for tracking medication schedules, designed in Figma.',
-  },
-];
+import portfolioData from '../data/portfolio.json';
+
+const { profile, skills, projects, support } = portfolioData;
 ---
 
-<div class="px-6 lg:px-12 pb-24 max-w-5xl mx-auto w-full">
+<div class="page-wrapper animate-fade-in-up">
     
     <!-- Hero Section -->
-    <section id="home" class="flex flex-col justify-center min-h-[85vh] py-12">
-        <div class="space-y-6 animate-fade-in-up">
-            <span class="badge">
-                Hi there, Welcome back!
-            </span>
+    <section id="home" class="hero-section">
+        <div>
+            <div class="hero-badge">
+                <span class="text-yellow-600">[ INFO ]</span>&nbsp;Welcome
+            </div>
             
             <h1 class="heading-display">
-                I'm <span class="text-gradient">Radja Genta</span><br/> Saputra
+                {profile.name}
             </h1>
             
             <p class="text-lead">
-                Full-Stack Web Developer <span class="text-blue-500">•</span> UI/UX Enthusiast <span class="text-blue-500">•</span> Junior Software Engineer
+                {profile.role}
             </p>
 
-            <div class="flex gap-4 pt-6">
-                <a href="https://github.com/RadjaShiqnals" target="_blank" aria-label="GitHub" class="btn-icon">
-                    <Icon name="mdi:github" class="w-7 h-7" />
+            <div class="social-list">
+                <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link">
+                    <Icon name="mdi:github" class="w-4 h-4" /> github
                 </a>
-                <a href="https://www.linkedin.com/in/radja-genta-saputra/" target="_blank" aria-label="LinkedIn" class="btn-icon">
-                    <Icon name="mdi:linkedin" class="w-7 h-7" />
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-link">
+                    <Icon name="mdi:linkedin" class="w-4 h-4" /> linkedin
                 </a>
-                <a href="https://x.com/RadjaShiqnals" target="_blank" aria-label="Twitter" class="btn-icon">
-                    <Icon name="mdi:twitter" class="w-7 h-7" />
+                <a href={profile.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="social-link">
+                    <Icon name="mdi:twitter" class="w-4 h-4" /> twitter
                 </a>
-                <a href="https://www.instagram.com/radjashiqnals/" target="_blank" aria-label="Instagram" class="btn-icon">
-                    <Icon name="mdi:instagram" class="w-7 h-7" />
-                </a>
-                <a href="#support" aria-label="Support Me" class="p-3 bg-[#FF5E5B] dark:bg-[#FF5E5B] rounded-xl hover:-translate-y-1 hover:shadow-lg hover:shadow-[#FF5E5B]/30 text-white transition-all border border-[#E05250] dark:border-[#E05250] group relative">
-                    <Icon name="mdi:hand-heart" class="w-7 h-7 group-hover:scale-110 transition-transform duration-300" />
+                <a href={profile.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link">
+                    <Icon name="mdi:instagram" class="w-4 h-4" /> instagram
                 </a>
             </div>
         </div>
     </section>
 
     <!-- About Me Section -->
-    <section id="about" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
-        <h2 class="heading-1 mb-8 flex items-center gap-3">
-            <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
-            About Me
+    <section id="about" class="section-container">
+        <h2 class="heading-1">
+            <span>01.</span> About Me
         </h2>
         
-        <div class="glass-card">
+        <div class="glass-card mb-8">
             <p class="text-body">
-                A passionate and driven full-stack web developer with a strong foundation in <span class="text-red-500 font-medium">Laravel</span> and <span class="text-green-500 font-medium">Vue.js</span>. I bring a mix of curiosity, creativity, and professionalism to every line of code I write. Whether building responsive UIs in <span class="text-cyan-500 font-medium">React</span>, designing APIs in Laravel, or styling components with <span class="text-sky-500 font-medium">TailwindCSS</span>, I strive to make every experience seamless, scalable, and impactful.
+                A passionate and driven full-stack web developer with a strong foundation in <span class="text-white font-bold underline decoration-zinc-800 underline-offset-4">Laravel</span> and <span class="text-white font-bold underline decoration-zinc-800 underline-offset-4">Vue.js</span>. I bring a mix of curiosity, creativity, and system-level tuning to every codebase I touch. Whether engineering responsive client interfaces, scaling back-ends, or managing platform deployments, I focus on clean performance and simplicity.
             </p>
-            
-            <div class="mt-8 flex flex-wrap gap-3">
-                <span class="badge-secondary">#Laravel</span>
-                <span class="badge-secondary">#Vue.js</span>
-                <span class="badge-secondary">#React</span>
-                <span class="badge-secondary">#TailwindCSS</span>
-                <span class="badge-secondary">#Figma</span>
+        </div>
+        
+        <div class="skills-box">
+            <h3 class="skills-title">
+                [core-skills]
+            </h3>
+            <div class="space-y-4">
+                {skills.map((skill) => (
+                    <div class="skill-item">
+                        <span class="skill-checkbox">[x]</span>
+                        <div class="skill-details">
+                            <span class="skill-name">{skill.name}</span>
+                            <span class="skill-desc">- {skill.desc}</span>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
-        <div class="flex items-center justify-between mb-12">
-            <h2 class="heading-1 flex items-center gap-3">
-                <span class="w-8 h-1 bg-blue-500 rounded-full inline-block"></span>
-                My Projects
-            </h2>
-        </div>
+    <section id="projects" class="section-container">
+        <h2 class="heading-1">
+            <span>02.</span> Projects
+        </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="project-grid">
             {projects.map((project) => (
-                <div class="card group">
-                    
-                    <div class="card-image-wrap">
+                <div class="project-card group">
+                    <div class="project-image-wrap">
                         {project.images[0] ? (
-                            <img src={project.images[0]} alt={`${project.title} Preview`} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" />
+                            <img src={project.images[0]} alt={`${project.title} Preview`} class="project-image" />
                         ) : (
-                            <div class="flex items-center justify-center h-full text-slate-400">No Image</div>
+                            <div class="project-placeholder">[ no preview image ]</div>
                         )}
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     
-                    <div class="p-6 flex flex-col flex-grow">
-                        <div class="flex items-center gap-4 mb-4">
+                    <div class="project-body">
+                        <div class="project-header">
                             {project.logo && (
-                                <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-600">
-                                    <img src={project.logo} alt="Logo" class="w-full h-full object-cover" />
-                                </div>
+                                <img src={project.logo} alt="" class="project-logo" />
                             )}
                             <h3 class="heading-3">
                                 {project.title}
@@ -122,9 +100,8 @@ const projects = [
                             {project.description}
                         </p>
                         
-                        <a href={project.link} target="_blank" rel="noopener noreferrer" class="btn-primary mt-auto w-full">
-                            View Project
-                            <Icon name="mdi:arrow-top-right" class="w-4 h-4" />
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" class="project-action-link">
+                            [ view project ]
                         </a>
                     </div>
                 </div>
@@ -133,48 +110,40 @@ const projects = [
     </section>
 
     <!-- Support Section -->
-    <section id="support" class="py-20 scroll-mt-20 border-t border-slate-200 dark:border-slate-800">
-        <h2 class="heading-1 mb-12 flex items-center gap-3">
-            <span class="w-8 h-1 bg-[#FF5E5B] rounded-full inline-block"></span>
-            Payment & Support
+    <section id="support" class="section-container mb-8">
+        <h2 class="heading-1">
+            <span>03.</span> Support & Sponsorship
         </h2>
         
-        <div class="glass-card !p-0 overflow-hidden flex flex-col md:flex-row transform hover:shadow-[#FF5E5B]/5 transition-all">
-            
+        <div class="support-grid">
             <!-- Left: Saweria -->
-            <div class="flex-1 p-8 md:p-12 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 relative bg-white/50 dark:bg-slate-800/50">
-                <div class="kofi-icon-container shadow-orange-500/10 group-hover:border-orange-500/30">
-                    <Icon name="mdi:wallet-giftcard" class="w-12 h-12 md:w-16 md:h-16 text-orange-500" />
+            <div class="support-card">
+                <div class="support-icon-wrap">
+                    <Icon name="mdi:wallet-giftcard" class="w-5 h-5 text-zinc-500" />
                 </div>
-                <h4 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3 text-center">Local Support</h4>
-                <p class="text-center text-slate-500 dark:text-slate-400 mb-8 max-w-[250px] leading-relaxed">
-                    If you're Indonesian and want to donate using local e-wallets or QRIS.
+                <h4 class="support-title">Local Support</h4>
+                <p class="support-desc">
+                    E-wallets and QRIS options optimized for local support (Saweria).
                 </p>
-                <a href="https://saweria.co/radjashiqnals" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium w-full max-w-[250px] bg-orange-500 text-white border border-transparent hover:bg-transparent hover:text-orange-500 hover:border-orange-500 dark:hover:bg-slate-800 transition-colors duration-300">
-                    <Icon name="mdi:open-in-new" class="w-5 h-5" />
-                    Support via Saweria
+                <a href={support.saweria} target="_blank" rel="noopener noreferrer" class="support-btn">
+                    [ support via saweria ]
                 </a>
             </div>
             
             <!-- Right: Ko-Fi -->
-            <div class="flex-1 p-8 md:p-12 flex flex-col items-center justify-center bg-slate-50/50 dark:bg-slate-900/30">
-                <div class="kofi-icon-container shadow-[#FF5E5B]/10 hover:border-[#FF5E5B]/30">
-                    <Icon name="mdi:wallet-giftcard" class="w-12 h-12 md:w-16 md:h-16 text-[#FF5E5B]" />
+            <div class="support-card">
+                <div class="support-icon-wrap">
+                    <Icon name="mdi:wallet-giftcard" class="w-5 h-5 text-zinc-500" />
                 </div>
-                <h4 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-3 text-center">Global Support</h4>
-                <p class="text-center text-slate-500 dark:text-slate-400 mb-8 max-w-[250px] leading-relaxed">
-                    If you're outside Indonesia and want to support my work globally.
+                <h4 class="support-title">Global Support</h4>
+                <p class="support-desc">
+                    Credit cards, PayPal, and international sponsorship options (Ko-fi).
                 </p>
-                <a href="https://ko-fi.com/radjashiqnals" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium w-full max-w-[250px] bg-[#FF5E5B] text-white border border-transparent hover:bg-transparent hover:text-[#FF5E5B] hover:border-[#FF5E5B] dark:hover:bg-slate-800 transition-colors duration-300">
-                    <Icon name="mdi:open-in-new" class="w-5 h-5" />
-                    Support on Ko-fi
+                <a href={support.kofi} target="_blank" rel="noopener noreferrer" class="support-btn">
+                    [ support via ko-fi ]
                 </a>
             </div>
-            
         </div>
     </section>
-    
-    <footer class="mt-20 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm pb-8">
-        © {new Date().getFullYear()} Radja Genta Saputra. System Design.
-    </footer>
+
 </div>
