@@ -219,6 +219,25 @@
   .glass-card {
     @apply bg-zinc-950/60 border border-zinc-800/80 p-6 md:p-8 font-mono;
   }
+
+  /* Language color dots */
+  .lang-dot {
+    @apply w-2 h-2 rounded-full inline-block;
+  }
+  .lang-php { @apply bg-indigo-600; }
+  .lang-js { @apply bg-yellow-500; }
+  .lang-vue { @apply bg-emerald-500; }
+  .lang-astro { @apply bg-orange-500; }
+  .lang-css { @apply bg-blue-500; }
+  .lang-typescript { @apply bg-sky-500; }
+  .lang-java { @apply bg-red-600; }
+  .lang-html { @apply bg-orange-600; }
+  .lang-other { @apply bg-zinc-600; }
+
+  /* Search/filter input box */
+  .search-input {
+    @apply w-full bg-zinc-950 border border-zinc-900 px-4 py-2.5 text-xs font-mono text-zinc-100 placeholder-zinc-700 focus:outline-none focus:border-zinc-700 transition-colors mb-8;
+  }
 }
 
 /* Animations */
