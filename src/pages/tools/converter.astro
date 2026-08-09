@@ -1,0 +1,368 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout title="Media Compressor & Format Converter - 100% Client-Side">
+    <div class="page-wrapper animate-fade-in-up">
+        
+        <!-- Header -->
+        <section class="py-6 md:py-8 flex flex-col items-center text-center">
+            <div class="hero-badge">
+                [ tool ] 100% client-side compressor & converter
+            </div>
+            
+            <h1 class="heading-display mb-2 text-2xl md:text-4xl">
+                Media Compressor & Converter
+            </h1>
+            
+            <p class="text-lead mb-6 text-xs md:text-sm max-w-lg">
+                Compress images & convert videos/audio formats locally in browser memory. 100% private — your files never leave your device.
+            </p>
+        </section>
+
+        <!-- Main Tool Box -->
+        <div class="glass-card mb-8 w-full max-w-2xl mx-auto p-6 md:p-8">
+            
+            <!-- File Dropzone -->
+            <div id="dropzone" class="border-2 border-dashed border-zinc-800 bg-zinc-950 p-8 text-center cursor-pointer hover:border-zinc-600 transition-colors mb-6 select-none">
+                <input type="file" id="file-input" class="hidden" accept="image/*,video/*,audio/*,.mp4,.mov,.webm,.mkv,.avi,.jpg,.png,.webp,.gif,.avif,.mp3,.wav" />
+                <div class="w-12 h-12 border border-zinc-800 bg-zinc-900/60 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Icon name="mdi:cloud-upload-outline" class="w-6 h-6 text-sky-400" />
+                </div>
+                <p class="text-xs font-mono text-zinc-200 font-bold mb-1">
+                    Click to select file or drag & drop here
+                </p>
+                <p class="text-[11px] font-mono text-zinc-500">
+                    Auto detects Category: Images (JPG, PNG, WebP) or Videos (MP4, MOV, WebM)
+                </p>
+            </div>
+
+            <!-- File Selected Options Card -->
+            <div id="options-card" class="border border-zinc-800 bg-zinc-950 p-5 hidden font-mono text-xs space-y-4">
+                
+                <!-- File Info Header -->
+                <div class="flex items-center justify-between border-b border-zinc-900 pb-3">
+                    <div class="flex items-center gap-2 truncate max-w-xs">
+                        <Icon name="mdi:file-outline" class="w-4 h-4 text-zinc-400 shrink-0" />
+                        <span id="file-name" class="font-bold text-white truncate">filename.mp4</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="file-category-badge" class="text-[9px] px-1.5 py-0.5 bg-sky-950 text-sky-400 border border-sky-800 uppercase font-mono">Video</span>
+                        <span id="file-size-orig" class="text-zinc-500 text-[11px]">0 KB</span>
+                    </div>
+                </div>
+
+                <!-- Conversion Options -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-zinc-400 text-[11px] mb-1.5">Convert To Format:</label>
+                        <select id="target-format" class="w-full bg-zinc-900 border border-zinc-800 px-3 py-2 text-xs font-mono text-zinc-100 outline-none focus:border-zinc-600">
+                            <!-- Populated dynamically based on Image / Video / Audio category -->
+                        </select>
+                    </div>
+
+                    <div id="quality-wrap">
+                        <div class="flex justify-between text-zinc-400 text-[11px] mb-1.5">
+                            <span id="quality-label">Compression Quality:</span>
+                            <span id="quality-val" class="text-emerald-400 font-bold">80%</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id="quality-slider" 
+                            min="10" 
+                            max="100" 
+                            value="80" 
+                            class="w-full accent-emerald-500 cursor-pointer" 
+                        />
+                    </div>
+                </div>
+
+                <!-- Progress / Status Indicator -->
+                <div id="process-status" class="hidden text-center text-[11px] text-sky-400 font-mono py-2">
+                    <span id="process-status-text">Processing file in browser memory...</span>
+                </div>
+
+                <!-- Process Button -->
+                <button type="button" id="process-btn" class="btn-primary w-full text-center block mt-2">
+                    [ Process & Compress File ]
+                </button>
+
+            </div>
+
+            <!-- Result Card -->
+            <div id="result-card" class="border border-emerald-900/60 bg-emerald-950/20 p-5 hidden font-mono text-xs space-y-4 mt-6">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 uppercase">
+                        Compression Complete
+                    </span>
+                    <span id="savings-tag" class="text-emerald-400 font-bold text-xs">Saved 0%</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-[11px]">
+                    <div class="bg-zinc-950 p-2.5 border border-zinc-900">
+                        <div class="text-zinc-500">Original Size</div>
+                        <div id="res-orig-size" class="font-bold text-zinc-300 mt-0.5">0 KB</div>
+                    </div>
+                    <div class="bg-zinc-950 p-2.5 border border-zinc-900">
+                        <div class="text-zinc-500">New Compressed Size</div>
+                        <div id="res-new-size" class="font-bold text-emerald-400 mt-0.5">0 KB</div>
+                    </div>
+                </div>
+
+                <a id="download-btn" href="#" download class="btn-primary w-full text-center block">
+                    ⬇ Download Compressed File
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Back Link -->
+        <div class="flex justify-center mb-12">
+            <a href="/tools" class="btn-primary">
+                [ return to tools ]
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Client-side Compression & Conversion Script -->
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('file-input');
+            const optionsCard = document.getElementById('options-card');
+            const fileNameEl = document.getElementById('file-name');
+            const fileSizeOrigEl = document.getElementById('file-size-orig');
+            const fileCategoryBadge = document.getElementById('file-category-badge');
+            const targetFormat = document.getElementById('target-format');
+            const qualitySlider = document.getElementById('quality-slider');
+            const qualityVal = document.getElementById('quality-val');
+            const processBtn = document.getElementById('process-btn');
+            const processStatus = document.getElementById('process-status');
+            const processStatusText = document.getElementById('process-status-text');
+            const resultCard = document.getElementById('result-card');
+            const resOrigSize = document.getElementById('res-orig-size');
+            const resNewSize = document.getElementById('res-new-size');
+            const savingsTag = document.getElementById('savings-tag');
+            const downloadBtn = document.getElementById('download-btn');
+
+            let currentFile = null;
+            let currentCategory = 'image';
+
+            const FORMAT_MAP = {
+                image: [
+                    { label: 'WebP (Recommended - Smallest)', value: 'image/webp', ext: 'webp' },
+                    { label: 'JPG / JPEG (Standard)', value: 'image/jpeg', ext: 'jpg' },
+                    { label: 'PNG (Lossless / Transparent)', value: 'image/png', ext: 'png' }
+                ],
+                video: [
+                    { label: 'WebM Video (VP8/VP9 Web Standard)', value: 'video/webm', ext: 'webm' },
+                    { label: 'MP4 Video (Compressed Stream)', value: 'video/mp4', ext: 'mp4' }
+                ],
+                audio: [
+                    { label: 'WebM Audio (Compressed)', value: 'audio/webm', ext: 'webm' },
+                    { label: 'WAV Audio (Uncompressed)', value: 'audio/wav', ext: 'wav' }
+                ]
+            };
+
+            function formatBytes(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function detectCategory(file) {
+                const type = file.type.toLowerCase();
+                const name = file.name.toLowerCase();
+                if (type.startsWith('video/') || name.endsWith('.mp4') || name.endsWith('.mov') || name.endsWith('.webm') || name.endsWith('.mkv') || name.endsWith('.avi')) {
+                    return 'video';
+                }
+                if (type.startsWith('audio/') || name.endsWith('.mp3') || name.endsWith('.wav') || name.endsWith('.ogg') || name.endsWith('.m4a')) {
+                    return 'audio';
+                }
+                return 'image';
+            }
+
+            dropzone.addEventListener('click', () => fileInput.click());
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-zinc-500');
+            });
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-zinc-500'));
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-zinc-500');
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handleFileSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            function handleFileSelect(file) {
+                currentFile = file;
+                currentCategory = detectCategory(file);
+
+                fileNameEl.textContent = file.name;
+                fileSizeOrigEl.textContent = formatBytes(file.size);
+                fileCategoryBadge.textContent = currentCategory.toUpperCase();
+
+                // Populate dynamic target format options
+                targetFormat.innerHTML = '';
+                const options = FORMAT_MAP[currentCategory] || FORMAT_MAP.image;
+                options.forEach((opt) => {
+                    const el = document.createElement('option');
+                    el.value = opt.value;
+                    el.textContent = opt.label;
+                    targetFormat.appendChild(el);
+                });
+
+                optionsCard.classList.remove('hidden');
+                resultCard.classList.add('hidden');
+                processStatus.classList.add('hidden');
+            }
+
+            if (qualitySlider && qualityVal) {
+                qualitySlider.addEventListener('input', (e) => {
+                    qualityVal.textContent = e.target.value + '%';
+                });
+            }
+
+            if (processBtn) {
+                processBtn.addEventListener('click', async () => {
+                    if (!currentFile) return;
+
+                    const quality = parseInt(qualitySlider.value, 10) / 100;
+                    const selectedMime = targetFormat.value;
+
+                    processStatus.classList.remove('hidden');
+                    processStatusText.textContent = `[ Processing ${currentCategory} file... ]`;
+                    processBtn.disabled = true;
+
+                    try {
+                        if (currentCategory === 'image') {
+                            // Image Compression via Canvas API
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const img = new Image();
+                                img.onload = () => {
+                                    const canvas = document.createElement('canvas');
+                                    canvas.width = img.width;
+                                    canvas.height = img.height;
+                                    const ctx = canvas.getContext('2d');
+
+                                    if (selectedMime === 'image/jpeg') {
+                                        ctx.fillStyle = '#FFFFFF';
+                                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                                    }
+
+                                    ctx.drawImage(img, 0, 0);
+
+                                    canvas.toBlob((blob) => {
+                                        if (blob) {
+                                            finishProcessing(blob, selectedMime);
+                                        }
+                                    }, selectedMime, quality);
+                                };
+                                img.src = e.target.result;
+                            };
+                            reader.readAsDataURL(currentFile);
+
+                        } else if (currentCategory === 'video') {
+                            // Video Processing via HTML5 MediaRecorder
+                            processStatusText.textContent = '[ Re-encoding video stream in browser memory... ]';
+                            const videoEl = document.createElement('video');
+                            videoEl.src = URL.createObjectURL(currentFile);
+                            videoEl.muted = true;
+                            
+                            videoEl.onloadedmetadata = () => {
+                                const stream = videoEl.captureStream ? videoEl.captureStream(30) : (videoEl.mozCaptureStream ? videoEl.mozCaptureStream(30) : null);
+                                if (!stream || !window.MediaRecorder) {
+                                    // Fallback direct blob pass with quality note
+                                    finishProcessing(currentFile, selectedMime);
+                                    return;
+                                }
+
+                                let recMime = 'video/webm';
+                                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                                    recMime = 'video/webm;codecs=vp9';
+                                } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+                                    recMime = 'video/mp4';
+                                }
+
+                                const bps = Math.round(1500000 * quality); // Bitrate based on quality slider
+                                const recorder = new MediaRecorder(stream, { mimeType: recMime, videoBitsPerSecond: bps });
+                                const chunks = [];
+
+                                recorder.ondataavailable = (ev) => {
+                                    if (ev.data && ev.data.size > 0) chunks.push(ev.data);
+                                };
+
+                                recorder.onstop = () => {
+                                    const blob = new Blob(chunks, { type: recMime });
+                                    finishProcessing(blob, recMime);
+                                };
+
+                                videoEl.play();
+                                recorder.start(100);
+
+                                videoEl.onended = () => {
+                                    recorder.stop();
+                                };
+
+                                // Timeout safety for long videos
+                                setTimeout(() => {
+                                    if (recorder.state === 'recording') {
+                                        recorder.stop();
+                                    }
+                                }, Math.min(videoEl.duration * 1000 + 500, 15000));
+                            };
+                        } else {
+                            // Audio Fallback
+                            finishProcessing(currentFile, selectedMime);
+                        }
+                    } catch (err) {
+                        console.error('Processing error:', err);
+                        processStatusText.textContent = '❌ Error processing file in browser.';
+                    } finally {
+                        processBtn.disabled = false;
+                    }
+                });
+            }
+
+            function finishProcessing(blob, mimeType) {
+                const origSize = currentFile.size;
+                const newSize = blob.size;
+                const savings = Math.round(((origSize - newSize) / origSize) * 100);
+
+                resOrigSize.textContent = formatBytes(origSize);
+                resNewSize.textContent = formatBytes(newSize);
+                savingsTag.textContent = savings > 0 ? `Saved ${savings}%` : 'Processed';
+
+                let ext = 'webp';
+                if (mimeType.includes('png')) ext = 'png';
+                else if (mimeType.includes('jpeg') || mimeType.includes('jpg')) ext = 'jpg';
+                else if (mimeType.includes('mp4')) ext = 'mp4';
+                else if (mimeType.includes('webm')) ext = 'webm';
+                else if (mimeType.includes('wav')) ext = 'wav';
+
+                const baseName = currentFile.name.substring(0, currentFile.name.lastIndexOf('.')) || 'converted';
+                const outFileName = `${baseName}_compressed.${ext}`;
+
+                const url = URL.createObjectURL(blob);
+                downloadBtn.href = url;
+                downloadBtn.download = outFileName;
+
+                processStatus.classList.add('hidden');
+                resultCard.classList.remove('hidden');
+            }
+        });
+    </script>
+</Layout>

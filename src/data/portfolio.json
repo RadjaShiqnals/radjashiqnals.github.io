@@ -20,10 +20,10 @@
     }
   },
   "skills": [
-    { "checked": true, "name": "PHP & Laravel", "desc": "Fullstack Infrastructure, manual migrations, PSE registration" },
-    { "checked": true, "name": "Vue.js & React", "desc": "Highly responsive frontend systems, UI/UX component design" },
-    { "checked": true, "name": "Astro & Tailwind CSS", "desc": "High-performance static rendering, clean CSS utility design" },
-    { "checked": true, "name": "Linux Systems", "desc": "Daily power user, custom desktop/kernel optimizations" }
+    { "checked": true, "name": "PHP & Laravel", "desc": "Fullstack Infrastructure, manual migrations, PSE registration", "url": "https://laravel.com/docs" },
+    { "checked": true, "name": "Vue.js & React", "desc": "Highly responsive frontend systems, UI/UX component design", "url": "https://vuejs.org/guide/introduction" },
+    { "checked": true, "name": "Astro & Tailwind CSS", "desc": "High-performance static rendering, clean CSS utility design", "url": "https://docs.astro.build" },
+    { "checked": true, "name": "Linux Systems", "desc": "Daily power user, custom desktop/kernel optimizations", "url": "https://wiki.archlinux.org" }
   ],
   "projects": [
     {

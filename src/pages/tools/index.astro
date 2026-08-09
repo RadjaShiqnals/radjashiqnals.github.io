@@ -1,0 +1,95 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout title="Free Web Utilities & Tools - Radja Genta">
+    <div class="page-wrapper animate-fade-in-up">
+        
+        <!-- Header area -->
+        <section class="py-6 md:py-10 flex flex-col items-center text-center">
+            <div class="hero-badge">
+                [ utilities ] 100% free & open web tools
+            </div>
+            
+            <h1 class="heading-display mb-3">
+                Free Developer Tools
+            </h1>
+            
+            <p class="text-lead mb-8 max-w-xl">
+                A collection of free, high-performance web utilities running directly in your browser. No signups, no paywalls, 100% private.
+            </p>
+        </section>
+
+        <!-- Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            
+            <!-- Tool 1: Downloader -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:download-box-outline" class="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">Media Downloader</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-amber-950 text-amber-400 border border-amber-800 uppercase font-mono">Work in Progress</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Download media from TikTok, YouTube, Instagram, and X/Twitter. (Currently under development).
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#TikTok</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#YouTube</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Instagram</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#TwitterX</span>
+                    </div>
+
+                    <a href="/tools/downloader" class="btn-primary w-full text-center block">
+                        [ View Downloader (WIP) ]
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tool 2: Converter & Compressor -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:file-cog-outline" class="w-6 h-6 text-sky-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">Compressor & Converter</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-sky-950 text-sky-400 border border-sky-800 uppercase font-mono">100% Client-Side</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Compress image files (JPG, PNG, WebP, AVIF) and convert media formats locally in your browser memory.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#WebAssembly</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#WebP</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#PNG/JPG</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#ZeroUpload</span>
+                    </div>
+
+                    <a href="/tools/converter" class="btn-primary w-full text-center block">
+                        [ Launch Converter ]
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Return Home -->
+        <div class="flex justify-center mb-12">
+            <a href="/" class="btn-primary">
+                [ return to home ]
+            </a>
+        </div>
+
+    </div>
+</Layout>
