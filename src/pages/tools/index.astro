@@ -1,0 +1,145 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout title="Free Web Utilities & Tools - Radja Genta">
+    <div class="page-wrapper animate-fade-in-up">
+        
+        <!-- Header area -->
+        <section class="py-6 md:py-10 flex flex-col items-center text-center">
+            <div class="hero-badge">
+                [ utilities ] 100% free & open web tools
+            </div>
+            
+            <h1 class="heading-display mb-3">
+                Free Developer Tools
+            </h1>
+            
+            <p class="text-lead mb-8 max-w-xl">
+                A collection of free, high-performance web utilities running directly in your browser. No signups, no paywalls, 100% private.
+            </p>
+        </section>
+
+        <!-- Tools Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            
+            <!-- Tool 1: Universal Media Editor -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:image-edit-outline" class="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">Universal Media Editor</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 uppercase font-mono">100% Client-Side</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Edit images (filters, rotate, resize, text), trim & adjust audio (gain, fade, WAV export), and trim/filter video — all locally in browser.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Image</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Audio</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Video</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#CanvasAPI</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#WebAudio</span>
+                    </div>
+                    <a href="/tools/media-editor" class="btn-primary w-full text-center block">
+                        [ Launch Media Editor ]
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tool 2: PDF Studio -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:file-pdf-box" class="w-6 h-6 text-orange-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">PDF Studio</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-orange-950 text-orange-400 border border-orange-800 uppercase font-mono">100% Client-Side</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Merge PDFs, split & extract pages, rotate pages, and convert images to PDF — all without uploading files anywhere. Powered by pdf-lib.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Merge</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Split</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Rotate</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Img2PDF</span>
+                    </div>
+                    <a href="/tools/pdf-studio" class="btn-primary w-full text-center block">
+                        [ Launch PDF Studio ]
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tool 3: Markdown Live Preview -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:language-markdown-outline" class="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">Markdown Live Preview</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-purple-950 text-purple-400 border border-purple-800 uppercase font-mono">100% Client-Side</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Real-time dual-pane Markdown editor and HTML preview. GFM syntax, tables, task lists, syntax highlighting, scroll sync, and export to .md or PDF.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Markdown</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#GFM</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#LivePreview</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#Export</span>
+                    </div>
+                    <a href="/tools/markdown-preview" class="btn-primary w-full text-center block">
+                        [ Launch Markdown Preview ]
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tool 4: Compressor & Converter -->
+            <div class="project-card group p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-between p-2 mb-4">
+                        <Icon name="mdi:file-cog-outline" class="w-6 h-6 text-sky-400" />
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="heading-3">Compressor & Converter</h2>
+                        <span class="text-[9px] px-1.5 py-0.5 bg-sky-950 text-sky-400 border border-sky-800 uppercase font-mono">100% Client-Side</span>
+                    </div>
+                    <p class="text-muted mb-6">
+                        Compress image files (JPG, PNG, WebP, AVIF) and convert media formats locally in your browser memory.
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex flex-wrap gap-1.5 text-[10px] font-mono text-zinc-500">
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#WebP</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#PNG/JPG</span>
+                        <span class="px-2 py-0.5 bg-zinc-900 border border-zinc-800">#ZeroUpload</span>
+                    </div>
+                    <a href="/tools/converter" class="btn-primary w-full text-center block">
+                        [ Launch Converter ]
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Return Home -->
+        <div class="flex justify-center mb-12">
+            <a href="/" class="btn-primary">
+                [ return to home ]
+            </a>
+        </div>
+
+    </div>
+</Layout>

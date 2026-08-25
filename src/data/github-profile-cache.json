@@ -1,0 +1,51 @@
+{
+  "username": "RadjaShiqnals",
+  "avatar_url": "https://avatars.githubusercontent.com/u/123444114?v=4",
+  "name": "Radja Genta Saputra",
+  "bio": "When ya...",
+  "location": "Indonesia",
+  "public_repos": 33,
+  "followers": 23,
+  "following": 22,
+  "total_stars": 0,
+  "total_forks": 0,
+  "languages": [
+    {
+      "name": "JavaScript",
+      "count": 11
+    },
+    {
+      "name": "PHP",
+      "count": 9
+    },
+    {
+      "name": "HTML",
+      "count": 2
+    },
+    {
+      "name": "TypeScript",
+      "count": 2
+    },
+    {
+      "name": "Astro",
+      "count": 1
+    },
+    {
+      "name": "Shell",
+      "count": 1
+    },
+    {
+      "name": "Java",
+      "count": 1
+    },
+    {
+      "name": "Rust",
+      "count": 1
+    },
+    {
+      "name": "SCSS",
+      "count": 1
+    }
+  ],
+  "last_updated": "2026-08-23T11:40:19.056Z"
+}

@@ -1,60 +1,52 @@
-# RadjaShiqnals Portfolio
+# Astro Starter Kit: Basics
 
-This project is a personal portfolio website showcasing my projects, skills, and experiences. It is built using modern web technologies including React, Tailwind CSS, and Vite.
+```sh
+npm create astro@latest -- --template basics
+```
 
-## Technologies Used
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-- **React**: A JavaScript library for building user interfaces.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
-- **Vite**: A fast build tool and development server.
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-## Libraries
+![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
-- **@react-spring/web**: For animations.
-- **@use-gesture/react**: For handling gestures.
-- **framer-motion**: For animations.
-- **react-loader-spinner**: For loading spinners.
-- **react-router-dom**: For routing.
-- **react-tsparticles**: For particle animations.
-- **react-typed**: For typed text animations.
+## 🚀 Project Structure
 
-## Usage
+Inside of your Astro project, you'll see the following folders and files:
 
-This portfolio is used to showcase my projects, skills, and experiences in a visually appealing and interactive manner.
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src
+│   ├── assets
+│   │   └── astro.svg
+│   ├── components
+│   │   └── Welcome.astro
+│   ├── layouts
+│   │   └── Layout.astro
+│   └── pages
+│       └── index.astro
+└── package.json
+```
 
-## How to Clone and Run
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/radjashiqnals/radjashiqnals.github.io.git
-   ```
+## 🧞 Commands
 
-2. **Navigate to the project directory:**
-   ```bash
-   cd radjashiqnals.github.io
-   ```
+All commands are run from the root of the project, from a terminal:
 
-3. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `npm install`             | Installs dependencies                            |
+| `npm run dev`             | Starts local dev server at `localhost:4321`      |
+| `npm run build`           | Build your production site to `./dist/`          |
+| `npm run preview`         | Preview your build locally, before deploying     |
+| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
+## 👀 Want to learn more?
 
-5. **Build the project for production:**
-   ```bash
-   npm run build
-   ```
-
-6. **Preview the production build:**
-   ```bash
-   npm run preview
-   ```
-
-## Deployment
-
-This project can be deployed using services like Vercel, Netlify, or GitHub Pages.
-
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

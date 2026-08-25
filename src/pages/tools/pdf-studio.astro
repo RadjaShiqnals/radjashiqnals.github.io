@@ -1,0 +1,673 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout title="PDF Studio - Merge, Split & Convert PDFs - Radja Genta">
+    <div class="page-wrapper animate-fade-in-up">
+
+        <!-- Header -->
+        <section class="py-6 md:py-8 flex flex-col items-center text-center">
+            <div class="hero-badge">
+                [ tool ] 100% client-side · your pdfs never leave your device
+            </div>
+            <h1 class="heading-display mb-2 text-2xl md:text-4xl">
+                PDF Studio
+            </h1>
+            <p class="text-lead mb-6 text-xs md:text-sm max-w-lg">
+                Merge, split, reorder, rotate, and convert PDF files entirely in your browser. No uploads. No servers. Powered by pdf-lib.
+            </p>
+        </section>
+
+        <!-- Main Tool Box -->
+        <div class="glass-card mb-8 w-full max-w-4xl mx-auto p-0 overflow-hidden">
+
+            <!-- Tab Header -->
+            <div class="tab-header" id="pdf-tab-header">
+                <button class="tab-btn active" data-pdf-tab="merge">
+                    <Icon name="mdi:merge" class="w-3.5 h-3.5" /> Merge
+                </button>
+                <button class="tab-btn" data-pdf-tab="split">
+                    <Icon name="mdi:content-cut" class="w-3.5 h-3.5" /> Split / Extract
+                </button>
+                <button class="tab-btn" data-pdf-tab="rotate">
+                    <Icon name="mdi:rotate-right" class="w-3.5 h-3.5" /> Rotate
+                </button>
+                <button class="tab-btn" data-pdf-tab="img2pdf">
+                    <Icon name="mdi:image-multiple-outline" class="w-3.5 h-3.5" /> Images → PDF
+                </button>
+            </div>
+
+            <!-- ========== MERGE TAB ========== -->
+            <div id="pdf-tab-merge" class="pdf-tab-content p-5 md:p-6 space-y-4">
+                <p class="text-xs font-mono text-zinc-500">Upload multiple PDF files. Drag to reorder, then merge into one file.</p>
+
+                <!-- Upload zone -->
+                <div id="merge-dropzone" class="border-2 border-dashed border-zinc-800 bg-zinc-950 p-6 text-center cursor-pointer hover:border-zinc-600 transition-colors select-none">
+                    <input type="file" id="merge-input" class="hidden" accept="application/pdf" multiple />
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-center mx-auto mb-3">
+                        <Icon name="mdi:file-plus-outline" class="w-5 h-5 text-orange-400" />
+                    </div>
+                    <p class="text-xs font-mono text-zinc-200 font-bold mb-1">Click or drag & drop PDF files</p>
+                    <p class="text-[11px] font-mono text-zinc-500">Select multiple PDFs to merge. Reorder by dragging below.</p>
+                </div>
+
+                <!-- File list -->
+                <div id="merge-file-list" class="hidden space-y-1 font-mono text-xs">
+                    <div class="flex items-center justify-between text-zinc-500 text-[10px] px-2 pb-1 border-b border-zinc-900">
+                        <span>Drag to reorder</span>
+                        <span id="merge-total-info" class="text-zinc-500">0 files</span>
+                    </div>
+                    <div id="merge-sortable" class="space-y-1"></div>
+                </div>
+
+                <div id="merge-status" class="hidden text-[11px] text-orange-400 font-mono py-1"></div>
+                <button id="merge-btn" class="btn-primary w-full hidden">[ Merge All PDFs & Download ]</button>
+            </div>
+
+            <!-- ========== SPLIT TAB ========== -->
+            <div id="pdf-tab-split" class="pdf-tab-content hidden p-5 md:p-6 space-y-4">
+                <p class="text-xs font-mono text-zinc-500">Upload a PDF to extract specific pages or split into individual pages.</p>
+
+                <div id="split-dropzone" class="border-2 border-dashed border-zinc-800 bg-zinc-950 p-6 text-center cursor-pointer hover:border-zinc-600 transition-colors select-none">
+                    <input type="file" id="split-input" class="hidden" accept="application/pdf" />
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-center mx-auto mb-3">
+                        <Icon name="mdi:file-document-outline" class="w-5 h-5 text-orange-400" />
+                    </div>
+                    <p class="text-xs font-mono text-zinc-200 font-bold mb-1">Click or drag & drop a PDF</p>
+                    <p class="text-[11px] font-mono text-zinc-500">Single PDF file only</p>
+                </div>
+
+                <div id="split-options" class="hidden space-y-4 font-mono text-xs">
+                    <div class="flex items-center justify-between border border-zinc-800 bg-zinc-950 px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <Icon name="mdi:file-pdf-box" class="w-4 h-4 text-orange-400" />
+                            <span id="split-filename" class="text-zinc-200 font-bold truncate max-w-xs">document.pdf</span>
+                        </div>
+                        <span id="split-page-count" class="text-zinc-500 text-[11px]">0 pages</span>
+                    </div>
+
+                    <div class="border border-zinc-800 bg-zinc-950/60 p-4 space-y-3">
+                        <p class="text-zinc-400 text-[11px] uppercase tracking-widest font-bold">Mode</p>
+                        <div class="flex gap-4 flex-wrap">
+                            <label class="flex items-center gap-2 cursor-pointer text-zinc-300">
+                                <input type="radio" name="split-mode" value="pages" checked class="accent-orange-500" />
+                                Extract page range
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-zinc-300">
+                                <input type="radio" name="split-mode" value="all" class="accent-orange-500" />
+                                Split each page into separate PDF
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="split-range-wrap" class="border border-zinc-800 bg-zinc-950/60 p-4 space-y-3">
+                        <p class="text-zinc-400 text-[11px] uppercase tracking-widest font-bold">Page Range</p>
+                        <p class="text-zinc-600 text-[10px]">Specify pages, e.g.: <span class="text-zinc-400">1,3,5-8,10</span></p>
+                        <input type="text" id="split-range-input" class="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs font-mono text-zinc-100 outline-none focus:border-zinc-500" placeholder="e.g. 1,3,5-8,10" />
+                    </div>
+
+                    <div id="split-status" class="hidden text-[11px] text-orange-400 font-mono py-1"></div>
+                    <button id="split-btn" class="btn-primary w-full">[ Extract / Split Pages ]</button>
+                </div>
+            </div>
+
+            <!-- ========== ROTATE TAB ========== -->
+            <div id="pdf-tab-rotate" class="pdf-tab-content hidden p-5 md:p-6 space-y-4">
+                <p class="text-xs font-mono text-zinc-500">Upload a PDF and rotate specific pages or the entire document.</p>
+
+                <div id="rot-dropzone" class="border-2 border-dashed border-zinc-800 bg-zinc-950 p-6 text-center cursor-pointer hover:border-zinc-600 transition-colors select-none">
+                    <input type="file" id="rot-input" class="hidden" accept="application/pdf" />
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-center mx-auto mb-3">
+                        <Icon name="mdi:rotate-right" class="w-5 h-5 text-orange-400" />
+                    </div>
+                    <p class="text-xs font-mono text-zinc-200 font-bold mb-1">Click or drag & drop a PDF</p>
+                    <p class="text-[11px] font-mono text-zinc-500">Single PDF file</p>
+                </div>
+
+                <div id="rot-options" class="hidden space-y-4 font-mono text-xs">
+                    <div class="flex items-center justify-between border border-zinc-800 bg-zinc-950 px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <Icon name="mdi:file-pdf-box" class="w-4 h-4 text-orange-400" />
+                            <span id="rot-filename" class="text-zinc-200 font-bold truncate max-w-xs">document.pdf</span>
+                        </div>
+                        <span id="rot-page-count" class="text-zinc-500 text-[11px]">0 pages</span>
+                    </div>
+
+                    <div class="border border-zinc-800 bg-zinc-950/60 p-4 space-y-3">
+                        <p class="text-zinc-400 text-[11px] uppercase tracking-widest font-bold">Target Pages</p>
+                        <div class="flex gap-4 flex-wrap">
+                            <label class="flex items-center gap-2 cursor-pointer text-zinc-300">
+                                <input type="radio" name="rot-target" value="all" checked class="accent-orange-500" />
+                                All pages
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-zinc-300">
+                                <input type="radio" name="rot-target" value="range" class="accent-orange-500" />
+                                Specific pages
+                            </label>
+                        </div>
+                        <input type="text" id="rot-range-input" class="w-full bg-zinc-900 border border-zinc-700 px-3 py-2 text-xs font-mono text-zinc-100 outline-none focus:border-zinc-500 hidden" placeholder="e.g. 1,3,5-8" />
+                    </div>
+
+                    <div class="border border-zinc-800 bg-zinc-950/60 p-4 space-y-3">
+                        <p class="text-zinc-400 text-[11px] uppercase tracking-widest font-bold">Rotation Angle</p>
+                        <div class="flex gap-3 flex-wrap">
+                            <button class="rot-angle-btn pdf-action-btn" data-deg="90">↻ 90° CW</button>
+                            <button class="rot-angle-btn pdf-action-btn" data-deg="180">↻ 180°</button>
+                            <button class="rot-angle-btn pdf-action-btn" data-deg="270">↺ 90° CCW</button>
+                        </div>
+                        <p id="rot-selected-angle" class="text-zinc-500 text-[10px]">Selected: 90°</p>
+                    </div>
+
+                    <div id="rot-status" class="hidden text-[11px] text-orange-400 font-mono py-1"></div>
+                    <button id="rot-btn" class="btn-primary w-full">[ Rotate & Download PDF ]</button>
+                </div>
+            </div>
+
+            <!-- ========== IMG → PDF TAB ========== -->
+            <div id="pdf-tab-img2pdf" class="pdf-tab-content hidden p-5 md:p-6 space-y-4">
+                <p class="text-xs font-mono text-zinc-500">Upload images to convert them into a single PDF. Each image becomes one page.</p>
+
+                <div id="img2pdf-dropzone" class="border-2 border-dashed border-zinc-800 bg-zinc-950 p-6 text-center cursor-pointer hover:border-zinc-600 transition-colors select-none">
+                    <input type="file" id="img2pdf-input" class="hidden" accept="image/*" multiple />
+                    <div class="w-10 h-10 border border-zinc-800 bg-zinc-900/60 flex items-center justify-center mx-auto mb-3">
+                        <Icon name="mdi:image-multiple-outline" class="w-5 h-5 text-orange-400" />
+                    </div>
+                    <p class="text-xs font-mono text-zinc-200 font-bold mb-1">Click or drag & drop images</p>
+                    <p class="text-[11px] font-mono text-zinc-500">JPG, PNG, WebP, GIF — Multiple files allowed</p>
+                </div>
+
+                <div id="img2pdf-list" class="hidden space-y-2 font-mono text-xs">
+                    <div class="flex items-center justify-between text-zinc-500 text-[10px] px-2 pb-1 border-b border-zinc-900">
+                        <span id="img2pdf-count">0 images</span>
+                        <button id="img2pdf-clear" class="pdf-action-btn text-red-400 border-red-900 hover:border-red-700">✕ Clear All</button>
+                    </div>
+                    <div id="img2pdf-sortable" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
+                </div>
+
+                <div class="border border-zinc-800 bg-zinc-950/60 p-4 space-y-3 font-mono text-xs">
+                    <p class="text-zinc-400 text-[11px] uppercase tracking-widest font-bold">Page Settings</p>
+                    <div class="flex gap-4 flex-wrap items-center">
+                        <div class="flex items-center gap-2">
+                            <label class="text-zinc-500 text-[10px]">Page Size:</label>
+                            <select id="img2pdf-pagesize" class="bg-zinc-900 border border-zinc-700 px-2 py-1 text-xs font-mono text-zinc-100 outline-none">
+                                <option value="A4">A4 (595×842)</option>
+                                <option value="Letter">Letter (612×792)</option>
+                                <option value="A3">A3 (842×1191)</option>
+                                <option value="fit">Fit to Image</option>
+                            </select>
+                        </div>
+                        <label class="flex items-center gap-1.5 text-zinc-400 cursor-pointer">
+                            <input type="checkbox" id="img2pdf-landscape" class="accent-orange-500" /> Landscape
+                        </label>
+                    </div>
+                </div>
+
+                <div id="img2pdf-status" class="hidden text-[11px] text-orange-400 font-mono py-1"></div>
+                <button id="img2pdf-btn" class="btn-primary w-full hidden">[ Convert Images to PDF & Download ]</button>
+            </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="flex justify-center mb-12">
+            <a href="/tools" class="btn-primary">
+                [ return to tools ]
+            </a>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .pdf-action-btn {
+        @apply px-3 py-1.5 bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white transition-all text-xs font-mono cursor-pointer;
+    }
+    .rot-angle-btn.selected {
+        @apply border-orange-600 text-orange-400 bg-orange-950/30;
+    }
+</style>
+
+<script is:inline>
+// Load pdf-lib from CDN (100% client-side)
+(function loadPdfLib() {
+    if (window.PDFLib) return;
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+    s.onload = () => console.log('[pdf-lib] loaded');
+    document.head.appendChild(s);
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    // =========================================================
+    // TAB SWITCHING
+    // =========================================================
+    const pdfTabBtns = document.querySelectorAll('[data-pdf-tab]');
+    const pdfTabContents = document.querySelectorAll('.pdf-tab-content');
+    pdfTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            pdfTabBtns.forEach(b => b.classList.remove('active'));
+            pdfTabContents.forEach(c => c.classList.add('hidden'));
+            btn.classList.add('active');
+            document.getElementById('pdf-tab-' + btn.dataset.pdfTab).classList.remove('hidden');
+        });
+    });
+
+    // =========================================================
+    // UTILITIES
+    // =========================================================
+    function formatBytes(bytes) {
+        if (!bytes) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function parsePageRange(rangeStr, totalPages) {
+        // Parse "1,3,5-8,10" into 0-indexed array
+        const pages = new Set();
+        const parts = rangeStr.split(',').map(s => s.trim()).filter(Boolean);
+        for (const part of parts) {
+            if (part.includes('-')) {
+                const [a, b] = part.split('-').map(Number);
+                if (!isNaN(a) && !isNaN(b)) {
+                    for (let i = Math.max(1, a); i <= Math.min(totalPages, b); i++) pages.add(i - 1);
+                }
+            } else {
+                const n = parseInt(part);
+                if (!isNaN(n) && n >= 1 && n <= totalPages) pages.add(n - 1);
+            }
+        }
+        return Array.from(pages).sort((a, b) => a - b);
+    }
+
+    function setupDropzone(dzId, inputId, handler, multiple = false) {
+        const dz = document.getElementById(dzId);
+        const input = document.getElementById(inputId);
+        if (!dz || !input) return;
+        if (multiple) input.setAttribute('multiple', '');
+        dz.addEventListener('click', () => input.click());
+        dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('border-zinc-500'); });
+        dz.addEventListener('dragleave', () => dz.classList.remove('border-zinc-500'));
+        dz.addEventListener('drop', e => {
+            e.preventDefault(); dz.classList.remove('border-zinc-500');
+            const files = Array.from(e.dataTransfer.files);
+            if (files.length) handler(files);
+        });
+        input.addEventListener('change', e => {
+            const files = Array.from(e.target.files);
+            if (files.length) handler(files);
+        });
+    }
+
+    async function waitForPdfLib() {
+        let tries = 0;
+        while (!window.PDFLib && tries < 50) {
+            await new Promise(r => setTimeout(r, 100));
+            tries++;
+        }
+        if (!window.PDFLib) throw new Error('pdf-lib failed to load');
+        return window.PDFLib;
+    }
+
+    function downloadBlob(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // =========================================================
+    // MERGE TAB
+    // =========================================================
+    let mergeFiles = [];
+
+    setupDropzone('merge-dropzone', 'merge-input', handleMergeFiles, true);
+
+    function handleMergeFiles(files) {
+        const pdfs = files.filter(f => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf'));
+        mergeFiles.push(...pdfs);
+        renderMergeList();
+    }
+
+    function renderMergeList() {
+        const listEl = document.getElementById('merge-file-list');
+        const sortable = document.getElementById('merge-sortable');
+        const btn = document.getElementById('merge-btn');
+        const info = document.getElementById('merge-total-info');
+        if (!mergeFiles.length) { listEl.classList.add('hidden'); btn.classList.add('hidden'); return; }
+        listEl.classList.remove('hidden');
+        btn.classList.remove('hidden');
+        info.textContent = `${mergeFiles.length} file${mergeFiles.length > 1 ? 's' : ''}`;
+        sortable.innerHTML = '';
+        mergeFiles.forEach((f, idx) => {
+            const row = document.createElement('div');
+            row.className = 'flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-xs cursor-grab select-none';
+            row.draggable = true;
+            row.dataset.idx = idx;
+            row.innerHTML = `
+                <span class="text-zinc-600 mr-1">⠿</span>
+                <span class="text-zinc-500 w-4 text-right">${idx + 1}.</span>
+                <span class="flex-1 text-zinc-200 truncate">${f.name}</span>
+                <span class="text-zinc-600 text-[10px]">${formatBytes(f.size)}</span>
+                <button class="merge-remove text-red-500 hover:text-red-300 text-[11px] px-1" data-idx="${idx}">✕</button>
+            `;
+            sortable.appendChild(row);
+        });
+
+        // Drag-to-reorder
+        let dragSrc = null;
+        sortable.querySelectorAll('[draggable]').forEach(row => {
+            row.addEventListener('dragstart', e => { dragSrc = row; row.classList.add('opacity-40'); });
+            row.addEventListener('dragend', () => { dragSrc = null; sortable.querySelectorAll('[draggable]').forEach(r => r.classList.remove('opacity-40')); });
+            row.addEventListener('dragover', e => { e.preventDefault(); });
+            row.addEventListener('drop', e => {
+                e.preventDefault();
+                if (dragSrc && dragSrc !== row) {
+                    const fromIdx = parseInt(dragSrc.dataset.idx);
+                    const toIdx = parseInt(row.dataset.idx);
+                    const moved = mergeFiles.splice(fromIdx, 1)[0];
+                    mergeFiles.splice(toIdx, 0, moved);
+                    renderMergeList();
+                }
+            });
+        });
+
+        // Remove buttons
+        sortable.querySelectorAll('.merge-remove').forEach(btn => {
+            btn.addEventListener('click', () => {
+                mergeFiles.splice(parseInt(btn.dataset.idx), 1);
+                renderMergeList();
+            });
+        });
+    }
+
+    document.getElementById('merge-btn')?.addEventListener('click', async () => {
+        if (mergeFiles.length < 1) return;
+        const statusEl = document.getElementById('merge-status');
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = '[ Merging PDFs in browser memory... ]';
+        try {
+            const { PDFDocument } = await waitForPdfLib();
+            const merged = await PDFDocument.create();
+            for (const file of mergeFiles) {
+                const bytes = await file.arrayBuffer();
+                const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+                const pages = await merged.copyPages(doc, doc.getPageIndices());
+                pages.forEach(p => merged.addPage(p));
+                statusEl.textContent = `[ Processing: ${file.name} ]`;
+            }
+            const pdfBytes = await merged.save();
+            downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'merged.pdf');
+            statusEl.textContent = '✓ Merge complete! Download started.';
+        } catch (err) {
+            statusEl.textContent = `❌ Error: ${err.message}`;
+        }
+    });
+
+    // =========================================================
+    // SPLIT TAB
+    // =========================================================
+    let splitFile = null;
+    let splitTotalPages = 0;
+
+    setupDropzone('split-dropzone', 'split-input', files => {
+        splitFile = files[0];
+        loadSplitFile(splitFile);
+    });
+
+    async function loadSplitFile(file) {
+        try {
+            const { PDFDocument } = await waitForPdfLib();
+            const bytes = await file.arrayBuffer();
+            const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+            splitTotalPages = doc.getPageCount();
+            document.getElementById('split-filename').textContent = file.name;
+            document.getElementById('split-page-count').textContent = `${splitTotalPages} page${splitTotalPages > 1 ? 's' : ''}`;
+            document.getElementById('split-range-input').value = `1-${splitTotalPages}`;
+            document.getElementById('split-dropzone').classList.add('hidden');
+            document.getElementById('split-options').classList.remove('hidden');
+        } catch (err) {
+            alert('Could not read PDF: ' + err.message);
+        }
+    }
+
+    document.querySelectorAll('input[name="split-mode"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('split-range-wrap').style.display = radio.value === 'pages' ? '' : 'none';
+        });
+    });
+
+    document.getElementById('split-btn')?.addEventListener('click', async () => {
+        if (!splitFile) return;
+        const mode = document.querySelector('input[name="split-mode"]:checked').value;
+        const statusEl = document.getElementById('split-status');
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = '[ Processing... ]';
+        try {
+            const { PDFDocument } = await waitForPdfLib();
+            const bytes = await splitFile.arrayBuffer();
+            const src = await PDFDocument.load(bytes, { ignoreEncryption: true });
+            const base = splitFile.name.replace(/\.pdf$/i, '');
+
+            if (mode === 'all') {
+                // Each page → separate download (ZIP not available without lib, download individually)
+                for (let i = 0; i < splitTotalPages; i++) {
+                    statusEl.textContent = `[ Generating page ${i + 1} of ${splitTotalPages}... ]`;
+                    const newDoc = await PDFDocument.create();
+                    const [page] = await newDoc.copyPages(src, [i]);
+                    newDoc.addPage(page);
+                    const pdfBytes = await newDoc.save();
+                    downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `${base}_page_${i + 1}.pdf`);
+                    await new Promise(r => setTimeout(r, 200));
+                }
+                statusEl.textContent = `✓ ${splitTotalPages} files downloaded.`;
+            } else {
+                const rangeStr = document.getElementById('split-range-input').value;
+                const pageIndices = parsePageRange(rangeStr, splitTotalPages);
+                if (!pageIndices.length) { statusEl.textContent = '❌ No valid pages in range.'; return; }
+                const newDoc = await PDFDocument.create();
+                const pages = await newDoc.copyPages(src, pageIndices);
+                pages.forEach(p => newDoc.addPage(p));
+                const pdfBytes = await newDoc.save();
+                downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `${base}_extracted.pdf`);
+                statusEl.textContent = `✓ Extracted ${pageIndices.length} page(s).`;
+            }
+        } catch (err) {
+            statusEl.textContent = `❌ Error: ${err.message}`;
+        }
+    });
+
+    // =========================================================
+    // ROTATE TAB
+    // =========================================================
+    let rotFile = null;
+    let rotTotalPages = 0;
+    let rotDeg = 90;
+
+    setupDropzone('rot-dropzone', 'rot-input', files => {
+        rotFile = files[0];
+        loadRotFile(rotFile);
+    });
+
+    async function loadRotFile(file) {
+        try {
+            const { PDFDocument } = await waitForPdfLib();
+            const bytes = await file.arrayBuffer();
+            const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+            rotTotalPages = doc.getPageCount();
+            document.getElementById('rot-filename').textContent = file.name;
+            document.getElementById('rot-page-count').textContent = `${rotTotalPages} page${rotTotalPages > 1 ? 's' : ''}`;
+            document.getElementById('rot-dropzone').classList.add('hidden');
+            document.getElementById('rot-options').classList.remove('hidden');
+        } catch (err) { alert('Could not read PDF: ' + err.message); }
+    }
+
+    document.querySelectorAll('input[name="rot-target"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('rot-range-input').classList.toggle('hidden', radio.value !== 'range');
+        });
+    });
+
+    document.querySelectorAll('.rot-angle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.rot-angle-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            rotDeg = parseInt(btn.dataset.deg);
+            document.getElementById('rot-selected-angle').textContent = `Selected: ${rotDeg}°`;
+        });
+    });
+    document.querySelector('.rot-angle-btn')?.classList.add('selected');
+
+    document.getElementById('rot-btn')?.addEventListener('click', async () => {
+        if (!rotFile) return;
+        const statusEl = document.getElementById('rot-status');
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = '[ Rotating... ]';
+        try {
+            const { PDFDocument, degrees } = await waitForPdfLib();
+            const bytes = await rotFile.arrayBuffer();
+            const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+            const targetMode = document.querySelector('input[name="rot-target"]:checked').value;
+            let pageIndices;
+            if (targetMode === 'all') {
+                pageIndices = doc.getPageIndices();
+            } else {
+                const rangeStr = document.getElementById('rot-range-input').value;
+                pageIndices = parsePageRange(rangeStr, rotTotalPages);
+            }
+            pageIndices.forEach(i => {
+                const page = doc.getPage(i);
+                page.setRotation(degrees((page.getRotation().angle + rotDeg) % 360));
+            });
+            const pdfBytes = await doc.save();
+            const base = rotFile.name.replace(/\.pdf$/i, '');
+            downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `${base}_rotated.pdf`);
+            statusEl.textContent = `✓ Rotated ${pageIndices.length} page(s) by ${rotDeg}°.`;
+        } catch (err) { statusEl.textContent = `❌ Error: ${err.message}`; }
+    });
+
+    // =========================================================
+    // IMAGES → PDF TAB
+    // =========================================================
+    let img2pdfFiles = [];
+
+    setupDropzone('img2pdf-dropzone', 'img2pdf-input', files => {
+        const images = files.filter(f => f.type.startsWith('image/'));
+        img2pdfFiles.push(...images);
+        renderImg2pdfList();
+    }, true);
+
+    document.getElementById('img2pdf-clear')?.addEventListener('click', () => {
+        img2pdfFiles = [];
+        renderImg2pdfList();
+    });
+
+    function renderImg2pdfList() {
+        const listEl = document.getElementById('img2pdf-list');
+        const sortable = document.getElementById('img2pdf-sortable');
+        const btn = document.getElementById('img2pdf-btn');
+        const countEl = document.getElementById('img2pdf-count');
+        if (!img2pdfFiles.length) { listEl.classList.add('hidden'); btn.classList.add('hidden'); return; }
+        listEl.classList.remove('hidden');
+        btn.classList.remove('hidden');
+        countEl.textContent = `${img2pdfFiles.length} image${img2pdfFiles.length > 1 ? 's' : ''}`;
+        sortable.innerHTML = '';
+        img2pdfFiles.forEach((f, idx) => {
+            const url = URL.createObjectURL(f);
+            const cell = document.createElement('div');
+            cell.className = 'border border-zinc-800 bg-zinc-950 p-1.5 flex flex-col gap-1 relative group cursor-grab select-none';
+            cell.draggable = true;
+            cell.dataset.idx = idx;
+            cell.innerHTML = `
+                <img src="${url}" alt="${f.name}" class="w-full aspect-square object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                <span class="text-[9px] text-zinc-500 truncate font-mono">${f.name}</span>
+                <button class="img2pdf-remove absolute top-1 right-1 bg-zinc-900 border border-zinc-700 text-red-400 text-[10px] px-1 opacity-0 group-hover:opacity-100 transition-opacity" data-idx="${idx}">✕</button>
+            `;
+            sortable.appendChild(cell);
+        });
+
+        // Drag-reorder for img grid
+        let dragSrc = null;
+        sortable.querySelectorAll('[draggable]').forEach(cell => {
+            cell.addEventListener('dragstart', () => { dragSrc = cell; cell.classList.add('opacity-40'); });
+            cell.addEventListener('dragend', () => { dragSrc = null; sortable.querySelectorAll('[draggable]').forEach(c => c.classList.remove('opacity-40')); });
+            cell.addEventListener('dragover', e => e.preventDefault());
+            cell.addEventListener('drop', e => {
+                e.preventDefault();
+                if (dragSrc && dragSrc !== cell) {
+                    const from = parseInt(dragSrc.dataset.idx);
+                    const to = parseInt(cell.dataset.idx);
+                    const moved = img2pdfFiles.splice(from, 1)[0];
+                    img2pdfFiles.splice(to, 0, moved);
+                    renderImg2pdfList();
+                }
+            });
+        });
+
+        sortable.querySelectorAll('.img2pdf-remove').forEach(btn => {
+            btn.addEventListener('click', () => {
+                img2pdfFiles.splice(parseInt(btn.dataset.idx), 1);
+                renderImg2pdfList();
+            });
+        });
+    }
+
+    const PAGE_SIZES = {
+        A4: [595.28, 841.89],
+        Letter: [612, 792],
+        A3: [841.89, 1190.55],
+    };
+
+    document.getElementById('img2pdf-btn')?.addEventListener('click', async () => {
+        if (!img2pdfFiles.length) return;
+        const statusEl = document.getElementById('img2pdf-status');
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = '[ Building PDF... ]';
+        try {
+            const { PDFDocument } = await waitForPdfLib();
+            const doc = await PDFDocument.create();
+            const sizeKey = document.getElementById('img2pdf-pagesize').value;
+            const landscape = document.getElementById('img2pdf-landscape').checked;
+
+            for (let i = 0; i < img2pdfFiles.length; i++) {
+                const file = img2pdfFiles[i];
+                statusEl.textContent = `[ Embedding image ${i + 1} of ${img2pdfFiles.length}... ]`;
+                const bytes = await file.arrayBuffer();
+                let img;
+                const type = file.type;
+                if (type === 'image/jpeg' || type === 'image/jpg') {
+                    img = await doc.embedJpg(bytes);
+                } else if (type === 'image/png') {
+                    img = await doc.embedPng(bytes);
+                } else {
+                    // Convert to PNG via canvas
+                    const blobUrl = URL.createObjectURL(file);
+                    const imgEl = new Image();
+                    await new Promise((res, rej) => { imgEl.onload = res; imgEl.onerror = rej; imgEl.src = blobUrl; });
+                    const canvas = document.createElement('canvas');
+                    canvas.width = imgEl.naturalWidth; canvas.height = imgEl.naturalHeight;
+                    canvas.getContext('2d').drawImage(imgEl, 0, 0);
+                    const pngBlob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                    const pngBytes = await pngBlob.arrayBuffer();
+                    img = await doc.embedPng(pngBytes);
+                    URL.revokeObjectURL(blobUrl);
+                }
+
+                let [pw, ph] = sizeKey === 'fit' ? [img.width, img.height] : PAGE_SIZES[sizeKey];
+                if (landscape && sizeKey !== 'fit') { [pw, ph] = [ph, pw]; }
+                const page = doc.addPage([pw, ph]);
+                const scale = Math.min(pw / img.width, ph / img.height);
+                const w = img.width * scale;
+                const h = img.height * scale;
+                page.drawImage(img, { x: (pw - w) / 2, y: (ph - h) / 2, width: w, height: h });
+            }
+
+            const pdfBytes = await doc.save();
+            downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'images_to_pdf.pdf');
+            statusEl.textContent = `✓ PDF with ${img2pdfFiles.length} page(s) downloaded.`;
+        } catch (err) { statusEl.textContent = `❌ Error: ${err.message}`; }
+    });
+
+});
+</script>

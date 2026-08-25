@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+interface Props {
+	title?: string;
+}
+
+const { title = 'Radja Genta - Portfolio' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content="Radja Genta Saputra - Full-Stack Developer & Tech Lead. Explore my portfolio, projects, and skills." />
+		<title>{title}</title>
+		
+		<!-- Google Fonts for JetBrains Mono -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-zinc-950 text-zinc-300 min-h-screen flex flex-col font-mono selection:bg-zinc-800 selection:text-white">
+		
+		<!-- Top Navbar Header -->
+		<header class="navbar">
+			<div class="navbar-container">
+				<a href="/" id="logo-link" class="logo-link">
+					<span class="logo-bracket">&lt;</span>RadjaShiqnals<span class="logo-bracket">/&gt;</span>
+				</a>
+				
+				<nav class="nav-menu">
+					<a href="/#home" id="nav-home" class="nav-item">home</a>
+					<a href="/#about" id="nav-about" class="nav-item">about</a>
+					<a href="/projects" id="nav-projects" class="nav-item">projects</a>
+					<a href="/tools" id="nav-tools" class="nav-item">tools</a>
+					<a href="/#support" id="nav-support" class="nav-item">support</a>
+				</nav>
+			</div>
+		</header>
+
+		<!-- Main Layout Wrapper -->
+		<main class="main-content">
+			<slot />
+		</main>
+
+		<!-- Bottom Footer -->
+		<footer class="footer-container">
+			<span>© {new Date().getFullYear()} Radja Genta Saputra. All rights reserved.</span>
+			<div class="flex gap-4">
+				<a href="https://github.com/RadjaShiqnals" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-400 transition-colors">GitHub</a>
+				<a href="https://www.linkedin.com/in/radja-genta-saputra/" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-400 transition-colors">LinkedIn</a>
+				<a href="https://x.com/RadjaShiqnals" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-400 transition-colors">Twitter</a>
+			</div>
+		</footer>
+
+	</body>
+</html>
