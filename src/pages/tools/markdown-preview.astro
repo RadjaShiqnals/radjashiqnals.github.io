@@ -1,0 +1,505 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+---
+
+<Layout title="Markdown Live Preview - Real-time Editor - Radja Genta">
+    <div class="page-wrapper animate-fade-in-up">
+
+        <!-- Header -->
+        <section class="py-4 md:py-6 flex flex-col items-center text-center">
+            <div class="hero-badge">
+                [ tool ] real-time markdown editor & previewer
+            </div>
+            <h1 class="heading-display mb-2 text-2xl md:text-4xl">
+                Markdown Live Preview
+            </h1>
+            <p class="text-lead mb-4 text-xs md:text-sm max-w-lg">
+                Write Markdown on the left, see the rendered preview on the right — updated as you type. GFM syntax, syntax highlighting, tables, and more.
+            </p>
+        </section>
+
+        <!-- Stats Bar -->
+        <div class="flex flex-wrap gap-x-4 gap-y-1 justify-center mb-4 text-[11px] font-mono text-zinc-500 select-none">
+            <span>chars: <span id="stat-chars" class="text-zinc-300">0</span></span>
+            <span>words: <span id="stat-words" class="text-zinc-300">0</span></span>
+            <span>lines: <span id="stat-lines" class="text-zinc-300">0</span></span>
+            <span>reading: <span id="stat-read" class="text-zinc-300">0 min</span></span>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="w-full max-w-7xl mx-auto mb-2 flex flex-wrap gap-1.5 px-1 md:px-0">
+            <!-- Format actions -->
+            <div class="flex gap-1 flex-wrap">
+                <button class="md-fmt-btn" data-fmt="bold" title="Bold">B</button>
+                <button class="md-fmt-btn italic" data-fmt="italic" title="Italic">I</button>
+                <button class="md-fmt-btn" data-fmt="strike" title="Strikethrough">S̶</button>
+                <button class="md-fmt-btn" data-fmt="h1" title="Heading 1">H1</button>
+                <button class="md-fmt-btn" data-fmt="h2" title="Heading 2">H2</button>
+                <button class="md-fmt-btn" data-fmt="h3" title="Heading 3">H3</button>
+                <button class="md-fmt-btn" data-fmt="code-inline" title="Inline Code">`</button>
+                <button class="md-fmt-btn" data-fmt="code-block" title="Code Block">```</button>
+                <button class="md-fmt-btn" data-fmt="link" title="Link">🔗</button>
+                <button class="md-fmt-btn" data-fmt="image" title="Image">🖼</button>
+                <button class="md-fmt-btn" data-fmt="blockquote" title="Blockquote">"</button>
+                <button class="md-fmt-btn" data-fmt="ul" title="Bullet List">• List</button>
+                <button class="md-fmt-btn" data-fmt="ol" title="Ordered List">1. List</button>
+                <button class="md-fmt-btn" data-fmt="task" title="Task List">☑</button>
+                <button class="md-fmt-btn" data-fmt="table" title="Insert Table">⊞ Table</button>
+                <button class="md-fmt-btn" data-fmt="hr" title="Horizontal Rule">—</button>
+            </div>
+
+            <!-- Separator -->
+            <div class="w-px bg-zinc-800 self-stretch mx-1 hidden sm:block"></div>
+
+            <!-- Sample loaders -->
+            <div class="flex gap-1 flex-wrap">
+                <button class="md-load-btn" data-sample="readme">Load README</button>
+                <button class="md-load-btn" data-sample="cheatsheet">Cheat Sheet</button>
+                <button class="md-load-btn" data-sample="blank">Clear</button>
+            </div>
+
+            <!-- Separator -->
+            <div class="w-px bg-zinc-800 self-stretch mx-1 hidden sm:block"></div>
+
+            <!-- Export actions -->
+            <div class="flex gap-1 flex-wrap ml-auto">
+                <button class="md-export-btn" id="btn-copy-md" title="Copy Markdown">Copy MD</button>
+                <button class="md-export-btn" id="btn-copy-html" title="Copy HTML">Copy HTML</button>
+                <button class="md-export-btn" id="btn-download-md" title="Download .md">⬇ .md</button>
+                <button class="md-export-btn" id="btn-print" title="Print / Save as PDF">🖨 Print</button>
+            </div>
+        </div>
+
+        <!-- Dual-Pane Editor -->
+        <div class="w-full max-w-7xl mx-auto mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border border-zinc-800 bg-zinc-950 h-[70vh] md:h-[75vh]">
+
+                <!-- Editor Pane -->
+                <div class="flex flex-col border-b md:border-b-0 md:border-r border-zinc-800 h-[50vh] md:h-full">
+                    <div class="flex items-center justify-between bg-zinc-900/50 border-b border-zinc-800 px-3 py-1.5 text-[11px] font-mono text-zinc-500 select-none shrink-0">
+                        <span>editor.md</span>
+                        <span class="text-zinc-700">markdown</span>
+                    </div>
+                    <textarea
+                        id="md-editor"
+                        class="flex-1 w-full bg-zinc-950 text-zinc-200 text-xs font-mono leading-relaxed resize-none outline-none border-none p-4 overflow-auto"
+                        spellcheck="false"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        placeholder="Start writing Markdown here..."
+                    ></textarea>
+                </div>
+
+                <!-- Preview Pane -->
+                <div class="flex flex-col h-[50vh] md:h-full">
+                    <div class="flex items-center justify-between bg-zinc-900/50 border-b border-zinc-800 px-3 py-1.5 text-[11px] font-mono text-zinc-500 select-none shrink-0">
+                        <span>preview.html</span>
+                        <span class="text-zinc-700">rendered</span>
+                    </div>
+                    <div
+                        id="md-preview"
+                        class="flex-1 overflow-auto p-4 md-prose"
+                    ></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="flex justify-center mb-12">
+            <a href="/tools" class="btn-primary">
+                [ return to tools ]
+            </a>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    /* Toolbar buttons */
+    .md-fmt-btn {
+        @apply px-2 py-1 bg-zinc-900 border border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-white transition-all text-[11px] font-mono cursor-pointer select-none;
+    }
+    .md-fmt-btn.italic { font-style: italic; }
+    .md-load-btn {
+        @apply px-2 py-1 bg-zinc-950 border border-zinc-800 text-zinc-500 hover:border-zinc-600 hover:text-zinc-200 transition-all text-[11px] font-mono cursor-pointer select-none;
+    }
+    .md-export-btn {
+        @apply px-2 py-1 bg-zinc-900 border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white transition-all text-[11px] font-mono cursor-pointer select-none;
+    }
+
+    /* Markdown prose styling for dark theme */
+    .md-prose {
+        color: #d4d4d8;
+        font-size: 13px;
+        line-height: 1.7;
+        font-family: inherit;
+    }
+    .md-prose h1, .md-prose h2, .md-prose h3, .md-prose h4, .md-prose h5, .md-prose h6 {
+        color: #ffffff;
+        font-weight: bold;
+        margin: 1.2em 0 0.4em;
+        line-height: 1.3;
+    }
+    .md-prose h1 { font-size: 1.6em; border-bottom: 1px solid #27272a; padding-bottom: 0.3em; }
+    .md-prose h2 { font-size: 1.3em; border-bottom: 1px solid #27272a; padding-bottom: 0.2em; }
+    .md-prose h3 { font-size: 1.1em; }
+    .md-prose p { margin: 0.6em 0; }
+    .md-prose a { color: #38bdf8; text-decoration: underline; }
+    .md-prose a:hover { color: #7dd3fc; }
+    .md-prose code {
+        background: #18181b;
+        border: 1px solid #3f3f46;
+        color: #a5f3fc;
+        padding: 0.1em 0.4em;
+        font-size: 0.88em;
+        border-radius: 3px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .md-prose pre {
+        background: #09090b;
+        border: 1px solid #27272a;
+        padding: 1em;
+        overflow-x: auto;
+        margin: 0.8em 0;
+    }
+    .md-prose pre code {
+        background: transparent;
+        border: none;
+        color: #e4e4e7;
+        padding: 0;
+        font-size: 0.85em;
+    }
+    .md-prose blockquote {
+        border-left: 3px solid #3f3f46;
+        padding-left: 1em;
+        color: #71717a;
+        margin: 0.8em 0;
+        font-style: italic;
+    }
+    .md-prose ul { list-style: disc; padding-left: 1.5em; margin: 0.5em 0; }
+    .md-prose ol { list-style: decimal; padding-left: 1.5em; margin: 0.5em 0; }
+    .md-prose li { margin: 0.2em 0; }
+    .md-prose li input[type="checkbox"] { margin-right: 0.4em; accent-color: #10b981; }
+    .md-prose table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: 0.9em; }
+    .md-prose th { background: #18181b; color: #fff; font-weight: bold; border: 1px solid #3f3f46; padding: 0.5em 0.8em; text-align: left; }
+    .md-prose td { border: 1px solid #27272a; padding: 0.4em 0.8em; }
+    .md-prose tr:nth-child(even) td { background: #111113; }
+    .md-prose hr { border: none; border-top: 1px solid #27272a; margin: 1em 0; }
+    .md-prose img { max-width: 100%; display: block; margin: 0.8em auto; }
+    .md-prose strong { color: #ffffff; font-weight: bold; }
+    .md-prose em { font-style: italic; color: #a1a1aa; }
+    .md-prose del { text-decoration: line-through; color: #71717a; }
+
+    /* Print styles */
+    @media print {
+        header, footer, .hero-badge, section, .md-fmt-btn, .md-load-btn, .md-export-btn,
+        #md-editor, [class*="stat-"], .page-wrapper > div:last-child, .toolbar { display: none !important; }
+        .md-preview-wrap { display: block !important; }
+        .md-prose { color: #000; background: #fff; }
+    }
+</style>
+
+<!-- Load marked.js from CDN -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const editor = document.getElementById('md-editor');
+    const preview = document.getElementById('md-preview');
+
+    // =========================================================
+    // RENDER ENGINE (marked.js with GFM)
+    // =========================================================
+    function render() {
+        const raw = editor.value;
+        // Sync scroll
+        const scrollRatio = editor.scrollTop / (editor.scrollHeight - editor.clientHeight || 1);
+
+        if (typeof marked === 'undefined') {
+            preview.innerHTML = '<p style="color:#71717a;font-size:11px">Loading renderer...</p>';
+            return;
+        }
+
+        // Configure marked
+        marked.setOptions({
+            gfm: true,
+            breaks: true,
+        });
+
+        // GFM task list extension
+        const taskListExtension = {
+            name: 'taskListItem',
+            level: 'block',
+            start(src) { return src.indexOf('- [ ]') !== -1 || src.indexOf('- [x]') !== -1 ? 0 : -1; },
+        };
+
+        let html = marked.parse(raw);
+
+        // Manual task list transform (marked doesn't do checkboxes in all versions)
+        html = html
+            .replace(/<li>\[ \] /g, '<li><input type="checkbox" disabled /> ')
+            .replace(/<li>\[x\] /gi, '<li><input type="checkbox" checked disabled /> ');
+
+        preview.innerHTML = html;
+        updateStats(raw);
+
+        // Restore scroll
+        requestAnimationFrame(() => {
+            const maxScroll = preview.scrollHeight - preview.clientHeight;
+            preview.scrollTop = scrollRatio * maxScroll;
+        });
+    }
+
+    function updateStats(raw) {
+        const chars = raw.length;
+        const words = raw.trim() ? raw.trim().split(/\s+/).length : 0;
+        const lines = raw.split('\n').length;
+        const readMin = Math.max(1, Math.ceil(words / 200));
+        document.getElementById('stat-chars').textContent = chars;
+        document.getElementById('stat-words').textContent = words;
+        document.getElementById('stat-lines').textContent = lines;
+        document.getElementById('stat-read').textContent = readMin + ' min';
+    }
+
+    // Debounced render
+    let renderTimer;
+    editor.addEventListener('input', () => {
+        clearTimeout(renderTimer);
+        renderTimer = setTimeout(render, 80);
+    });
+
+    // Sync scroll: editor → preview
+    editor.addEventListener('scroll', () => {
+        const ratio = editor.scrollTop / (editor.scrollHeight - editor.clientHeight || 1);
+        preview.scrollTop = ratio * (preview.scrollHeight - preview.clientHeight);
+    });
+
+    // =========================================================
+    // FORMAT BUTTONS
+    // =========================================================
+    const FORMATS = {
+        bold: { wrap: ['**', '**'], default: 'bold text' },
+        italic: { wrap: ['*', '*'], default: 'italic text' },
+        strike: { wrap: ['~~', '~~'], default: 'strikethrough' },
+        h1: { line: '# ', default: 'Heading 1' },
+        h2: { line: '## ', default: 'Heading 2' },
+        h3: { line: '### ', default: 'Heading 3' },
+        'code-inline': { wrap: ['`', '`'], default: 'code' },
+        'code-block': { block: '```\ncode here\n```' },
+        link: { block: '[link text](https://example.com)' },
+        image: { block: '![alt text](https://example.com/image.png)' },
+        blockquote: { line: '> ', default: 'quoted text' },
+        ul: { block: '- Item 1\n- Item 2\n- Item 3' },
+        ol: { block: '1. Item 1\n2. Item 2\n3. Item 3' },
+        task: { block: '- [ ] Task 1\n- [ ] Task 2\n- [x] Done task' },
+        table: { block: '| Column 1 | Column 2 | Column 3 |\n|----------|----------|----------|\n| Cell 1   | Cell 2   | Cell 3   |\n| Cell 4   | Cell 5   | Cell 6   |' },
+        hr: { block: '\n---\n' },
+    };
+
+    document.querySelectorAll('.md-fmt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const fmt = FORMATS[btn.dataset.fmt];
+            if (!fmt) return;
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            const selected = editor.value.substring(start, end);
+
+            let insertion = '';
+            let cursorOffset = 0;
+
+            if (fmt.wrap) {
+                const text = selected || fmt.default;
+                insertion = fmt.wrap[0] + text + fmt.wrap[1];
+                cursorOffset = fmt.wrap[0].length + text.length + fmt.wrap[1].length;
+            } else if (fmt.line) {
+                const text = selected || fmt.default;
+                insertion = fmt.line + text;
+                cursorOffset = insertion.length;
+            } else if (fmt.block) {
+                insertion = '\n' + fmt.block + '\n';
+                cursorOffset = insertion.length;
+            }
+
+            editor.setRangeText(insertion, start, end, 'end');
+            editor.focus();
+            render();
+        });
+    });
+
+    // =========================================================
+    // TAB KEY SUPPORT (insert 2 spaces instead of focus change)
+    // =========================================================
+    editor.addEventListener('keydown', e => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.setRangeText('  ', start, end, 'end');
+            render();
+        }
+    });
+
+    // =========================================================
+    // SAMPLE LOADERS
+    // =========================================================
+    const SAMPLES = {
+        readme: `# Project Name
+
+> A short description of what this project does.
+
+## Features
+
+- ✅ Feature one
+- ✅ Feature two
+- 🚧 Feature three (in progress)
+
+## Installation
+
+\`\`\`bash
+npm install project-name
+\`\`\`
+
+## Usage
+
+\`\`\`javascript
+import Project from 'project-name';
+
+const p = new Project({ option: true });
+p.run();
+\`\`\`
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+`,
+        cheatsheet: `# Markdown Cheat Sheet
+
+## Headings
+# H1 Heading
+## H2 Heading
+### H3 Heading
+
+## Text Formatting
+**Bold text** | *Italic text* | ~~Strikethrough~~
+
+## Links & Images
+[Link text](https://example.com)
+![Alt text](https://picsum.photos/200/100)
+
+## Lists
+- Unordered item
+- Another item
+
+1. Ordered item
+2. Another item
+
+## Task List
+- [x] Completed task
+- [ ] Pending task
+
+## Code
+Inline \`code\` or a block:
+
+\`\`\`javascript
+const greet = name => \`Hello, \${name}!\`;
+console.log(greet('World'));
+\`\`\`
+
+## Table
+
+| Name     | Age | City      |
+|----------|-----|-----------|
+| Alice    | 25  | Jakarta   |
+| Bob      | 30  | Surabaya  |
+
+## Blockquote
+
+> "Simplicity is the ultimate sophistication."
+> — Leonardo da Vinci
+
+---
+
+*That's a horizontal rule above.*
+`,
+        blank: '',
+    };
+
+    document.querySelectorAll('.md-load-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            editor.value = SAMPLES[btn.dataset.sample] || '';
+            render();
+        });
+    });
+
+    // =========================================================
+    // EXPORT ACTIONS
+    // =========================================================
+    document.getElementById('btn-copy-md')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(editor.value).then(() => showCopyFeedback('btn-copy-md', 'Copied!'));
+    });
+
+    document.getElementById('btn-copy-html')?.addEventListener('click', () => {
+        navigator.clipboard.writeText(preview.innerHTML).then(() => showCopyFeedback('btn-copy-html', 'Copied!'));
+    });
+
+    document.getElementById('btn-download-md')?.addEventListener('click', () => {
+        const blob = new Blob([editor.value], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'document.md'; a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    document.getElementById('btn-print')?.addEventListener('click', () => {
+        // Print only the preview content
+        const printWin = window.open('', '_blank');
+        printWin.document.write(`<!DOCTYPE html><html><head>
+            <meta charset="UTF-8"><title>Print Markdown</title>
+            <style>
+                body { font-family: -apple-system, sans-serif; color: #111; max-width: 800px; margin: 40px auto; padding: 0 24px; line-height: 1.7; }
+                h1,h2,h3 { margin: 1.2em 0 0.4em; }
+                h1,h2 { border-bottom: 1px solid #eee; padding-bottom: 0.3em; }
+                code { background: #f3f4f6; padding: 0.1em 0.4em; border-radius: 3px; font-family: monospace; }
+                pre { background: #f3f4f6; padding: 1em; overflow: auto; }
+                pre code { background: none; padding: 0; }
+                blockquote { border-left: 3px solid #ccc; padding-left: 1em; color: #666; }
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 0.4em 0.8em; text-align: left; }
+                th { background: #f9fafb; }
+                img { max-width: 100%; }
+                a { color: #2563eb; }
+                hr { border: none; border-top: 1px solid #ddd; }
+            </style>
+        </head><body>${preview.innerHTML}</body></html>`);
+        printWin.document.close();
+        setTimeout(() => { printWin.focus(); printWin.print(); printWin.close(); }, 250);
+    });
+
+    function showCopyFeedback(btnId, text) {
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+        const orig = btn.textContent;
+        btn.textContent = text;
+        btn.classList.add('text-emerald-400', 'border-emerald-800');
+        setTimeout(() => { btn.textContent = orig; btn.classList.remove('text-emerald-400', 'border-emerald-800'); }, 1500);
+    }
+
+    // =========================================================
+    // INITIAL LOAD
+    // =========================================================
+    editor.value = SAMPLES.readme;
+    // Wait a tick for marked.js CDN to load
+    setTimeout(render, 200);
+    // Poll until marked loads (CDN may take a moment)
+    const markedPoll = setInterval(() => {
+        if (typeof marked !== 'undefined') { clearInterval(markedPoll); render(); }
+    }, 150);
+
+});
+</script>
