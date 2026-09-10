@@ -1,17 +1,25 @@
 ---
-
+import "../styles/global.css";
+import { DesktopEnv } from "../components/desktop/DesktopEnv";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>Radja Genta | RadjaOS Web Desktop</title>
+    <meta name="description" content="Personal Portfolio Web Desktop Environment of Radja Genta Saputra - Tech Lead at SIDIGS & Full Stack Crafter." />
+
+    <!-- OpenGraph / Social -->
+    <meta property="og:title" content="Radja Genta | RadjaOS Web Desktop" />
+    <meta property="og:description" content="Interactive Web Desktop Environment showcasing full-stack projects, architecture, and developer easter eggs." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#07090e" />
+  </head>
+  <body class="bg-[#07090e] text-slate-100 overflow-hidden select-none">
+    <DesktopEnv client:only="react" />
+  </body>
 </html>
