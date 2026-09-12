@@ -1,25 +1,373 @@
 ---
 import "../styles/global.css";
-import { DesktopEnv } from "../components/desktop/DesktopEnv";
 ---
 
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>Radja Genta | RadjaOS Web Desktop</title>
-    <meta name="description" content="Personal Portfolio Web Desktop Environment of Radja Genta Saputra - Tech Lead at SIDIGS & Full Stack Crafter." />
-
-    <!-- OpenGraph / Social -->
-    <meta property="og:title" content="Radja Genta | RadjaOS Web Desktop" />
-    <meta property="og:description" content="Interactive Web Desktop Environment showcasing full-stack projects, architecture, and developer easter eggs." />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#07090e" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Persona 5 UI Motion Prototype | Radja Genta</title>
   </head>
-  <body class="bg-[#07090e] text-slate-100 overflow-hidden select-none">
-    <DesktopEnv client:only="react" />
+  <body class="bg-[#0b0b0e] text-white min-h-screen overflow-hidden select-none font-sans relative">
+
+    <!-- BACKGROUND: P5 Inspired High-Contrast Split & Halftone Accent -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      <!-- Dynamic Diagonal Splash Banner -->
+      <div 
+        id="bg-slice"
+        class="absolute -top-[20%] -left-[20%] w-[140%] h-[140%] bg-gradient-to-br from-[#c80015] via-[#8a000e] to-[#120002] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style="clip-path: polygon(0 0, 75% 0, 45% 100%, 0 100%);"
+      ></div>
+
+      <!-- Halftone Dots Texture (Pure CSS dot pattern) -->
+      <div 
+        class="absolute inset-0 opacity-15"
+        style="background-image: radial-gradient(#000000 2px, transparent 2px); background-size: 16px 16px;"
+      ></div>
+
+      <!-- Comic Strip Border Lines -->
+      <div class="absolute inset-0 border-8 border-black pointer-events-none"></div>
+    </div>
+
+    <!-- MAIN INTERACTIVE CANVAS -->
+    <main class="relative z-10 w-full h-screen flex flex-col justify-between p-8 md:p-12">
+      
+      <!-- TOP BAR: Status / Header -->
+      <header class="flex justify-between items-center z-20">
+        <div class="skew-x-[-12deg] bg-black text-white px-4 py-1.5 border-2 border-white shadow-[4px_4px_0px_#c80015]">
+          <span class="font-black tracking-widest text-xs uppercase text-[#c80015]">PROTOTYPE // TIER 1</span>
+          <h1 class="font-black text-lg md:text-xl tracking-tighter uppercase">Persona 5 Motion Template</h1>
+        </div>
+
+        <!-- Explanatory Badge -->
+        <div class="hidden md:block bg-black/80 border border-white/20 px-3 py-1 text-xs font-mono text-zinc-300 rounded">
+          Active State: <span id="debug-state-indicator" class="text-[#ff1a30] font-bold">HOME (Char on Right)</span>
+        </div>
+      </header>
+
+      <!-- MIDDLE STAGE: Dynamic Content Panels -->
+      <div class="relative w-full flex-1 flex items-center">
+
+        <!-- CONTENT PANEL A: Muncul saat di HOME (posisi di KIRI layar) -->
+        <section 
+          id="panel-home" 
+          class="content-panel active absolute left-0 max-w-lg z-20 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        >
+          <div class="skew-x-[-8deg] bg-black/90 border-l-8 border-[#c80015] p-6 shadow-2xl backdrop-blur-sm">
+            <div class="bg-white text-black inline-block px-2 py-0.5 font-black text-xs uppercase mb-2">
+              01 // TAKEOVER
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-white mb-3">
+              RADJA <span class="text-[#c80015]">GENTA</span>
+            </h2>
+            <p class="text-zinc-300 text-sm leading-relaxed mb-4">
+              Perhatikan karakter di sebelah kanan! Dia punya <strong>Idle Animation</strong> (nafas/mengambang santai). Coba klik menu <em>"02 // MISSIONS"</em> untuk melihat transisinya ke sebelah kiri tanpa menghentikan idle animasinya.
+            </p>
+            <div class="text-xs font-mono text-zinc-400 bg-zinc-900/90 p-2 border border-zinc-800">
+              💡 <strong>Key Architecture:</strong> State berubah &rarr; Parent Container pindah koordinat &rarr; Child Rig tetap idle looping!
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTENT PANEL B: Muncul saat di MISSIONS (posisi di KANAN layar) -->
+        <section 
+          id="panel-missions" 
+          class="content-panel inactive absolute right-0 max-w-lg z-20 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        >
+          <div class="skew-x-[-8deg] bg-black/90 border-r-8 border-[#c80015] p-6 shadow-2xl backdrop-blur-sm text-right">
+            <div class="bg-[#c80015] text-white inline-block px-2 py-0.5 font-black text-xs uppercase mb-2">
+              02 // INFILTRATION LOG
+            </div>
+            <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tight text-white mb-3">
+              TARGET <span class="text-[#c80015]">ACQUIRED</span>
+            </h2>
+            <p class="text-zinc-300 text-sm leading-relaxed mb-4 text-left">
+              Sekarang karakter sudah berada di sisi kiri! Animasinya tetap looping mulus karena dipisah antara <strong>Locomotion Layer</strong> (pergerakan container) dan <strong>Action Layer</strong> (gerak napas tubuh).
+            </p>
+            <div class="flex justify-end gap-2 text-xs font-mono">
+              <span class="bg-zinc-800 text-zinc-200 px-2 py-1">Tech Lead @ SIDIGS</span>
+              <span class="bg-zinc-800 text-zinc-200 px-2 py-1">Full Stack</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- CHARACTER RIG STAGE (THE PERSISTENT HERO ELEMENT)        -->
+        <!-- ======================================================== -->
+        <!--
+          Layer 1: #char-stage
+          Mengatur posisi X, Y, dan rotasi (Locomotion Layer).
+          Menggunakan transition snappy ala Persona 5.
+        -->
+        <div 
+          id="char-stage" 
+          class="absolute bottom-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-15"
+          data-position="right"
+        >
+          <!--
+            Layer 2: .char-idle-rig
+            Mengatur animasi Idle (Nafas/floating looping).
+            Looping ini TIDAK AKAN PERNAH RESET saat parent container bergerak.
+          -->
+          <div class="char-idle-rig relative flex flex-col items-center">
+
+            <!-- Efek Bayangan / Shadow di Kaki -->
+            <div class="absolute -bottom-4 w-40 h-8 bg-black/60 rounded-full blur-md transform -skew-x-12"></div>
+
+            <!-- DUMMY BONE / SILHOUETTE CHARACTER (SVG Placeholder) -->
+            <!-- Nanti tinggal diganti dengan Cutout Ren Amamiya / Joker PNG -->
+            <svg 
+              class="w-64 h-96 md:w-80 md:h-[480px] drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] filter transition-all duration-300"
+              viewBox="0 0 200 320" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Mask / Persona Visor Glow (Gaya Topeng Joker) -->
+              <polygon points="75,55 100,68 125,55 118,65 100,82 82,65" fill="#ffffff" stroke="#c80015" stroke-width="3" />
+              <polygon points="90,63 100,70 95,73" fill="#0b0b0e" />
+              <polygon points="110,63 100,70 105,73" fill="#0b0b0e" />
+
+              <!-- Head / Rambut Siluet -->
+              <path 
+                d="M70,55 C65,30 90,20 105,20 C125,20 140,35 130,60 C145,50 140,75 130,80 C110,90 90,85 75,75 C60,75 60,65 70,55 Z" 
+                fill="#151518" 
+                stroke="#c80015" 
+                stroke-width="2"
+              />
+
+              <!-- Collar / Kerah Tinggi Persona 5 -->
+              <path d="M70,85 L100,105 L60,125 Z" fill="#c80015" />
+              <path d="M130,85 L100,105 L140,125 Z" fill="#a00010" />
+
+              <!-- Badan / Trenchcoat Siluet Utama -->
+              <path 
+                d="M75,95 L125,95 L145,180 L160,280 L135,275 L115,190 L100,210 L85,190 L65,275 L40,280 L55,180 Z" 
+                fill="#111114" 
+                stroke="#ffffff" 
+                stroke-width="2"
+              />
+
+              <!-- Detail Dada & Kancing Putih Kontras -->
+              <line x1="100" y1="110" x2="100" y2="185" stroke="#ffffff" stroke-width="2" stroke-dasharray="6 6" />
+
+              <!-- Lengan / Pose Tangan di Saku -->
+              <path d="M70,100 L45,160 L65,190" stroke="#151518" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M130,100 L155,160 L135,190" stroke="#151518" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+
+              <!-- Kaki Siluet Celana Hitam -->
+              <path d="M85,210 L80,310" stroke="#09090b" stroke-width="14" stroke-linecap="round" />
+              <path d="M115,210 L120,310" stroke="#09090b" stroke-width="14" stroke-linecap="round" />
+              <!-- Sepatu Ujung Runcing -->
+              <path d="M70,310 L85,310 L90,315" stroke="#c80015" stroke-width="4" stroke-linecap="round" />
+              <path d="M130,310 L115,310 L110,315" stroke="#c80015" stroke-width="4" stroke-linecap="round" />
+
+              <!-- Label Dummy Bone di Dada -->
+              <rect x="75" y="130" width="50" height="18" fill="#c80015" transform="rotate(-6 100 139)" />
+              <text x="100" y="143" fill="#ffffff" font-size="9" font-family="monospace" font-weight="900" text-anchor="middle" transform="rotate(-6 100 139)">DUMMY RIG</text>
+            </svg>
+
+            <!-- State Label Badge di bawah Karakter -->
+            <div class="mt-2 bg-black text-[#c80015] border border-[#c80015] px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider font-bold">
+              IDLE: BREATHING
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAVIGATION: Persona 5 Angled Buttons -->
+      <footer class="z-20 flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t-2 border-white/20">
+        
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-mono text-zinc-400">CHOOSE ACTION:</span>
+          
+          <!-- Tombol Menu 1: Home (Karakter di Kanan) -->
+          <button 
+            id="btn-home"
+            class="menu-btn active group relative px-6 py-2.5 font-black text-sm uppercase tracking-wider transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            data-target="home"
+          >
+            <span class="btn-bg absolute inset-0 bg-[#c80015] border-2 border-white -skew-x-12 transition-colors duration-200"></span>
+            <span class="relative z-10 text-white flex items-center gap-2">
+              <span class="font-mono text-xs opacity-75">01</span>
+              <span>HOME</span>
+            </span>
+          </button>
+
+          <!-- Tombol Menu 2: Missions (Karakter di Kiri) -->
+          <button 
+            id="btn-missions"
+            class="menu-btn group relative px-6 py-2.5 font-black text-sm uppercase tracking-wider transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            data-target="missions"
+          >
+            <span class="btn-bg absolute inset-0 bg-black border-2 border-white -skew-x-12 transition-colors duration-200"></span>
+            <span class="relative z-10 text-white flex items-center gap-2">
+              <span class="font-mono text-xs opacity-75">02</span>
+              <span>MISSIONS</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="text-[11px] font-mono text-zinc-400 flex items-center gap-2">
+          <span>Keyboard Shortcut:</span>
+          <kbd class="px-2 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-white font-bold">1</kbd>
+          <kbd class="px-2 py-0.5 bg-zinc-800 border border-zinc-700 rounded text-white font-bold">2</kbd>
+        </div>
+      </footer>
+    </main>
+
   </body>
 </html>
+
+<style>
+  /* ======================================================== */
+  /* IDLE ANIMATION (Looping terus menerus di child rig)      */
+  /* ======================================================== */
+  .char-idle-rig {
+    /* Animasi bobbing naik-turun dan tarikan napas halus */
+    animation: p5-idle-bob 2.6s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+  }
+
+  @keyframes p5-idle-bob {
+    0% {
+      transform: translateY(0px) scale(1, 1) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-6px) scale(1.01, 1.015) rotate(-0.5deg);
+    }
+    100% {
+      transform: translateY(-12px) scale(1.02, 1.025) rotate(0.5deg);
+    }
+  }
+
+  /* ======================================================== */
+  /* LOCOMOTION POSITIONS (Dikendalikan oleh parent container) */
+  /* ======================================================== */
+
+  /* State 1: Karakter di Kanan (Home) */
+  #char-stage[data-position="right"] {
+    left: 65%;
+    transform: translateX(0) skewX(-4deg);
+  }
+
+  /* State 2: Karakter di Kiri (Missions) */
+  #char-stage[data-position="left"] {
+    left: 10%;
+    transform: translateX(0) skewX(4deg);
+  }
+
+  /* ======================================================== */
+  /* CONTENT PANELS VISIBILITY                                */
+  /* ======================================================== */
+  .content-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .content-panel.inactive {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #panel-home.active {
+    transform: translateX(0) skewX(-8deg);
+  }
+  #panel-home.inactive {
+    transform: translateX(-50px) skewX(-8deg);
+  }
+
+  #panel-missions.active {
+    transform: translateX(0) skewX(-8deg);
+  }
+  #panel-missions.inactive {
+    transform: translateX(50px) skewX(-8deg);
+  }
+</style>
+
+<script>
+  // ========================================================
+  // STATE MACHINE & TRANSITION CONTROLLER
+  // ========================================================
+  type AppState = 'home' | 'missions';
+
+  const charStage = document.getElementById('char-stage');
+  const bgSlice = document.getElementById('bg-slice');
+  const panelHome = document.getElementById('panel-home');
+  const panelMissions = document.getElementById('panel-missions');
+  const btnHome = document.getElementById('btn-home');
+  const btnMissions = document.getElementById('btn-missions');
+  const debugIndicator = document.getElementById('debug-state-indicator');
+
+  function setState(state: AppState) {
+    if (!charStage || !bgSlice || !panelHome || !panelMissions || !btnHome || !btnMissions || !debugIndicator) {
+      return;
+    }
+
+    if (state === 'home') {
+      // 1. Pindahkan Karakter ke Kanan
+      charStage.setAttribute('data-position', 'right');
+
+      // 2. Geser Background Slice ke kiri
+      bgSlice.style.transform = 'translateX(0) rotate(0deg)';
+
+      // 3. Toggle Tampilan Panel Konten
+      panelHome.classList.add('active');
+      panelHome.classList.remove('inactive');
+      panelMissions.classList.add('inactive');
+      panelMissions.classList.remove('active');
+
+      // 4. Update Button Styles
+      updateButton(btnHome, true);
+      updateButton(btnMissions, false);
+
+      debugIndicator.innerText = 'HOME (Char on Right)';
+      debugIndicator.className = 'text-[#ff1a30] font-bold';
+    } else if (state === 'missions') {
+      // 1. Pindahkan Karakter ke Kiri
+      charStage.setAttribute('data-position', 'left');
+
+      // 2. Geser Background Slice ke kanan agar kontras tetap terjaga
+      bgSlice.style.transform = 'translateX(30%) rotate(3deg)';
+
+      // 3. Toggle Tampilan Panel Konten
+      panelMissions.classList.add('active');
+      panelMissions.classList.remove('inactive');
+      panelHome.classList.add('inactive');
+      panelHome.classList.remove('active');
+
+      // 4. Update Button Styles
+      updateButton(btnHome, false);
+      updateButton(btnMissions, true);
+
+      debugIndicator.innerText = 'MISSIONS (Char on Left)';
+      debugIndicator.className = 'text-[#ffffff] font-bold';
+    }
+  }
+
+  function updateButton(btn: HTMLElement, isActive: boolean) {
+    const bg = btn.querySelector('.btn-bg');
+    if (!bg) return;
+    if (isActive) {
+      bg.classList.remove('bg-black');
+      bg.classList.add('bg-[#c80015]');
+      btn.classList.add('active');
+    } else {
+      bg.classList.remove('bg-[#c80015]');
+      bg.classList.add('bg-black');
+      btn.classList.remove('active');
+    }
+  }
+
+  // Event Listeners Click
+  btnHome?.addEventListener('click', () => setState('home'));
+  btnMissions?.addEventListener('click', () => setState('missions'));
+
+  // Keyboard Navigation (P5 Console Feel)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === '1') setState('home');
+    if (e.key === '2') setState('missions');
+  });
+</script>
+
