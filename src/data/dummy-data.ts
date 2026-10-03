@@ -83,7 +83,7 @@ export const dummySkills: DummySkillGroup[] = [
       { name: "Python", level: "Basic Scripting", iconName: "FileCode" },
       { name: "Node.js / JavaScript", level: "Runtime & Tooling", iconName: "Cpu" },
       { name: "MySQL", level: "Database & CRUD Queries", iconName: "Database" },
-      { name: "Linux / CachyOS", level: "Daily OS & Hyprland", iconName: "Terminal" },
+      { name: "Linux / CachyOS", level: "Daily OS & Window Management", iconName: "Terminal" },
     ],
   },
   {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { type Locale, t } from "../../lib/i18n";
 import { playBootChime } from "../../lib/sound";
-import { ArrowRight, ShieldAlert, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldAlert, Wifi, BatteryCharging, Power } from "lucide-react";
 
 interface LoginScreenProps {
   locale: Locale;
@@ -20,7 +20,34 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
 
-  // Simulated Bootloader Preload
+  // Realtime clock for RadjaOS Lockscreen
+  const [timeStr, setTimeStr] = useState("");
+  const [dateStr, setDateStr] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setTimeStr(
+        now.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+      setDateStr(
+        now.toLocaleDateString("en-US", {
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+        })
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Simulated RadjaOS Bootloader Preload
   useEffect(() => {
     const timer = setInterval(() => {
       setBootProgress((prev) => {
@@ -60,26 +87,41 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-neutral-950 text-white select-none transition-all duration-700 ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#0c1017] text-white select-none transition-all duration-700 ${
         isUnlocking ? "opacity-0 scale-105 pointer-events-none" : "opacity-100 scale-100"
       }`}
+      style={{
+        backgroundImage: "url('/image/wallpaper/win11-dark.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Dark frosted overlay */}
+      <div className="absolute inset-0 bg-black/45 backdrop-blur-xl -z-10" />
+
+      {/* Top Lockscreen Clock */}
+      <div className="pt-16 sm:pt-20 text-center space-y-1">
+        <h1 className="text-6xl sm:text-7xl font-light tracking-tight text-white/95 font-sans drop-shadow-lg">
+          {timeStr}
+        </h1>
+        <p className="text-sm sm:text-base font-normal text-white/80 drop-shadow">
+          {dateStr}
+        </p>
+      </div>
 
       {!isBooted ? (
-        /* Boot Preloader Screen */
-        <div className="w-full max-w-sm px-6 space-y-4 text-center">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Sparkles className="w-6 h-6 text-white animate-pulse" />
+        /* RadjaOS Spinning Dots Bootloader */
+        <div className="w-full max-w-sm px-6 space-y-5 text-center my-auto">
+          {/* RadjaOS Spinning Circle Indicator */}
+          <div className="relative w-12 h-12 mx-auto">
+            <div className="w-12 h-12 rounded-full border-2 border-white/20 border-t-blue-400 animate-spin" />
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-sm font-bold tracking-widest uppercase font-mono text-neutral-200">
-              RadjaOS Boot Core
-            </h1>
-            <p className="text-xs text-neutral-400 font-mono">
+            <h2 className="text-sm font-semibold tracking-wider text-neutral-200">
+              RadjaOS Desktop Pro
+            </h2>
+            <p className="text-xs text-neutral-400">
               {bootProgress < 50
                 ? t("sys.booting", locale)
                 : bootProgress < 100
@@ -87,61 +129,52 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 : t("sys.ready", locale)}
             </p>
           </div>
-
-          {/* Progress bar */}
-          <div className="w-full h-1.5 bg-neutral-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-500 transition-all duration-150 rounded-full"
-              style={{ width: `${bootProgress}%` }}
-            />
-          </div>
         </div>
       ) : (
-        /* Login Card Screen */
-        <div className="w-full max-w-md px-6 space-y-6 text-center animate-in fade-in zoom-in-95 duration-300">
-          {/* Satirical 7-Day Expiry Banner */}
+        /* RadjaOS User Sign-In Box */
+        <div className="w-full max-w-sm px-6 space-y-5 text-center my-auto animate-win-flyout">
+          {/* Satirical 7-Day Expiry Notice */}
           {expiredNotice && (
-            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs text-left space-y-1 shadow-lg animate-in slide-in-from-top-4">
-              <div className="flex items-center gap-1.5 font-bold">
+            <div className="p-3 rounded-xl bg-amber-500/20 border border-amber-500/30 text-amber-200 text-xs text-left space-y-1 shadow-lg">
+              <div className="flex items-center gap-1.5 font-semibold">
                 <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>{t("sys.sessionExpiredTitle", locale)}</span>
               </div>
-              <p className="text-[11px] text-amber-200/80 leading-relaxed">
+              <p className="text-[11px] text-amber-100/80 leading-relaxed">
                 {t("sys.sessionExpiredDesc", locale)}
               </p>
             </div>
           )}
 
-          {/* User Avatar with Halo */}
+          {/* User Avatar */}
           <div className="relative inline-block">
-            <div className="w-24 h-24 rounded-3xl overflow-hidden border-2 border-white/20 bg-neutral-800 shadow-2xl mx-auto">
+            <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-white/30 bg-neutral-800 shadow-2xl mx-auto ring-4 ring-black/30">
               <img
                 src="/image/about-me-profile.png"
                 alt="Radja Genta"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-neutral-950 shadow flex items-center justify-center">
-              <span className="w-2 h-2 rounded-full bg-white animate-ping opacity-75" />
-            </div>
           </div>
 
-          {/* Profile Name & Tagline */}
-          <div className="space-y-1">
-            <h2 className="text-xl font-bold text-white tracking-tight">
+          {/* Name & Tagline */}
+          <div className="space-y-0.5">
+            <h2 className="text-xl font-semibold text-white tracking-tight drop-shadow">
               Radja Genta Saputra
             </h2>
-            <p className="text-xs text-blue-400 font-medium">{t("sys.role", locale)}</p>
+            <p className="text-xs text-blue-300 font-medium drop-shadow">
+              {t("sys.role", locale)}
+            </p>
           </div>
 
-          {/* Satirical Toast Feedback */}
+          {/* Toast feedback */}
           {toastMessage && (
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-mono animate-in fade-in">
+            <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-mono animate-in fade-in">
               {toastMessage}
             </div>
           )}
 
-          {/* Login Form */}
+          {/* RadjaOS Sign-in input */}
           <form onSubmit={handleLogin} className="space-y-3">
             <div className="relative max-w-xs mx-auto">
               <input
@@ -150,27 +183,40 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={t("sys.passPlaceholder", locale)}
                 autoFocus
-                className="w-full h-10 px-4 pr-10 rounded-full bg-neutral-900/80 border border-white/15 text-xs text-white placeholder:text-neutral-500 focus:outline-none focus:border-blue-500/60 focus:ring-2 focus:ring-blue-500/20 transition-all text-center"
+                className="w-full h-10 px-4 pr-10 rounded-md bg-black/40 border border-white/20 text-xs text-white placeholder:text-neutral-400 focus:outline-none focus:border-blue-400 focus:bg-black/60 focus:ring-1 focus:ring-blue-400 transition-all text-center"
               />
               <button
                 type="submit"
-                className="absolute right-1.5 top-1.5 w-7 h-7 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors cursor-pointer shadow"
-                title="Enter"
+                className="absolute right-1 top-1 w-8 h-8 rounded-md hover:bg-white/10 active:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Sign in"
               >
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="text-[11px] text-neutral-500">
+            <div className="text-[11px] text-white/60 drop-shadow">
               <span>Press </span>
-              <kbd className="px-1.5 py-0.5 rounded bg-neutral-800 border border-white/10 text-[10px] font-mono text-neutral-300">
+              <kbd className="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 text-[10px] font-mono text-white">
                 Enter
               </kbd>
-              <span> or click arrow to log in</span>
+              <span> to sign in</span>
             </div>
           </form>
         </div>
       )}
+
+      {/* Bottom Right System Controls */}
+      <div className="w-full p-6 flex items-center justify-end gap-4 text-white/80">
+        <span title="Internet: Connected">
+          <Wifi className="w-5 h-5 hover:text-white transition-colors cursor-pointer" />
+        </span>
+        <span title="Power: 100%">
+          <BatteryCharging className="w-5 h-5 text-emerald-400 hover:text-white transition-colors cursor-pointer" />
+        </span>
+        <span title="Power">
+          <Power className="w-5 h-5 hover:text-white transition-colors cursor-pointer" />
+        </span>
+      </div>
     </div>
   );
 };

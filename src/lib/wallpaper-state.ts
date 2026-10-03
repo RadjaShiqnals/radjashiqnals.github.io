@@ -8,8 +8,22 @@ export interface WallpaperPreset {
 
 export const WALLPAPER_PRESETS: WallpaperPreset[] = [
   {
+    id: "win11-dark",
+    name: "RadjaOS Obsidian Bloom (Default)",
+    path: "/image/wallpaper/win11-dark.jpg",
+    thumbnail: "/image/wallpaper/win11-dark.jpg",
+    accentColor: "#60cdff",
+  },
+  {
+    id: "win11-light",
+    name: "RadjaOS Radiant Bloom (Light)",
+    path: "/image/wallpaper/win11-light.jpg",
+    thumbnail: "/image/wallpaper/win11-light.jpg",
+    accentColor: "#0078d4",
+  },
+  {
     id: "catppuccin",
-    name: "Catppuccin Pastel (Default)",
+    name: "Catppuccin Pastel",
     path: "/image/wallpaper/catpuccin-wallpaper.png",
     thumbnail: "/image/wallpaper/catpuccin-wallpaper.png",
     accentColor: "#f5c2e7",
@@ -59,9 +73,9 @@ export interface WallpaperConfig {
 
 export const DEFAULT_WALLPAPER_CONFIG: WallpaperConfig = {
   type: "preset",
-  presetId: "catppuccin",
+  presetId: "win11-dark",
   fit: "cover",
-  opacity: 85,
+  opacity: 100,
   blur: 0,
   flipH: false,
   flipV: false,

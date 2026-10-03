@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { X, Minus, Square } from "lucide-react";
+import { Minus, Square, Copy, X } from "lucide-react";
 import { playWindowClose } from "../../lib/sound";
 
 interface WindowFrameProps {
   id: string;
   title: string;
   icon?: React.ReactNode;
+  iconSrc?: string;
   isOpen: boolean;
   isMinimized: boolean;
   isMaximized: boolean;
@@ -29,6 +30,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
   id,
   title,
   icon,
+  iconSrc,
   isOpen,
   isMinimized,
   isMaximized,
@@ -50,6 +52,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
   const [pos, setPos] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
   const [ghostPos, setGhostPos] = useState<{ x: number; y: number } | null>(null);
+  const [showSnapPreview, setShowSnapPreview] = useState(false);
 
   const windowRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
@@ -63,7 +66,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
       const screenW = window.innerWidth;
       const screenH = window.innerHeight;
       const x = Math.max(20, Math.floor((screenW - initialWidth) / 2) + (id === "about" ? 0 : 20));
-      const y = Math.max(50, Math.floor((screenH - initialHeight) / 2.5) + (id === "about" ? 0 : 20));
+      const y = Math.max(20, Math.floor((screenH - initialHeight - 48) / 2.3) + (id === "about" ? 0 : 20));
       posRef.current = { x, y };
       setPos({ x, y });
     }
@@ -75,18 +78,16 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 
     const handlePointerMove = (e: PointerEvent) => {
       const newX = Math.max(10, Math.min(window.innerWidth - 80, e.clientX - dragStart.current.x));
-      const newY = Math.max(34, Math.min(window.innerHeight - 60, e.clientY - dragStart.current.y));
+      const newY = Math.max(0, Math.min(window.innerHeight - 80, e.clientY - dragStart.current.y));
       posRef.current = { x: newX, y: newY };
 
       if (!rafId.current) {
         rafId.current = requestAnimationFrame(() => {
           if (potatoMode) {
-            // In Potato Mode: only move the lightweight ghost outline
             if (ghostRef.current) {
               ghostRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
             }
           } else {
-            // In Normal Mode: direct DOM transform without triggering React re-renders
             if (windowRef.current) {
               windowRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
             }
@@ -121,29 +122,49 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
 
   if (!isOpen || isMinimized) return null;
 
-  // Mobile Sheet View (Native App Drawer style)
+  // Mobile Sheet View
   if (isMobile) {
     return (
       <div
-        className="fixed inset-0 top-8 z-50 bg-neutral-950 flex flex-col animate-in fade-in slide-in-from-bottom-5 duration-200"
+        className="fixed inset-0 bottom-12 bg-[#1e1e1e] flex flex-col animate-in fade-in slide-in-from-bottom-5 duration-200"
+        style={{ zIndex: zIndex || 40 }}
         onClick={onFocus}
       >
-        <div className="h-12 bg-neutral-900 border-b border-white/10 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-medium text-sm text-white">
-            {icon}
-            <span>{title}</span>
+        <div className="h-10 bg-[#252525] border-b border-white/10 px-3 flex items-center justify-between">
+          <div className="flex items-center gap-2 font-medium text-xs text-white truncate max-w-[65vw]">
+            {iconSrc ? (
+              <img src={iconSrc} alt={title} className="w-4 h-4 object-contain shrink-0" />
+            ) : (
+              icon
+            )}
+            <span className="truncate">{title}</span>
           </div>
-          <button
-            onClick={() => {
-              playWindowClose();
-              onClose();
-            }}
-            className="p-2 rounded-lg bg-white/10 hover:bg-red-500/20 text-neutral-300 hover:text-red-400 transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                playWindowClose();
+                onMinimize();
+              }}
+              className="w-10 h-10 hover:bg-white/10 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              title="Minimize"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                playWindowClose();
+                onClose();
+              }}
+              className="w-10 h-10 hover:bg-[#c42b1c] text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              title="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-4 pb-24 text-neutral-200">
+        <div className="flex-1 overflow-y-auto p-4 pb-20 text-neutral-200">
           {children}
         </div>
       </div>
@@ -170,44 +191,33 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
     onFocus();
   };
 
-  // CachyOS / Hyprland Window Style Architecture
+  // RadjaOS Mica Surface Styling
   const getWindowClasses = () => {
     if (potatoMode) {
-      // 100% Solid Opaque (Zero transparency bleed, zero GPU blur)
       if (isFocused) {
-        return "bg-[#07090e] border-blue-500/50 shadow-2xl shadow-black ring-1 ring-blue-500/25";
+        return "bg-[#1f1f1f] border-white/20 shadow-2xl shadow-black";
       }
-      return "bg-[#0f131c] border-white/10 shadow-lg shadow-black/80 opacity-95 hover:border-white/30 hover:opacity-100 transition-all duration-150";
+      return "bg-[#181818] border-white/10 shadow-lg shadow-black/80 opacity-95";
     }
 
-    // Normal Mode:
     if (isDragging) {
-      return "bg-[#07090e] border-blue-500/50 shadow-blue-500/20";
+      return "bg-[#202020]/90 backdrop-blur-2xl border-white/20 shadow-2xl shadow-black/90";
     }
     if (isFocused) {
-      return "bg-[#07090e]/98 backdrop-blur-3xl border-blue-500/40 shadow-2xl shadow-black ring-1 ring-blue-500/20";
+      return "bg-[#202020]/88 backdrop-blur-2xl border-white/15 shadow-2xl shadow-black/80 ring-1 ring-white/10";
     }
-    return "bg-[#0e121b]/92 backdrop-blur-xl border-white/10 shadow-lg shadow-black/60 opacity-90 hover:opacity-100 hover:border-white/25 transition-all duration-150";
-  };
-
-  const getTitlebarClasses = () => {
-    if (isFocused) {
-      return potatoMode || isDragging
-        ? "bg-[#05070a] border-white/15"
-        : "bg-neutral-950/90 border-white/15";
-    }
-    return "bg-neutral-950/60 border-white/5";
+    return "bg-[#1a1a1a]/85 backdrop-blur-xl border-white/10 shadow-lg shadow-black/60 opacity-95 hover:opacity-100 transition-opacity duration-150";
   };
 
   const windowStyle: React.CSSProperties = isMaximized
     ? {
         zIndex,
         left: 0,
-        top: 32,
+        top: 0,
         width: "100vw",
-        height: "calc(100vh - 32px)",
+        height: "calc(100vh - 48px)",
         transform: "none",
-        transition: "all 0.18s cubic-bezier(0.16, 1, 0.3, 1)",
+        transition: "all 0.16s cubic-bezier(0.1, 0.9, 0.2, 1)",
       }
     : {
         zIndex,
@@ -217,12 +227,12 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
         height: `${initialHeight}px`,
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
         willChange: isDragging ? "transform" : "auto",
-        transition: isDragging ? "none" : "width 0.18s ease-out, height 0.18s ease-out",
+        transition: isDragging ? "none" : "width 0.16s ease-out, height 0.16s ease-out",
       };
 
   return (
     <>
-      {/* Potato Mode: Lightweight Wireframe Ghost Outline during Drag */}
+      {/* Potato Mode Outline */}
       {potatoMode && isDragging && ghostPos && (
         <div
           ref={ghostRef}
@@ -234,16 +244,15 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
             height: `${initialHeight}px`,
             transform: `translate3d(${ghostPos.x}px, ${ghostPos.y}px, 0)`,
           }}
-          className="fixed border-2 border-dashed border-blue-400 bg-blue-500/10 rounded-xl pointer-events-none shadow-2xl"
+          className="fixed border-2 border-dashed border-blue-400 bg-blue-500/10 rounded-[8px] pointer-events-none shadow-2xl"
         >
-          <div className="h-10 bg-blue-500/20 border-b border-blue-400/30 px-3 flex items-center gap-2 text-xs font-mono text-blue-300">
-            {icon}
+          <div className="h-9 bg-blue-500/20 border-b border-blue-400/30 px-3 flex items-center gap-2 text-xs font-mono text-blue-300">
             <span>Moving: {title}</span>
           </div>
         </div>
       )}
 
-      {/* Main Window Container with CachyOS / Hyprland focus architecture */}
+      {/* Main RadjaOS Frame */}
       <div
         ref={windowRef}
         onPointerDown={onFocus}
@@ -253,64 +262,107 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
           }
         }}
         style={windowStyle}
-        className={`fixed flex flex-col rounded-xl overflow-hidden border select-none ${getWindowClasses()}`}
+        className={`fixed flex flex-col ${
+          isMaximized ? "rounded-none border-x-0 border-t-0" : "rounded-[8px] border"
+        } overflow-hidden select-none ${getWindowClasses()}`}
       >
-        {/* Window Titlebar */}
+        {/* RadjaOS Titlebar */}
         <div
           onPointerDown={handleTitleBarPointerDown}
-          className={`h-10 border-b px-3 flex items-center justify-between select-none ${getTitlebarClasses()} ${
-            isMaximized ? "cursor-default" : isDragging ? "cursor-grabbing" : "cursor-grab"
-          }`}
+          onDoubleClick={onToggleMaximize}
+          className={`h-9 shrink-0 flex items-center justify-between select-none ${
+            isFocused ? "bg-white/[0.03]" : "bg-transparent"
+          } ${isMaximized ? "cursor-default" : isDragging ? "cursor-grabbing" : "cursor-default"}`}
         >
-          {/* Window Controls (Traffic lights) */}
-          <div className={`flex items-center gap-2 transition-opacity ${isFocused ? "opacity-100" : "opacity-50"}`}>
+          {/* Left: App Icon & Window Title */}
+          <div className="flex items-center gap-2 pl-3 pointer-events-none">
+            {iconSrc ? (
+              <img src={iconSrc} alt={title} className="w-4 h-4 object-contain" />
+            ) : (
+              icon
+            )}
+            <span className={`text-xs font-normal tracking-wide transition-colors ${
+              isFocused ? "text-neutral-200" : "text-neutral-400"
+            }`}>
+              {title}
+            </span>
+          </div>
+
+          {/* Draggable center area */}
+          <div className="flex-1 h-full"></div>
+
+          {/* Right: RadjaOS Caption Buttons */}
+          <div className="flex items-center h-full">
+            {/* Minimize */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onMinimize();
+              }}
+              className="w-11 h-full flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 active:bg-white/15 transition-colors cursor-pointer"
+              title="Minimize"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Maximize / Restore with Snap Layout Tooltip */}
+            <div
+              className="relative h-full"
+              onMouseEnter={() => setShowSnapPreview(true)}
+              onMouseLeave={() => setShowSnapPreview(false)}
+            >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleMaximize();
+                }}
+                className="w-11 h-full flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/10 active:bg-white/15 transition-colors cursor-pointer"
+                title={isMaximized ? "Restore" : "Maximize"}
+              >
+                {isMaximized ? (
+                  <Copy className="w-3 h-3 rotate-180" />
+                ) : (
+                  <Square className="w-3 h-3" />
+                )}
+              </button>
+
+              {/* RadjaOS Snap Layouts Preview on hover */}
+              {showSnapPreview && (
+                <div className="absolute top-10 right-0 w-48 p-2 rounded-lg bg-[#252525]/95 backdrop-blur-2xl border border-white/15 shadow-2xl z-50 pointer-events-none animate-in fade-in zoom-in-95 duration-100">
+                  <p className="text-[10px] text-neutral-400 font-medium mb-1.5 px-1">Snap layouts</p>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {/* 50-50 Split */}
+                    <div className="p-1 rounded bg-white/5 border border-white/10 grid grid-cols-2 gap-1 h-10">
+                      <div className="bg-blue-500/40 border border-blue-400/50 rounded-sm"></div>
+                      <div className="bg-white/10 rounded-sm"></div>
+                    </div>
+                    {/* 2/3 - 1/3 Split */}
+                    <div className="p-1 rounded bg-white/5 border border-white/10 grid grid-cols-3 gap-1 h-10">
+                      <div className="col-span-2 bg-blue-500/40 border border-blue-400/50 rounded-sm"></div>
+                      <div className="bg-white/10 rounded-sm"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Close */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 playWindowClose();
                 onClose();
               }}
-              className="w-3 h-3 rounded-full bg-rose-500 hover:bg-rose-600 border border-rose-600 flex items-center justify-center group focus:outline-none cursor-pointer"
+              className="w-11 h-full flex items-center justify-center text-neutral-300 hover:text-white hover:bg-[#c42b1c] active:bg-[#b22617] transition-colors cursor-pointer"
               title="Close"
             >
-              <X className="w-2 h-2 text-rose-950 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onMinimize();
-              }}
-              className="w-3 h-3 rounded-full bg-amber-500 hover:bg-amber-600 border border-amber-600 flex items-center justify-center group focus:outline-none cursor-pointer"
-              title="Minimize"
-            >
-              <Minus className="w-2 h-2 text-amber-950 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleMaximize();
-              }}
-              className="w-3 h-3 rounded-full bg-emerald-500 hover:bg-emerald-600 border border-emerald-600 flex items-center justify-center group focus:outline-none cursor-pointer"
-              title={isMaximized ? "Restore" : "Maximize"}
-            >
-              <Square className="w-1.5 h-1.5 text-emerald-950 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
-
-          {/* Window Title */}
-          <div className={`flex items-center gap-2 text-xs font-semibold pointer-events-none transition-colors ${
-            isFocused ? "text-white" : "text-neutral-400"
-          }`}>
-            {icon}
-            <span>{title}</span>
-          </div>
-
-          {/* Spacer */}
-          <div className="w-12"></div>
         </div>
 
-        {/* Window Body */}
-        <div className="flex-1 overflow-y-auto p-5 text-neutral-200 selection:bg-blue-600/40">
+        {/* Window Body Canvas */}
+        <div className="flex-1 overflow-y-auto p-5 text-neutral-200 selection:bg-blue-600/50 bg-[#1e1e1e]/60">
           {children}
         </div>
       </div>

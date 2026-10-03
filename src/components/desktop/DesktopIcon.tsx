@@ -4,7 +4,8 @@ import { type AppId } from "../../lib/os-state";
 interface DesktopIconProps {
   id?: AppId;
   label: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  iconSrc?: string;
   badge?: string;
   onClick: () => void;
 }
@@ -12,26 +13,39 @@ interface DesktopIconProps {
 export const DesktopIcon: React.FC<DesktopIconProps> = ({
   label,
   icon,
+  iconSrc,
   badge,
   onClick,
 }) => {
   return (
     <button
       onClick={onClick}
-      className="group flex flex-col items-center justify-center w-20 sm:w-24 p-2 rounded-xl text-center focus:outline-none hover:bg-white/10 active:bg-blue-600/30 transition-all duration-150 cursor-pointer select-none relative"
+      className="group relative flex flex-col items-center justify-start w-full max-w-[84px] sm:w-[84px] py-1.5 px-1 mx-auto rounded-md text-center focus:outline-none hover:bg-white/10 border border-transparent hover:border-white/15 active:bg-blue-600/30 transition-colors duration-150 cursor-pointer select-none"
     >
-      {/* Icon Container with subtle glow */}
-      <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-neutral-800/90 to-neutral-900/90 border border-white/10 shadow-lg flex items-center justify-center text-neutral-200 group-hover:scale-105 group-hover:border-blue-500/50 group-hover:shadow-blue-500/20 group-hover:text-white transition-all duration-200">
-        {icon}
+      {/* Icon Image Container */}
+      <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
+        {iconSrc ? (
+          <img
+            src={iconSrc}
+            alt={label}
+            className="w-10 h-10 sm:w-11 sm:h-11 object-contain drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-150"
+            draggable={false}
+          />
+        ) : (
+          <div className="w-10 h-10 rounded-lg bg-neutral-800/80 border border-white/10 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+            {icon}
+          </div>
+        )}
+
         {badge && (
-          <span className="absolute -top-1 -right-1 px-1.5 py-0.2 bg-red-500 text-white text-[9px] font-bold rounded-full border border-neutral-900 shadow">
+          <span className="absolute -top-1 -right-1 px-1.5 py-0.2 bg-blue-500 text-white text-[9px] font-bold rounded-full border border-neutral-900 shadow">
             {badge}
           </span>
         )}
       </div>
 
-      {/* App Label */}
-      <span className="mt-1.5 text-[11px] sm:text-xs font-medium text-neutral-200 group-hover:text-white tracking-wide line-clamp-1 drop-shadow-md px-1.5 py-0.5 rounded group-hover:bg-blue-600/60 transition-colors">
+      {/* App Label with RadjaOS drop shadow */}
+      <span className="mt-1 text-[11px] font-normal text-white text-center line-clamp-2 px-1 leading-tight tracking-normal drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]">
         {label}
       </span>
     </button>

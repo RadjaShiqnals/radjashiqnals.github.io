@@ -16,11 +16,11 @@ import {
   WALLPAPER_CHANGE_EVENT,
 } from "../../lib/wallpaper-state";
 import { getWallpaperBlob } from "../../lib/wallpaper-db";
-import { TopBar } from "./TopBar";
-import { Dock } from "./Dock";
+import { Taskbar } from "./Taskbar";
 import { DesktopIcon } from "./DesktopIcon";
 import { WindowFrame } from "./WindowFrame";
 import { LoginScreen } from "./LoginScreen";
+import { ContextMenu } from "./ContextMenu";
 
 // Apps
 import { AboutApp } from "./apps/AboutApp";
@@ -31,9 +31,6 @@ import { TerminalApp } from "./apps/TerminalApp";
 import { TrashApp } from "./apps/TrashApp";
 import { SettingsApp } from "./apps/SettingsApp";
 
-// Icons
-import { User, FolderGit2, Cpu, Briefcase, Terminal, Trash2, Settings } from "lucide-react";
-
 export const DesktopEnv: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [expiredNotice, setExpiredNotice] = useState(false);
@@ -42,6 +39,7 @@ export const DesktopEnv: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isBSOD, setIsBSOD] = useState(false);
   const [potatoMode, setPotatoMode] = useState(false);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
 
   // Wallpaper States
   const [wallpaperConfig, setWallpaperConfig] = useState<WallpaperConfig>(() =>
@@ -235,6 +233,35 @@ export const DesktopEnv: React.FC = () => {
     setActiveWindowId(id);
   };
 
+  const toggleShowDesktop = () => {
+    const hasVisible = Object.entries(openWindows).some(
+      ([id, isOpen]) => isOpen && !minimizedWindows[id as AppId]
+    );
+
+    if (hasVisible) {
+      setMinimizedWindows({
+        about: true,
+        projects: true,
+        skills: true,
+        experience: true,
+        terminal: true,
+        trash: true,
+        settings: true,
+      });
+      setActiveWindowId(null);
+    } else {
+      setMinimizedWindows({
+        about: false,
+        projects: false,
+        skills: false,
+        experience: false,
+        terminal: false,
+        trash: false,
+        settings: false,
+      });
+    }
+  };
+
   const triggerBSOD = () => {
     setIsBSOD(true);
     setTimeout(() => {
@@ -243,27 +270,45 @@ export const DesktopEnv: React.FC = () => {
     }, 3500);
   };
 
-  // Render Fake BSOD
+  // Render Fake RadjaOS BSOD
   if (isBSOD) {
     return (
-      <div className="fixed inset-0 z-[9999] bg-[#0078d7] text-white p-10 font-mono flex flex-col justify-center space-y-6 select-none animate-in fade-in duration-75">
-        <div className="text-7xl font-bold">:(</div>
-        <div className="text-2xl font-bold">
-          Your PC ran into a problem and needs to restart.
+      <div className="fixed inset-0 z-[9999] bg-[#0078d7] text-white p-12 font-sans flex flex-col justify-center space-y-6 select-none animate-in fade-in duration-75">
+        <div className="text-8xl font-light">:(</div>
+        <div className="text-3xl font-light">
+          Your device ran into a problem and needs to restart.
         </div>
-        <p className="text-sm max-w-xl text-blue-100">
-          We're just collecting some error info, and then we'll restart for you. (100% complete)
+        <p className="text-sm max-w-xl text-blue-100 font-normal">
+          We're just collecting some error info, and then we'll restart for you.
         </p>
-        <div className="text-xs text-blue-200 space-y-1 pt-4 border-t border-blue-400/40">
-          <p>Stop code: KERNEL_PANIC_NODE_MODULES_OVERLOAD</p>
-          <p>What failed: rm -rf / executed by user</p>
-          <p className="italic text-blue-300">Rebooting back to RadjaOS Desktop...</p>
+        <p className="text-lg font-light text-white">100% complete</p>
+
+        <div className="flex items-center gap-6 pt-6 border-t border-blue-400/30">
+          <div className="w-24 h-24 bg-white p-2 rounded flex items-center justify-center">
+            {/* QR Code graphic */}
+            <div className="w-full h-full bg-neutral-900 grid grid-cols-4 gap-1 p-1">
+              <div className="bg-white"></div>
+              <div className="bg-transparent"></div>
+              <div className="bg-white"></div>
+              <div className="bg-white"></div>
+              <div className="bg-white"></div>
+              <div className="bg-white"></div>
+              <div className="bg-transparent"></div>
+              <div className="bg-white"></div>
+            </div>
+          </div>
+          <div className="text-xs text-blue-100 space-y-1 font-mono">
+            <p className="text-sm font-sans font-medium text-white">For more info and possible fixes, visit:</p>
+            <p className="text-blue-300">https://windows.com/stopcode</p>
+            <p className="pt-2">Stop code: SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
+            <p>What failed: radja_stack_overflow.sys</p>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Render Login Screen if not authenticated
+  // Render RadjaOS Login Screen
   if (!isLoggedIn) {
     return (
       <LoginScreen
@@ -275,102 +320,111 @@ export const DesktopEnv: React.FC = () => {
   }
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-[#07090e] select-none">
-      {/* Top Menu Bar */}
-      <TopBar
-        locale={locale}
-        setLocale={changeLocale}
-        isMuted={isMuted}
-        toggleMute={toggleMute}
-        onLockScreen={handleLogout}
-        onOpenApp={openApp}
-      />
+    <div
+      className="relative w-screen h-screen overflow-hidden bg-[#0c1017] select-none"
+      onContextMenu={(e) => {
+        // Only trigger desktop context menu if clicking the desktop canvas
+        if ((e.target as HTMLElement).closest(".window-frame") || (e.target as HTMLElement).closest("footer")) {
+          return;
+        }
+        e.preventDefault();
+        setContextMenu({ x: e.clientX, y: e.clientY });
+      }}
+      onClick={() => {
+        if (contextMenu) setContextMenu(null);
+      }}
+    >
+      {/* Desktop Context Menu */}
+      {contextMenu && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+          onOpenApp={openApp}
+          onRefresh={() => {
+            playWindowOpen();
+          }}
+        />
+      )}
 
-      {/* Desktop Wallpaper & Background Grid Glows */}
-      <div className="absolute inset-0 pt-8 pointer-events-none -z-10 overflow-hidden">
-        {/* Dynamic Wallpaper Image Layer */}
+      {/* Dynamic Wallpaper Layer */}
+      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         {wallpaperUrl && (
           <div
             className="absolute inset-0 transition-opacity duration-500 overflow-hidden"
             style={{
-              opacity: (wallpaperConfig.opacity ?? 85) / 100,
+              opacity: (wallpaperConfig.opacity ?? 100) / 100,
               filter: potatoMode ? "none" : `blur(${wallpaperConfig.blur || 0}px)`,
             }}
           >
             <img
               src={wallpaperUrl}
               alt="Desktop Wallpaper"
-              className="w-full h-full transition-transform duration-300 pointer-events-none"
+              className={`w-full h-full ${
+                wallpaperConfig.fit === "contain"
+                  ? "object-contain"
+                  : wallpaperConfig.fit === "fill"
+                  ? "object-fill"
+                  : "object-cover"
+              }`}
               style={{
-                objectFit: wallpaperConfig.fit || "cover",
-                transform: `rotate(${wallpaperConfig.rotation || 0}deg) scaleX(${
-                  wallpaperConfig.flipH ? -1 : 1
-                }) scaleY(${wallpaperConfig.flipV ? -1 : 1})`,
+                transform: `scaleX(${wallpaperConfig.flipH ? -1 : 1}) scaleY(${
+                  wallpaperConfig.flipV ? -1 : 1
+                }) rotate(${wallpaperConfig.rotation || 0}deg)`,
               }}
             />
           </div>
         )}
 
-        {/* Soft radial orbs (hidden in potato mode for 0% GPU load) */}
-        {!potatoMode && (
-          <>
-            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-600/10 rounded-full blur-[140px]" />
-            <div className="absolute -bottom-40 right-10 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[160px]" />
-          </>
-        )}
-
-        {/* Subtle grid lines */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
-
-        {/* Watermark Branding */}
-        <div className="absolute bottom-16 right-6 text-right opacity-20 hidden md:block">
-          <p className="text-2xl font-black tracking-widest uppercase font-mono text-neutral-400">
-            RADJA.OS
+        {/* RadjaOS Evaluation Watermark (Bottom Right) */}
+        <div className="absolute bottom-16 right-6 text-right opacity-30 pointer-events-none hidden md:block">
+          <p className="text-xs font-normal text-white drop-shadow">
+            RadjaOS Desktop Pro
           </p>
-          <p className="text-[10px] font-mono text-neutral-500">
-            Build 2026.4 • Junior Full Stack Edition {potatoMode && "(Eco/Potato Mode)"}
+          <p className="text-[11px] font-normal text-neutral-300 drop-shadow">
+            Edition v2.4 (Build 2408) {potatoMode && "• (Eco Mode)"}
           </p>
         </div>
       </div>
 
-      {/* Desktop App Shortcuts Grid */}
-      <div className="pt-12 px-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-1 gap-2 sm:gap-3 w-fit z-10">
+      {/* Desktop App Shortcuts (Mobile Grid vs Desktop Left Column) */}
+      <div className="pt-6 sm:pt-4 pb-20 px-4 sm:px-3 grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-col md:flex-wrap gap-y-5 gap-x-2 md:gap-2 w-full max-w-sm sm:max-w-md md:w-fit md:h-full z-10 pointer-events-auto">
         <DesktopIcon
           label={t("app.about", locale)}
-          icon={<User className="w-6 h-6 text-blue-400" />}
+          iconSrc="/image/win11/thispc.png"
           onClick={() => openApp("about")}
         />
         <DesktopIcon
           label={t("app.projects", locale)}
           badge="3"
-          icon={<FolderGit2 className="w-6 h-6 text-indigo-400" />}
+          iconSrc="/image/win11/explorer.png"
           onClick={() => openApp("projects")}
         />
         <DesktopIcon
           label={t("app.skills", locale)}
-          icon={<Cpu className="w-6 h-6 text-emerald-400" />}
+          iconSrc="/image/win11/vscode.png"
           onClick={() => openApp("skills")}
         />
         <DesktopIcon
           label={t("app.experience", locale)}
-          icon={<Briefcase className="w-6 h-6 text-amber-400" />}
+          iconSrc="/image/win11/edge.png"
           onClick={() => openApp("experience")}
         />
         <DesktopIcon
           label={t("app.terminal", locale)}
-          icon={<Terminal className="w-6 h-6 text-cyan-400" />}
+          iconSrc="/image/win11/terminal.png"
           onClick={() => openApp("terminal")}
         />
         <DesktopIcon
           label={t("app.settings", locale)}
           badge={potatoMode ? "🥔" : undefined}
-          icon={<Settings className="w-6 h-6 text-neutral-300" />}
+          iconSrc="/image/win11/settings.png"
           onClick={() => openApp("settings")}
         />
         <DesktopIcon
           label={t("app.trash", locale)}
           badge="999GB"
-          icon={<Trash2 className="w-6 h-6 text-rose-400" />}
+          iconSrc="/image/win11/bin0.png"
           onClick={() => openApp("trash")}
         />
       </div>
@@ -381,14 +435,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="about"
         title={t("app.about", locale)}
-        icon={<User className="w-4 h-4 text-blue-400" />}
+        iconSrc="/image/win11/thispc.png"
         isOpen={openWindows.about}
         isMinimized={minimizedWindows.about}
         isMaximized={maximizedWindows.about}
         isFocused={activeWindowId === "about"}
         zIndex={windowZIndices.about}
-        initialWidth={680}
-        initialHeight={460}
+        initialWidth={720}
+        initialHeight={480}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("about")}
@@ -408,14 +462,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="projects"
         title={t("app.projects", locale)}
-        icon={<FolderGit2 className="w-4 h-4 text-indigo-400" />}
+        iconSrc="/image/win11/explorer.png"
         isOpen={openWindows.projects}
         isMinimized={minimizedWindows.projects}
         isMaximized={maximizedWindows.projects}
         isFocused={activeWindowId === "projects"}
         zIndex={windowZIndices.projects}
-        initialWidth={800}
-        initialHeight={540}
+        initialWidth={820}
+        initialHeight={550}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("projects")}
@@ -431,14 +485,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="skills"
         title={t("app.skills", locale)}
-        icon={<Cpu className="w-4 h-4 text-emerald-400" />}
+        iconSrc="/image/win11/vscode.png"
         isOpen={openWindows.skills}
         isMinimized={minimizedWindows.skills}
         isMaximized={maximizedWindows.skills}
         isFocused={activeWindowId === "skills"}
         zIndex={windowZIndices.skills}
-        initialWidth={740}
-        initialHeight={480}
+        initialWidth={750}
+        initialHeight={490}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("skills")}
@@ -454,14 +508,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="experience"
         title={t("app.experience", locale)}
-        icon={<Briefcase className="w-4 h-4 text-amber-400" />}
+        iconSrc="/image/win11/edge.png"
         isOpen={openWindows.experience}
         isMinimized={minimizedWindows.experience}
         isMaximized={maximizedWindows.experience}
         isFocused={activeWindowId === "experience"}
         zIndex={windowZIndices.experience}
-        initialWidth={680}
-        initialHeight={480}
+        initialWidth={700}
+        initialHeight={500}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("experience")}
@@ -477,14 +531,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="terminal"
         title={t("app.terminal", locale)}
-        icon={<Terminal className="w-4 h-4 text-cyan-400" />}
+        iconSrc="/image/win11/terminal.png"
         isOpen={openWindows.terminal}
         isMinimized={minimizedWindows.terminal}
         isMaximized={maximizedWindows.terminal}
         isFocused={activeWindowId === "terminal"}
         zIndex={windowZIndices.terminal}
-        initialWidth={660}
-        initialHeight={420}
+        initialWidth={680}
+        initialHeight={520}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("terminal")}
@@ -504,14 +558,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="settings"
         title={t("app.settings", locale)}
-        icon={<Settings className="w-4 h-4 text-neutral-300" />}
+        iconSrc="/image/win11/settings.png"
         isOpen={openWindows.settings}
         isMinimized={minimizedWindows.settings}
         isMaximized={maximizedWindows.settings}
         isFocused={activeWindowId === "settings"}
         zIndex={windowZIndices.settings}
-        initialWidth={600}
-        initialHeight={500}
+        initialWidth={620}
+        initialHeight={520}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("settings")}
@@ -538,14 +592,14 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="trash"
         title={t("app.trash", locale)}
-        icon={<Trash2 className="w-4 h-4 text-rose-400" />}
+        iconSrc="/image/win11/bin0.png"
         isOpen={openWindows.trash}
         isMinimized={minimizedWindows.trash}
         isMaximized={maximizedWindows.trash}
         isFocused={activeWindowId === "trash"}
         zIndex={windowZIndices.trash}
-        initialWidth={580}
-        initialHeight={400}
+        initialWidth={600}
+        initialHeight={420}
         isMobile={isMobile}
         potatoMode={potatoMode}
         onClose={() => closeApp("trash")}
@@ -557,12 +611,22 @@ export const DesktopEnv: React.FC = () => {
         <TrashApp locale={locale} />
       </WindowFrame>
 
-      {/* Bottom Dock */}
-      <Dock
+      {/* RadjaOS Bottom Taskbar */}
+      <Taskbar
         openWindows={openWindows}
+        minimizedWindows={minimizedWindows}
         activeWindowId={activeWindowId}
         onOpenApp={openApp}
+        onMinimizeApp={minimizeApp}
         locale={locale}
+        setLocale={changeLocale}
+        isMuted={isMuted}
+        toggleMute={toggleMute}
+        potatoMode={potatoMode}
+        togglePotatoMode={togglePotatoMode}
+        onLockScreen={handleLogout}
+        onTriggerBSOD={triggerBSOD}
+        onToggleShowDesktop={toggleShowDesktop}
       />
     </div>
   );
