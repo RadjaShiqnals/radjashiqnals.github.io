@@ -1,11 +1,11 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Runs on pushes targeting the main branch
+  # Runs on pushes targeting this branch
   push:
     branches:
+      - vibe
       - main
-      - v4
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
