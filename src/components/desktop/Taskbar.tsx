@@ -159,6 +159,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
     { id: "skills", nameKey: "app.skills", iconSrc: "/image/win11/vscode.png" },
     { id: "experience", nameKey: "app.experience", iconSrc: "/image/win11/edge.png" },
     { id: "terminal", nameKey: "app.terminal", iconSrc: "/image/win11/terminal.png" },
+    { id: "tools", nameKey: "app.tools", iconSrc: "/image/win11/taskmanager.png" },
     { id: "settings", nameKey: "app.settings", iconSrc: "/image/win11/settings.png" },
     { id: "trash", nameKey: "app.trash", iconSrc: "/image/win11/bin0.png" },
   ];

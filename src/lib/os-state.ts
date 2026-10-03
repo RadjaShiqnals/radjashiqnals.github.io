@@ -4,6 +4,7 @@ export type AppId =
   | "skills"
   | "experience"
   | "terminal"
+  | "tools"
   | "trash"
   | "settings";
 

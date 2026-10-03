@@ -142,6 +142,19 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
         <span>Open in Terminal</span>
       </button>
 
+      {/* Open Dev Tools */}
+      <button
+        onClick={() => {
+          playWindowOpen();
+          onOpenApp("tools");
+          onClose();
+        }}
+        className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/10 text-neutral-200 hover:text-white transition-colors cursor-pointer"
+      >
+        <LayoutGrid className="w-3.5 h-3.5 text-emerald-400" />
+        <span>Open Dev Tools</span>
+      </button>
+
       <div className="h-px bg-white/10 my-1" />
 
       {/* About RadjaOS */}
@@ -151,10 +164,10 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
           onOpenApp("about");
           onClose();
         }}
-        className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/10 text-blue-300 hover:text-white transition-colors cursor-pointer font-medium"
+        className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/10 text-cyan-300 hover:text-white transition-colors cursor-pointer font-medium"
       >
-        <Info className="w-3.5 h-3.5 text-blue-400" />
-        <span>About RadjaOS 11</span>
+        <Info className="w-3.5 h-3.5 text-cyan-400" />
+        <span>About RadjaOS</span>
       </button>
     </div>
   );

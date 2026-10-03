@@ -38,6 +38,19 @@ RadjaOS operates under a strict **Look-Alike Non-Trademark Policy**:
   - **Frosted Glass Surface**: Multi-stop backdrop blur (30px) and saturation boost for active windows and canvas panels.
   - **Deep Acrylic Surface**: 40px backdrop blur with specular lighting for flyouts and the right-click desktop context menu.
   - **Eco / Potato Mode**: Toggleable low-spec hardware mode that disables expensive GPU backdrop filters and switches to wireframe dragging.
+- **Client-Side Developer Utilities Suite (Tools App)**:
+  - 100% offline, client-side developer utility hub executing directly in the browser runtime without external API dependencies, network calls, or CORS limits.
+  - Master-detail architecture with categorical tabs (*All*, *Formatters*, *Converters*, *Security*, *Generators*) and instant text search filtering.
+  - 8 production-ready local tools:
+    - **JSON Formatter & Validator**: 2/4/tab indentation, minifier, byte/key stats, and real-time syntax error diagnosis.
+    - **Base64 & URL Converter**: Multi-byte UTF-8 text encoder/decoder, URL encoder, and image-to-Base64 Data URI converter with live preview.
+    - **Hash & Checksum Machine**: Instant MD5, SHA-1, SHA-256, and SHA-512 cryptographic digests with uppercase hex toggle and one-click copy.
+    - **JWT Token Inspector**: Header & Payload claim inspector, expiration status, and formatted local time conversion.
+    - **UUID & Token Studio**: Batch UUID v4 generator with hyphen stripping and uppercase options, plus high-entropy cryptographically secure random token generator.
+    - **Unix Epoch Converter**: Realtime live ticking epoch clock and bidirectional Unix Timestamp $\leftrightarrow$ Human Readable Date (WIB & UTC) conversion.
+    - **QR Code Studio**: Client-side canvas QR generator with custom sizes, error correction levels (L/M/Q/H), PNG export, and Data URI copy.
+    - **Color & Contrast Studio**: HEX color picker, WCAG 2.1 relative luminance calculation, AA/AAA contrast pass/fail compliance ratings, and live test card.
+  - Full desktop shell integration: accessible via Desktop shortcut, centered Taskbar dock, Start Menu, Desktop Context Menu (*Open Dev Tools*), and RadjaShell (`tools` / `devtoys` CLI commands).
 - **Procedural Audio Synthesis**:
   - Built-in Web Audio API synthesizer for native OS sound effects (window open, click, minimize, error beep) without external MP3/WAV assets.
 - **Wallpaper System & Persistence**:
@@ -56,6 +69,7 @@ RadjaOS operates under a strict **Look-Alike Non-Trademark Policy**:
 | **Skills** | Code Editor | Categorized technical proficiency matrix (Frontend, Backend, DevOps, Tools). |
 | **Experience** | Browser | Career history timeline and role achievements at SIDIGS. |
 | **Terminal** | Terminal | Authentic tabbed shell emulator with Oh My Posh styling and CLI commands. |
+| **Tools** | Task Manager | 100% offline client-side developer utilities suite (JSON, QR, Hash, JWT, UUID, Epoch, Contrast). |
 | **Settings** | Settings | Personalization hub: wallpaper selector, Eco Mode, volume, and language. |
 | **Recycle Bin** | Trash | Satirical storage cleaner for `node_modules` and temporary files. |
 

@@ -7,6 +7,7 @@ interface TerminalAppProps {
   locale: Locale;
   onOpenProjects: () => void;
   onTriggerBSOD: () => void;
+  onOpenTools?: () => void;
 }
 
 interface CommandHistory {
@@ -18,6 +19,7 @@ export const TerminalApp: React.FC<TerminalAppProps> = ({
   locale,
   onOpenProjects,
   onTriggerBSOD,
+  onOpenTools,
 }) => {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<CommandHistory[]>([
@@ -39,6 +41,7 @@ export const TerminalApp: React.FC<TerminalAppProps> = ({
   const availableCommands = [
     { name: "fetch", desc: "Display RadjaOS system specifications" },
     { name: "help", desc: "List all available shell commands" },
+    { name: "tools", desc: "Launch offline developer utilities" },
     { name: "projects", desc: "Open featured projects portfolio" },
     { name: "whoami", desc: "Print current logged in developer identity" },
     { name: "mommy", desc: "Mommy ASMR comfort & encouragement" },
@@ -196,15 +199,18 @@ export const TerminalApp: React.FC<TerminalAppProps> = ({
           <span className="text-amber-400 font-bold">Projects/</span>
           <span className="text-emerald-400 font-bold">Skills/</span>
           <span className="text-cyan-400 font-bold">Experience/</span>
+          <span className="text-pink-400 font-bold">Tools/</span>
           <span className="text-purple-400 font-bold">Settings/</span>
           <span className="text-neutral-500 font-bold">RecycleBin/</span>
           <span className="text-neutral-400">README.md</span>
-          <span className="text-neutral-400">package.json</span>
         </div>
       );
     } else if (lower === "projects") {
       onOpenProjects();
       outputNode = <span className="text-cyan-400">Launching Projects application...</span>;
+    } else if (lower === "tools" || lower === "devtoys" || lower === "utilitas") {
+      if (onOpenTools) onOpenTools();
+      outputNode = <span className="text-cyan-400">Launching RadjaOS Tools suite...</span>;
     } else if (lower.startsWith("sudo")) {
       outputNode = (
         <span className="text-amber-400">

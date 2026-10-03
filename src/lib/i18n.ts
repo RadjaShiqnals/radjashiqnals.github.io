@@ -41,6 +41,7 @@ export const dictionaries = {
     "app.skills": "Skills",
     "app.experience": "Experience",
     "app.terminal": "Terminal",
+    "app.tools": "Tools",
     "app.trash": "Recycle Bin",
     "app.settings": "Settings",
 
@@ -138,6 +139,7 @@ export const dictionaries = {
     "app.skills": "Kemampuan",
     "app.experience": "Pengalaman",
     "app.terminal": "Terminal",
+    "app.tools": "Utilitas",
     "app.trash": "Kotak Sampah",
     "app.settings": "Pengaturan",
 
@@ -235,6 +237,7 @@ export const dictionaries = {
     "app.skills": "スキル",
     "app.experience": "経歴",
     "app.terminal": "ターミナル",
+    "app.tools": "ツール",
     "app.trash": "ごみ箱",
     "app.settings": "設定",
 

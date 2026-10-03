@@ -30,6 +30,7 @@ import { ExperienceApp } from "./apps/ExperienceApp";
 import { TerminalApp } from "./apps/TerminalApp";
 import { TrashApp } from "./apps/TrashApp";
 import { SettingsApp } from "./apps/SettingsApp";
+import { ToolsApp } from "./apps/ToolsApp";
 
 export const DesktopEnv: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -54,6 +55,7 @@ export const DesktopEnv: React.FC = () => {
     skills: false,
     experience: false,
     terminal: false,
+    tools: false,
     trash: false,
     settings: false,
   });
@@ -64,6 +66,7 @@ export const DesktopEnv: React.FC = () => {
     skills: false,
     experience: false,
     terminal: false,
+    tools: false,
     trash: false,
     settings: false,
   });
@@ -74,6 +77,7 @@ export const DesktopEnv: React.FC = () => {
     skills: false,
     experience: false,
     terminal: false,
+    tools: false,
     trash: false,
     settings: false,
   });
@@ -84,6 +88,7 @@ export const DesktopEnv: React.FC = () => {
     skills: 1,
     experience: 1,
     terminal: 1,
+    tools: 1,
     trash: 1,
     settings: 1,
   });
@@ -245,6 +250,7 @@ export const DesktopEnv: React.FC = () => {
         skills: true,
         experience: true,
         terminal: true,
+        tools: true,
         trash: true,
         settings: true,
       });
@@ -256,6 +262,7 @@ export const DesktopEnv: React.FC = () => {
         skills: false,
         experience: false,
         terminal: false,
+        tools: false,
         trash: false,
         settings: false,
       });
@@ -416,6 +423,12 @@ export const DesktopEnv: React.FC = () => {
           onClick={() => openApp("terminal")}
         />
         <DesktopIcon
+          label={t("app.tools", locale)}
+          badge="NEW"
+          iconSrc="/image/win11/taskmanager.png"
+          onClick={() => openApp("tools")}
+        />
+        <DesktopIcon
           label={t("app.settings", locale)}
           badge={potatoMode ? "🥔" : undefined}
           iconSrc="/image/win11/settings.png"
@@ -551,6 +564,7 @@ export const DesktopEnv: React.FC = () => {
           locale={locale}
           onOpenProjects={() => openApp("projects")}
           onTriggerBSOD={triggerBSOD}
+          onOpenTools={() => openApp("tools")}
         />
       </WindowFrame>
 
@@ -609,6 +623,29 @@ export const DesktopEnv: React.FC = () => {
         onHoverFocus={() => focusApp("trash")}
       >
         <TrashApp locale={locale} />
+      </WindowFrame>
+
+      {/* 8. Tools App */}
+      <WindowFrame
+        id="tools"
+        title={t("app.tools", locale)}
+        iconSrc="/image/win11/taskmanager.png"
+        isOpen={openWindows.tools}
+        isMinimized={minimizedWindows.tools}
+        isMaximized={maximizedWindows.tools}
+        isFocused={activeWindowId === "tools"}
+        zIndex={windowZIndices.tools}
+        initialWidth={860}
+        initialHeight={560}
+        isMobile={isMobile}
+        potatoMode={potatoMode}
+        onClose={() => closeApp("tools")}
+        onMinimize={() => minimizeApp("tools")}
+        onToggleMaximize={() => toggleMaximizeApp("tools")}
+        onFocus={() => focusApp("tools")}
+        onHoverFocus={() => focusApp("tools")}
+      >
+        <ToolsApp locale={locale} />
       </WindowFrame>
 
       {/* RadjaOS Bottom Taskbar */}
