@@ -258,8 +258,14 @@ export const SettingsApp: React.FC<SettingsAppProps> = ({
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-tr from-neutral-950 via-neutral-900 to-blue-950 flex items-center justify-center">
-                        <span className="text-[10px] text-neutral-500 font-mono">Mesh</span>
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{
+                          background:
+                            "radial-gradient(at 0% 0%, #1e1b4b 0px, transparent 50%), radial-gradient(at 100% 0%, #0369a1 0px, transparent 50%), radial-gradient(at 100% 100%, #0f172a 0px, transparent 50%), radial-gradient(at 0% 100%, #111827 0px, transparent 50%), #0c1017",
+                        }}
+                      >
+                        <span className="text-[10px] text-cyan-300 font-mono font-bold drop-shadow">Mesh</span>
                       </div>
                     )}
                     {active && (

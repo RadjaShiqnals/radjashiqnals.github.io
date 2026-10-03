@@ -10,12 +10,10 @@ import {
   ZoomIn,
   ZoomOut,
   Check,
-  X,
   Sparkles,
   Smartphone,
   Monitor,
   Crop,
-  Rotate3D,
 } from "lucide-react";
 
 interface WallpaperCropperModalProps {

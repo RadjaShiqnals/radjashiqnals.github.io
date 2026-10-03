@@ -127,9 +127,9 @@ export const DesktopEnv: React.FC = () => {
         const p =
           WALLPAPER_PRESETS.find((x) => x.id === cfg.presetId) ||
           WALLPAPER_PRESETS[0];
-        if (active) setWallpaperUrl(p?.path || "");
+        if (active) setWallpaperUrl(p?.path || "/image/wallpaper/radja-dark.jpg");
       } else if (cfg.type === "url") {
-        if (active) setWallpaperUrl(cfg.customUrl || "");
+        if (active) setWallpaperUrl(cfg.customUrl || "/image/wallpaper/radja-dark.jpg");
       } else if (cfg.type === "custom_raw") {
         const record = await getWallpaperBlob(
           cfg.rawBlobId || "user_custom_wallpaper"
@@ -138,6 +138,8 @@ export const DesktopEnv: React.FC = () => {
           if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
           currentBlobUrl = URL.createObjectURL(record.blob);
           setWallpaperUrl(currentBlobUrl);
+        } else if (active) {
+          setWallpaperUrl("/image/wallpaper/radja-dark.jpg");
         }
       } else {
         if (active) setWallpaperUrl("");
@@ -306,7 +308,7 @@ export const DesktopEnv: React.FC = () => {
           </div>
           <div className="text-xs text-blue-100 space-y-1 font-mono">
             <p className="text-sm font-sans font-medium text-white">For more info and possible fixes, visit:</p>
-            <p className="text-blue-300">https://windows.com/stopcode</p>
+            <p className="text-blue-300">https://radjashiqnals.github.io</p>
             <p className="pt-2">Stop code: SYSTEM_THREAD_EXCEPTION_NOT_HANDLED</p>
             <p>What failed: radja_stack_overflow.sys</p>
           </div>
@@ -355,8 +357,17 @@ export const DesktopEnv: React.FC = () => {
       )}
 
       {/* Dynamic Wallpaper Layer */}
-      <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
-        {wallpaperUrl && (
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {wallpaperConfig.type === "mesh" ? (
+          <div
+            className="w-full h-full transition-opacity duration-500 overflow-hidden"
+            style={{
+              background:
+                "radial-gradient(at 0% 0%, #1e1b4b 0px, transparent 50%), radial-gradient(at 100% 0%, #0369a1 0px, transparent 50%), radial-gradient(at 100% 100%, #0f172a 0px, transparent 50%), radial-gradient(at 0% 100%, #111827 0px, transparent 50%), #0c1017",
+              opacity: (wallpaperConfig.opacity ?? 100) / 100,
+            }}
+          />
+        ) : wallpaperUrl ? (
           <div
             className="absolute inset-0 transition-opacity duration-500 overflow-hidden"
             style={{
@@ -367,6 +378,12 @@ export const DesktopEnv: React.FC = () => {
             <img
               src={wallpaperUrl}
               alt="Desktop Wallpaper"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.src.endsWith("/image/wallpaper/radja-dark.jpg")) {
+                  target.src = "/image/wallpaper/radja-dark.jpg";
+                }
+              }}
               className={`w-full h-full ${
                 wallpaperConfig.fit === "contain"
                   ? "object-contain"
@@ -381,6 +398,14 @@ export const DesktopEnv: React.FC = () => {
               }}
             />
           </div>
+        ) : (
+          <div
+            className="w-full h-full"
+            style={{
+              background:
+                "radial-gradient(at 0% 0%, #1e1b4b 0px, transparent 50%), radial-gradient(at 100% 0%, #0369a1 0px, transparent 50%), radial-gradient(at 100% 100%, #0f172a 0px, transparent 50%), radial-gradient(at 0% 100%, #111827 0px, transparent 50%), #0c1017",
+            }}
+          />
         )}
 
         {/* RadjaOS Evaluation Watermark (Bottom Right) */}
@@ -414,7 +439,7 @@ export const DesktopEnv: React.FC = () => {
         />
         <DesktopIcon
           label={t("app.experience", locale)}
-          iconSrc="/image/win11/edge.png"
+          iconSrc="/image/win11/experience.png"
           onClick={() => openApp("experience")}
         />
         <DesktopIcon
@@ -521,7 +546,7 @@ export const DesktopEnv: React.FC = () => {
       <WindowFrame
         id="experience"
         title={t("app.experience", locale)}
-        iconSrc="/image/win11/edge.png"
+        iconSrc="/image/win11/experience.png"
         isOpen={openWindows.experience}
         isMinimized={minimizedWindows.experience}
         isMaximized={maximizedWindows.experience}

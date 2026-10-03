@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { type Locale, t } from "../../lib/i18n";
 import { playBootChime } from "../../lib/sound";
+import {
+  getSavedWallpaperConfig,
+  WALLPAPER_PRESETS,
+  WALLPAPER_CHANGE_EVENT,
+  type WallpaperConfig,
+} from "../../lib/wallpaper-state";
+import { getWallpaperBlob } from "../../lib/wallpaper-db";
 import { ArrowRight, ShieldAlert, Wifi, BatteryCharging, Power } from "lucide-react";
 
 interface LoginScreenProps {
@@ -19,10 +26,66 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   const [password, setPassword] = useState("");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isUnlocking, setIsUnlocking] = useState(false);
+  const [wallpaperConfig, setWallpaperConfig] = useState<WallpaperConfig>(() =>
+    getSavedWallpaperConfig()
+  );
+  const [wallpaperUrl, setWallpaperUrl] = useState<string>("/image/wallpaper/radja-dark.jpg");
 
   // Realtime clock for RadjaOS Lockscreen
   const [timeStr, setTimeStr] = useState("");
   const [dateStr, setDateStr] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    let currentBlobUrl = "";
+
+    const resolveWallpaper = async (cfg: WallpaperConfig) => {
+      if (cfg.type === "preset") {
+        const p =
+          WALLPAPER_PRESETS.find((x) => x.id === cfg.presetId) ||
+          WALLPAPER_PRESETS[0];
+        if (active) setWallpaperUrl(p?.path || "/image/wallpaper/radja-dark.jpg");
+      } else if (cfg.type === "url") {
+        if (active) setWallpaperUrl(cfg.customUrl || "/image/wallpaper/radja-dark.jpg");
+      } else if (cfg.type === "custom_raw") {
+        const record = await getWallpaperBlob(
+          cfg.rawBlobId || "user_custom_wallpaper"
+        );
+        if (record && active) {
+          if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+          currentBlobUrl = URL.createObjectURL(record.blob);
+          setWallpaperUrl(currentBlobUrl);
+        } else if (active) {
+          setWallpaperUrl("/image/wallpaper/radja-dark.jpg");
+        }
+      } else {
+        if (active) setWallpaperUrl("");
+      }
+    };
+
+    resolveWallpaper(wallpaperConfig);
+
+    const handleWallpaperChange = (e: Event) => {
+      const customEvent = e as CustomEvent<WallpaperConfig>;
+      if (customEvent.detail) {
+        setWallpaperConfig(customEvent.detail);
+        resolveWallpaper(customEvent.detail);
+      }
+    };
+
+    window.addEventListener(WALLPAPER_CHANGE_EVENT, handleWallpaperChange);
+
+    return () => {
+      active = false;
+      window.removeEventListener(WALLPAPER_CHANGE_EVENT, handleWallpaperChange);
+      if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+    };
+  }, [
+    wallpaperConfig.type,
+    wallpaperConfig.presetId,
+    wallpaperConfig.customUrl,
+    wallpaperConfig.rawBlobId,
+  ]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -90,24 +153,57 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       className={`fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#0c1017] text-white select-none transition-all duration-700 ${
         isUnlocking ? "opacity-0 scale-105 pointer-events-none" : "opacity-100 scale-100"
       }`}
-      style={{
-        backgroundImage: "url('/image/wallpaper/win11-dark.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
-      {/* Dark frosted overlay */}
-      <div className="absolute inset-0 bg-black/45 backdrop-blur-xl -z-10" />
-
-      {/* Top Lockscreen Clock */}
-      <div className="pt-16 sm:pt-20 text-center space-y-1">
-        <h1 className="text-6xl sm:text-7xl font-light tracking-tight text-white/95 font-sans drop-shadow-lg">
-          {timeStr}
-        </h1>
-        <p className="text-sm sm:text-base font-normal text-white/80 drop-shadow">
-          {dateStr}
-        </p>
+      {/* Dynamic Background Wallpaper Layer */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {wallpaperConfig.type === "mesh" ? (
+          <div
+            className="w-full h-full"
+            style={{
+              background:
+                "radial-gradient(at 0% 0%, #1e1b4b 0px, transparent 50%), radial-gradient(at 100% 0%, #0369a1 0px, transparent 50%), radial-gradient(at 100% 100%, #0f172a 0px, transparent 50%), radial-gradient(at 0% 100%, #111827 0px, transparent 50%), #0c1017",
+            }}
+          />
+        ) : (
+          <img
+            src={wallpaperUrl || "/image/wallpaper/radja-dark.jpg"}
+            alt="Lockscreen Wallpaper"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (!target.src.endsWith("/image/wallpaper/radja-dark.jpg")) {
+                target.src = "/image/wallpaper/radja-dark.jpg";
+              }
+            }}
+            className={`w-full h-full ${
+              wallpaperConfig.fit === "contain"
+                ? "object-contain"
+                : wallpaperConfig.fit === "fill"
+                ? "object-fill"
+                : "object-cover"
+            }`}
+            style={{
+              transform: `scaleX(${wallpaperConfig.flipH ? -1 : 1}) scaleY(${
+                wallpaperConfig.flipV ? -1 : 1
+              }) rotate(${wallpaperConfig.rotation || 0}deg)`,
+            }}
+          />
+        )}
       </div>
+
+      {/* Dark frosted overlay */}
+      <div className="absolute inset-0 bg-black/45 backdrop-blur-xl z-[1] pointer-events-none" />
+
+      {/* Lockscreen Foreground Interactive Content */}
+      <div className="relative z-10 w-full h-full flex flex-col items-center justify-between pointer-events-auto">
+        {/* Top Lockscreen Clock */}
+        <div className="pt-16 sm:pt-20 text-center space-y-1">
+          <h1 className="text-6xl sm:text-7xl font-light tracking-tight text-white/95 font-sans drop-shadow-lg">
+            {timeStr}
+          </h1>
+          <p className="text-sm sm:text-base font-normal text-white/80 drop-shadow">
+            {dateStr}
+          </p>
+        </div>
 
       {!isBooted ? (
         /* RadjaOS Spinning Dots Bootloader */
@@ -216,6 +312,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
         <span title="Power">
           <Power className="w-5 h-5 hover:text-white transition-colors cursor-pointer" />
         </span>
+      </div>
       </div>
     </div>
   );

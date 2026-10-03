@@ -157,7 +157,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
     { id: "about", nameKey: "app.about", iconSrc: "/image/win11/thispc.png" },
     { id: "projects", nameKey: "app.projects", iconSrc: "/image/win11/explorer.png" },
     { id: "skills", nameKey: "app.skills", iconSrc: "/image/win11/vscode.png" },
-    { id: "experience", nameKey: "app.experience", iconSrc: "/image/win11/edge.png" },
+    { id: "experience", nameKey: "app.experience", iconSrc: "/image/win11/experience.png" },
     { id: "terminal", nameKey: "app.terminal", iconSrc: "/image/win11/terminal.png" },
     { id: "tools", nameKey: "app.tools", iconSrc: "/image/win11/taskmanager.png" },
     { id: "settings", nameKey: "app.settings", iconSrc: "/image/win11/settings.png" },
@@ -301,7 +301,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                   }}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
                 >
-                  <img src="/image/win11/edge.png" className="w-7 h-7 object-contain" />
+                  <img src="/image/win11/experience.png" className="w-7 h-7 object-contain" />
                   <div className="text-left">
                     <p className="text-xs font-medium text-white">SIDIGS Tech Lead</p>
                     <p className="text-[10px] text-neutral-400">East Java School Ecosystem</p>

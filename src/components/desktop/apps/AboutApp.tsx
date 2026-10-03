@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import QRCode from "qrcode";
 import { type Locale, t } from "../../../lib/i18n";
-import { Sparkles, MapPin, Terminal, Mail, ExternalLink, Coffee, X } from "lucide-react";
+import { Sparkles, MapPin, Terminal, Mail, ExternalLink, Coffee, X, Heart, Wallet } from "lucide-react";
 
 interface AboutAppProps {
   locale: Locale;
@@ -25,7 +26,36 @@ export const AboutApp: React.FC<AboutAppProps> = ({
   onOpenProjects,
   onOpenTerminal,
 }) => {
-  const [showQrisModal, setShowQrisModal] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
+  const [saweriaQrUrl, setSaweriaQrUrl] = useState("");
+  const [kofiQrUrl, setKofiQrUrl] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+    QRCode.toDataURL("https://saweria.co/radjashiqnals", {
+      width: 280,
+      margin: 2,
+      color: { dark: "#000000", light: "#ffffff" },
+    })
+      .then((url) => {
+        if (isMounted) setSaweriaQrUrl(url);
+      })
+      .catch(() => {});
+
+    QRCode.toDataURL("https://ko-fi.com/radjashiqnals", {
+      width: 280,
+      margin: 2,
+      color: { dark: "#000000", light: "#ffffff" },
+    })
+      .then((url) => {
+        if (isMounted) setKofiQrUrl(url);
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
@@ -89,10 +119,10 @@ export const AboutApp: React.FC<AboutAppProps> = ({
           </p>
         </div>
 
-        {/* Traktir Kopi / QRIS Card */}
+        {/* Support & Donation Card */}
         <div
-          onClick={() => setShowQrisModal(true)}
-          className="col-span-1 sm:col-span-2 p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/30 via-neutral-900 to-emerald-950/20 hover:border-emerald-500/40 border border-emerald-500/20 cursor-pointer transition-all flex items-center justify-between group"
+          onClick={() => setShowSupportModal(true)}
+          className="col-span-1 sm:col-span-2 p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/30 via-neutral-900 to-amber-950/20 hover:border-emerald-500/40 border border-emerald-500/20 cursor-pointer transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
@@ -108,7 +138,7 @@ export const AboutApp: React.FC<AboutAppProps> = ({
             </div>
           </div>
           <span className="text-[11px] font-mono text-emerald-400 group-hover:translate-x-0.5 transition-transform shrink-0 pl-2">
-            Scan &rarr;
+            View &rarr;
           </span>
         </div>
       </div>
@@ -145,52 +175,189 @@ export const AboutApp: React.FC<AboutAppProps> = ({
         </div>
       </div>
 
-      {/* QRIS Lightbox Modal */}
-      {showQrisModal && (
+      {/* Support & Payment Channels Modal */}
+      {showSupportModal && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
-          onClick={() => setShowQrisModal(false)}
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
+          onClick={() => setShowSupportModal(false)}
         >
           <div
-            className="bg-neutral-900 border border-white/10 rounded-2xl p-5 max-w-xs w-full space-y-4 shadow-2xl animate-in zoom-in-95 duration-150 text-center relative"
+            className="bg-[#181818] border border-white/15 rounded-2xl p-4 sm:p-5 max-w-3xl w-full my-auto space-y-3.5 shadow-2xl relative animate-in zoom-in-95 duration-150 max-h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
-              onClick={() => setShowQrisModal(false)}
-              className="absolute top-3 right-3 p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              onClick={() => setShowSupportModal(false)}
+              className="absolute top-3.5 right-3.5 p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer z-10"
+              aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
 
             {/* Header */}
-            <div className="space-y-1">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
-                <Coffee className="w-5 h-5" />
+            <div className="text-center space-y-1 pr-6 pl-6">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-medium">
+                <Coffee className="w-3 h-3" />
+                <span>{t("about.qrisTitle", locale)}</span>
               </div>
-              <h3 className="font-bold text-white text-sm">
-                {t("about.qrisTitle", locale)}
-              </h3>
-              <p className="text-[11px] text-neutral-400">
-                SWAG Coffee / Matcha Latte Support
+              <h2 className="text-sm sm:text-base font-bold text-white tracking-tight">
+                Support Radja's Creative & Code Journey
+              </h2>
+              <p className="text-[11px] text-neutral-400 max-w-lg mx-auto">
+                {t("about.supportModalSubtitle", locale)}
               </p>
             </div>
 
-            {/* QR Image */}
-            <div className="bg-white p-3 rounded-xl shadow-lg border border-neutral-200 inline-block">
-              <img
-                src="/qris.png"
-                alt="QRIS Radja Genta"
-                className="w-56 h-auto object-contain mx-auto rounded"
-              />
+            {/* Top Section: QR Codes Side by Side */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* 1. QRIS Bank Mandiri */}
+              <div className="bg-neutral-900/90 border border-emerald-500/30 rounded-xl p-3 flex flex-col items-center text-center relative overflow-hidden group shadow-lg">
+                <div className="w-full flex justify-center mb-1.5">
+                  <span className="text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    {t("about.recommendedIndo", locale)}
+                  </span>
+                </div>
+                <h3 className="font-bold text-xs text-white">QRIS Mandiri</h3>
+                <p className="text-[10px] text-neutral-400 mb-1.5">
+                  Merchant: <span className="text-neutral-200 font-medium">RadjaShiqnals</span>
+                </p>
+                <div className="bg-white p-1.5 rounded-lg shadow border border-neutral-200 mb-2">
+                  <img
+                    src="/qris.png"
+                    alt="QRIS Mandiri"
+                    className="w-24 h-24 object-contain mx-auto"
+                  />
+                </div>
+                <p className="text-[10px] text-neutral-400 mt-auto leading-relaxed">
+                  {t("about.qrisMandiriDesc", locale)}
+                </p>
+              </div>
+
+              {/* 2. Saweria QR */}
+              <div className="bg-neutral-900/90 border border-orange-500/30 rounded-xl p-3 flex flex-col items-center text-center relative overflow-hidden group shadow-lg">
+                <div className="w-full flex justify-center mb-1.5">
+                  <span className="text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                    {t("about.localIndo", locale)}
+                  </span>
+                </div>
+                <h3 className="font-bold text-xs text-white">Saweria</h3>
+                <p className="text-[10px] text-neutral-400 mb-1.5">
+                  <span className="text-orange-300/90 font-mono">saweria.co/radjashiqnals</span>
+                </p>
+                <div className="bg-white p-1.5 rounded-lg shadow border border-neutral-200 mb-2">
+                  {saweriaQrUrl ? (
+                    <img
+                      src={saweriaQrUrl}
+                      alt="Saweria QR"
+                      className="w-24 h-24 object-contain mx-auto"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 flex items-center justify-center text-neutral-400 text-xs">
+                      Loading...
+                    </div>
+                  )}
+                </div>
+                <p className="text-[10px] text-neutral-400 mt-auto leading-relaxed">
+                  {t("about.saweriaDesc", locale)}
+                </p>
+              </div>
+
+              {/* 3. Ko-fi QR */}
+              <div className="bg-neutral-900/90 border border-rose-500/30 rounded-xl p-3 flex flex-col items-center text-center relative overflow-hidden group shadow-lg">
+                <div className="w-full flex justify-center mb-1.5">
+                  <span className="text-[9px] font-bold tracking-wider px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                    {t("about.globalUniversal", locale)}
+                  </span>
+                </div>
+                <h3 className="font-bold text-xs text-white">Ko-fi</h3>
+                <p className="text-[10px] text-neutral-400 mb-1.5">
+                  <span className="text-rose-300/90 font-mono">ko-fi.com/radjashiqnals</span>
+                </p>
+                <div className="bg-white p-1.5 rounded-lg shadow border border-neutral-200 mb-2">
+                  {kofiQrUrl ? (
+                    <img
+                      src={kofiQrUrl}
+                      alt="Ko-fi QR"
+                      className="w-24 h-24 object-contain mx-auto"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 flex items-center justify-center text-neutral-400 text-xs">
+                      Loading...
+                    </div>
+                  )}
+                </div>
+                <p className="text-[10px] text-neutral-400 mt-auto leading-relaxed">
+                  {t("about.kofiDesc", locale)}
+                </p>
+              </div>
             </div>
 
-            <p className="text-[10px] text-neutral-400 leading-relaxed">
-              Mendukung semua aplikasi e-wallet & m-Banking (BCA, Mandiri, BRI, GoPay, OVO, Dana, ShopeePay). Terima kasih banyak! 💖
+            {/* Bottom Section: Direct URL Buttons */}
+            <div className="pt-2 border-t border-white/10 space-y-1.5">
+              <p className="text-[11px] text-neutral-400 font-medium">Direct Links / Payment Portals:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {/* Saweria Button */}
+                <a
+                  href="https://saweria.co/radjashiqnals"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 hover:border-orange-500/50 transition-all flex items-center justify-between text-left group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+                      <Wallet className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-orange-200 flex items-center gap-1.5">
+                        <span>{t("about.supportSaweriaBtn", locale)}</span>
+                        <span className="text-[8px] px-1 py-0.2 rounded bg-orange-500/30 text-orange-200 font-mono">
+                          ID
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400">
+                        E-Wallet, QRIS, & Media Share
+                      </p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-orange-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+                </a>
+
+                {/* Ko-fi Button */}
+                <a
+                  href="https://ko-fi.com/radjashiqnals"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-between text-left group"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
+                      <Heart className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-rose-200 flex items-center gap-1.5">
+                        <span>{t("about.supportKofiBtn", locale)}</span>
+                        <span className="text-[8px] px-1 py-0.2 rounded bg-rose-500/30 text-rose-200 font-mono">
+                          GLOBAL
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400">
+                        PayPal, Credit/Debit Cards, Stripe
+                      </p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-rose-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+                </a>
+              </div>
+            </div>
+
+            {/* Footnote */}
+            <p className="text-[10px] text-neutral-400 text-center leading-relaxed">
+              Mendukung semua aplikasi e-wallet & m-Banking (BCA, Mandiri, BRI, GoPay, OVO, Dana, ShopeePay) serta pembayaran internasional via PayPal. Terima kasih banyak! 💖
             </p>
           </div>
         </div>
       )}
+
     </div>
   );
 };

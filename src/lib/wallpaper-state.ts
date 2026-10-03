@@ -8,17 +8,17 @@ export interface WallpaperPreset {
 
 export const WALLPAPER_PRESETS: WallpaperPreset[] = [
   {
-    id: "win11-dark",
-    name: "RadjaOS Obsidian Bloom (Default)",
-    path: "/image/wallpaper/win11-dark.jpg",
-    thumbnail: "/image/wallpaper/win11-dark.jpg",
+    id: "radja-dark",
+    name: "RadjaOS Obsidian Waves (Default)",
+    path: "/image/wallpaper/radja-dark.jpg",
+    thumbnail: "/image/wallpaper/radja-dark.jpg",
     accentColor: "#60cdff",
   },
   {
-    id: "win11-light",
-    name: "RadjaOS Radiant Bloom (Light)",
-    path: "/image/wallpaper/win11-light.jpg",
-    thumbnail: "/image/wallpaper/win11-light.jpg",
+    id: "radja-light",
+    name: "RadjaOS Radiant Waves (Light)",
+    path: "/image/wallpaper/radja-light.jpg",
+    thumbnail: "/image/wallpaper/radja-light.jpg",
     accentColor: "#0078d4",
   },
   {
@@ -73,7 +73,7 @@ export interface WallpaperConfig {
 
 export const DEFAULT_WALLPAPER_CONFIG: WallpaperConfig = {
   type: "preset",
-  presetId: "win11-dark",
+  presetId: "radja-dark",
   fit: "cover",
   opacity: 100,
   blur: 0,
@@ -91,6 +91,8 @@ export function getSavedWallpaperConfig(): WallpaperConfig {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_WALLPAPER_CONFIG;
     const parsed = JSON.parse(raw);
+    if (parsed.presetId === "win11-dark") parsed.presetId = "radja-dark";
+    if (parsed.presetId === "win11-light") parsed.presetId = "radja-light";
     return { ...DEFAULT_WALLPAPER_CONFIG, ...parsed };
   } catch {
     return DEFAULT_WALLPAPER_CONFIG;
