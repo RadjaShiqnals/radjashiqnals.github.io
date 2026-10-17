@@ -160,9 +160,11 @@ export const Taskbar: React.FC<TaskbarProps> = ({
     { id: "experience", nameKey: "app.experience", iconSrc: "/image/win11/experience.png" },
     { id: "terminal", nameKey: "app.terminal", iconSrc: "/image/win11/terminal.png" },
     { id: "tools", nameKey: "app.tools", iconSrc: "/image/win11/taskmanager.png" },
+    { id: "studio", nameKey: "app.studio", iconSrc: "/image/win11/studio.png" },
     { id: "settings", nameKey: "app.settings", iconSrc: "/image/win11/settings.png" },
     { id: "trash", nameKey: "app.trash", iconSrc: "/image/win11/bin0.png" },
   ];
+
 
   const handleTaskbarItemClick = (id: AppId) => {
     if (openWindows[id]) {

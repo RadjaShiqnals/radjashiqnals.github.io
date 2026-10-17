@@ -100,3 +100,70 @@ html, body {
 .animate-win-zoom {
   animation: winFadeZoomIn 0.15s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }
+
+/* Photo transparency checkerboard */
+.checkerboard-pattern {
+  background-color: #1a1a1a;
+  background-image:
+    linear-gradient(45deg, #262626 25%, transparent 25%),
+    linear-gradient(-45deg, #262626 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #262626 75%),
+    linear-gradient(-45deg, transparent 75%, #262626 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+}
+
+/* Size-Aware Container Queries for ImageStudioApp (modern-web-guidance: size-aware-styling) */
+.studio-container {
+  container-type: inline-size;
+}
+
+.studio-workspace {
+  display: flex;
+  flex-direction: column;
+}
+
+.studio-sidepanel {
+  width: 100%;
+  max-height: 15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+  .studio-workspace {
+    flex-direction: row;
+  }
+  .studio-sidepanel {
+    width: 16rem;
+    max-height: none;
+    border-top: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@supports (container-type: inline-size) {
+  @media (min-width: 768px) {
+    .studio-workspace {
+      flex-direction: column;
+    }
+    .studio-sidepanel {
+      width: 100%;
+      max-height: 15rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-left: 0;
+    }
+  }
+
+  @container (min-width: 680px) {
+    .studio-workspace {
+      flex-direction: row;
+    }
+    .studio-sidepanel {
+      width: 16rem;
+      max-height: none;
+      border-top: 0;
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+}
+

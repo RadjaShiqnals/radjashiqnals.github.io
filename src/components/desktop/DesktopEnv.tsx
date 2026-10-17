@@ -31,6 +31,7 @@ import { TerminalApp } from "./apps/TerminalApp";
 import { TrashApp } from "./apps/TrashApp";
 import { SettingsApp } from "./apps/SettingsApp";
 import { ToolsApp } from "./apps/ToolsApp";
+import { ImageStudioApp } from "./apps/ImageStudioApp";
 
 export const DesktopEnv: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,6 +59,7 @@ export const DesktopEnv: React.FC = () => {
     tools: false,
     trash: false,
     settings: false,
+    studio: false,
   });
 
   const [minimizedWindows, setMinimizedWindows] = useState<Record<AppId, boolean>>({
@@ -69,6 +71,7 @@ export const DesktopEnv: React.FC = () => {
     tools: false,
     trash: false,
     settings: false,
+    studio: false,
   });
 
   const [maximizedWindows, setMaximizedWindows] = useState<Record<AppId, boolean>>({
@@ -80,6 +83,7 @@ export const DesktopEnv: React.FC = () => {
     tools: false,
     trash: false,
     settings: false,
+    studio: false,
   });
 
   const [windowZIndices, setWindowZIndices] = useState<Record<AppId, number>>({
@@ -91,7 +95,9 @@ export const DesktopEnv: React.FC = () => {
     tools: 1,
     trash: 1,
     settings: 1,
+    studio: 1,
   });
+
 
   const [activeWindowId, setActiveWindowId] = useState<AppId | null>("about");
   const [topZ, setTopZ] = useState(15);
@@ -255,6 +261,7 @@ export const DesktopEnv: React.FC = () => {
         tools: true,
         trash: true,
         settings: true,
+        studio: true,
       });
       setActiveWindowId(null);
     } else {
@@ -267,6 +274,7 @@ export const DesktopEnv: React.FC = () => {
         tools: false,
         trash: false,
         settings: false,
+        studio: false,
       });
     }
   };
@@ -453,6 +461,13 @@ export const DesktopEnv: React.FC = () => {
           iconSrc="/image/win11/taskmanager.png"
           onClick={() => openApp("tools")}
         />
+        <DesktopIcon
+          label={t("app.studio", locale)}
+          badge="AI"
+          iconSrc="/image/win11/studio.png"
+          onClick={() => openApp("studio")}
+        />
+
         <DesktopIcon
           label={t("app.settings", locale)}
           badge={potatoMode ? "🥔" : undefined}
@@ -672,6 +687,30 @@ export const DesktopEnv: React.FC = () => {
       >
         <ToolsApp locale={locale} />
       </WindowFrame>
+
+      {/* 9. Image Studio App */}
+      <WindowFrame
+        id="studio"
+        title={t("app.studio", locale)}
+        iconSrc="/image/win11/studio.png"
+        isOpen={openWindows.studio}
+        isMinimized={minimizedWindows.studio}
+        isMaximized={maximizedWindows.studio}
+        isFocused={activeWindowId === "studio"}
+        zIndex={windowZIndices.studio}
+        initialWidth={960}
+        initialHeight={620}
+        isMobile={isMobile}
+        potatoMode={potatoMode}
+        onClose={() => closeApp("studio")}
+        onMinimize={() => minimizeApp("studio")}
+        onToggleMaximize={() => toggleMaximizeApp("studio")}
+        onFocus={() => focusApp("studio")}
+        onHoverFocus={() => focusApp("studio")}
+      >
+        <ImageStudioApp locale={locale} />
+      </WindowFrame>
+
 
       {/* RadjaOS Bottom Taskbar */}
       <Taskbar

@@ -55,6 +55,7 @@ RadjaOS provisions seven core applications by default. Each entry contains stric
 | `terminal` | Terminal | `/image/win11/terminal.png` | `680px x 440px` | `420px x 280px` | Closed | 1 |
 | `settings` | Settings | `/image/win11/settings.png` | `620px x 520px` | `400px x 400px` | Closed | 1 |
 | `trash` | Recycle Bin | `/image/win11/bin0.png` | `600px x 420px` | `360px x 280px` | Closed | 1 |
+| `studio` | Image Studio | `/image/win11/store.png` | `840px x 580px` | `460px x 380px` | Closed | 1 |
 
 ---
 
@@ -203,6 +204,25 @@ RadjaOS provisions seven core applications by default. Each entry contains stric
 - **Component Implementation**: `TrashApp.tsx`
 - **Functional Scope**: Repository of discarded developer artifacts (`node_modules`, legacy dependencies, deprecated scripts), item metadata inspector, mock "Empty Recycle Bin" action with sound effects, and humorous warning dialogues.
 
+### 3.8. Image Studio (`studio`)
+- **App ID**: `studio`
+- **Application Category**: Utilities / Graphics & Neural Processing
+- **Display Name**: Image Studio (Localized via `app.studio`)
+- **Icon Asset URI**: `/image/win11/store.png`
+- **Default Geometry**:
+  - Initial Width: `840px`
+  - Initial Height: `580px`
+  - Minimum Width: `460px`
+  - Minimum Height: `380px`
+  - Cascade Offset: `+20px` on X and Y relative to centered baseline.
+- **Routing Triggers**:
+  - Desktop shortcut: "Image Studio" tile on desktop grid.
+  - Taskbar pinned slot: Utilities group.
+  - Start Menu: Pinned applications grid.
+  - Terminal Command: `studio`, `paint`, or `edit-image`.
+- **Component Implementation**: `ImageStudioApp.tsx`
+- **Functional Scope**: Client-side neural background removal (ISNet FP16/INT8 ONNX model via `@imgly/background-removal`), hybrid boundary-luminance subject protection, retouch vector/erasure brushes, interactive crop with thirds grid, trilingual localization, adaptive binary probe native `localStorage` quota engine, non-blocking history synchronization, and direct desktop wallpaper dispatch.
+
 ---
 
 ## 4. TypeScript Architecture and Interfaces
@@ -216,7 +236,8 @@ export type AppId =
   | "experience"
   | "terminal"
   | "settings"
-  | "trash";
+  | "trash"
+  | "studio";
 
 // Window lifecycle states
 export type WindowLifecycleState =

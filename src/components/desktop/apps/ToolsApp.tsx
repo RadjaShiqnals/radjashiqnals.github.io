@@ -20,8 +20,10 @@ import {
   Upload,
   Download,
   RefreshCw,
+  Image as ImageIcon,
 } from "lucide-react";
 import { type Locale } from "../../../lib/i18n";
+import { ImageStudioApp } from "./ImageStudioApp";
 import {
   computeSubtleHash,
   computeMD5,
@@ -39,7 +41,8 @@ export type ToolId =
   | "uuid"
   | "epoch"
   | "qrcode"
-  | "color";
+  | "color"
+  | "studio";
 
 interface ToolItem {
   id: ToolId;
@@ -52,8 +55,17 @@ interface ToolItem {
 
 const TOOLS_REGISTRY: ToolItem[] = [
   {
+    id: "studio",
+    name: "Image Studio & AI BG",
+    category: "converters",
+    description: "Crop, color adjustments, AI background removal, and erase/recover brush",
+    icon: ImageIcon,
+    badge: "AI",
+  },
+  {
     id: "json",
     name: "JSON Formatter",
+
     category: "formatters",
     description: "Format, validate, and minify JSON data with syntax checks",
     icon: FileCode,
@@ -268,7 +280,13 @@ export const ToolsApp: React.FC<ToolsAppProps> = ({ locale }) => {
             copiedKey={copiedKey}
           />
         )}
+        {activeTool === "studio" && (
+          <div className="flex-1 h-full overflow-hidden">
+            <ImageStudioApp locale={locale} />
+          </div>
+        )}
       </div>
+
     </div>
   );
 };

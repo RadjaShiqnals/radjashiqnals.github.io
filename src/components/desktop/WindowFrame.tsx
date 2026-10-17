@@ -120,60 +120,11 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
     };
   }, [isDragging, potatoMode]);
 
-  if (!isOpen || isMinimized) return null;
-
-  // Mobile Sheet View
-  if (isMobile) {
-    return (
-      <div
-        className="fixed inset-0 bottom-12 bg-[#1e1e1e] flex flex-col animate-in fade-in slide-in-from-bottom-5 duration-200"
-        style={{ zIndex: zIndex || 40 }}
-        onClick={onFocus}
-      >
-        <div className="h-10 bg-[#252525] border-b border-white/10 px-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-medium text-xs text-white truncate max-w-[65vw]">
-            {iconSrc ? (
-              <img src={iconSrc} alt={title} className="w-4 h-4 object-contain shrink-0" />
-            ) : (
-              icon
-            )}
-            <span className="truncate">{title}</span>
-          </div>
-          <div className="flex items-center">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                playWindowClose();
-                onMinimize();
-              }}
-              className="w-10 h-10 hover:bg-white/10 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-              title="Minimize"
-            >
-              <Minus className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                playWindowClose();
-                onClose();
-              }}
-              className="w-10 h-10 hover:bg-[#c42b1c] text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-              title="Close"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4 pb-20 text-neutral-200">
-          {children}
-        </div>
-      </div>
-    );
-  }
+  if (!isOpen) return null;
 
   // Pointer Down on Titlebar to start dragging
   const handleTitleBarPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (isMaximized) return;
+    if (isMobile || isMaximized) return;
     if ((e.target as HTMLElement).closest("button")) return;
 
     e.preventDefault();
@@ -209,7 +160,12 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
     return "bg-[#1a1a1a]/85 backdrop-blur-xl border-white/10 shadow-lg shadow-black/60 opacity-95 hover:opacity-100 transition-opacity duration-150";
   };
 
-  const windowStyle: React.CSSProperties = isMaximized
+  const windowStyle: React.CSSProperties = isMobile
+    ? {
+        zIndex: zIndex || 40,
+        display: isMinimized ? "none" : undefined,
+      }
+    : isMaximized
     ? {
         zIndex,
         left: 0,
@@ -218,6 +174,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
         height: "calc(100vh - 48px)",
         transform: "none",
         transition: "all 0.16s cubic-bezier(0.1, 0.9, 0.2, 1)",
+        display: isMinimized ? "none" : undefined,
       }
     : {
         zIndex,
@@ -228,12 +185,13 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
         transform: `translate3d(${pos.x}px, ${pos.y}px, 0)`,
         willChange: isDragging ? "transform" : "auto",
         transition: isDragging ? "none" : "width 0.16s ease-out, height 0.16s ease-out",
+        display: isMinimized ? "none" : undefined,
       };
 
   return (
     <>
       {/* Potato Mode Outline */}
-      {potatoMode && isDragging && ghostPos && (
+      {!isMobile && !isMinimized && potatoMode && isDragging && ghostPos && (
         <div
           ref={ghostRef}
           style={{
@@ -252,28 +210,69 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
         </div>
       )}
 
-      {/* Main RadjaOS Frame */}
+      {/* Main RadjaOS Frame (Unified tree so responsive layout switches never unmount children) */}
       <div
         ref={windowRef}
         onPointerDown={onFocus}
+        onClick={isMobile ? onFocus : undefined}
         onMouseEnter={() => {
-          if (!isDragging) {
+          if (!isMobile && !isDragging) {
             onHoverFocus();
           }
         }}
         style={windowStyle}
-        className={`fixed flex flex-col ${
-          isMaximized ? "rounded-none border-x-0 border-t-0" : "rounded-[8px] border"
-        } overflow-hidden select-none ${getWindowClasses()}`}
+        className={
+          isMobile
+            ? "fixed inset-0 bottom-12 bg-[#1e1e1e] flex flex-col animate-in fade-in slide-in-from-bottom-5 duration-200"
+            : `fixed flex flex-col ${
+                isMaximized ? "rounded-none border-x-0 border-t-0" : "rounded-[8px] border"
+              } overflow-hidden select-none ${getWindowClasses()}`
+        }
       >
-        {/* RadjaOS Titlebar */}
-        <div
-          onPointerDown={handleTitleBarPointerDown}
-          onDoubleClick={onToggleMaximize}
-          className={`h-9 shrink-0 flex items-center justify-between select-none ${
-            isFocused ? "bg-white/[0.03]" : "bg-transparent"
-          } ${isMaximized ? "cursor-default" : isDragging ? "cursor-grabbing" : "cursor-default"}`}
-        >
+        {isMobile ? (
+          <div className="h-10 bg-[#252525] border-b border-white/10 px-3 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2 font-medium text-xs text-white truncate max-w-[65vw]">
+              {iconSrc ? (
+                <img src={iconSrc} alt={title} className="w-4 h-4 object-contain shrink-0" />
+              ) : (
+                icon
+              )}
+              <span className="truncate">{title}</span>
+            </div>
+            <div className="flex items-center">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playWindowClose();
+                  onMinimize();
+                }}
+                className="w-10 h-10 hover:bg-white/10 text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Minimize"
+              >
+                <Minus className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playWindowClose();
+                  onClose();
+                }}
+                className="w-10 h-10 hover:bg-[#c42b1c] text-neutral-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* RadjaOS Titlebar */
+          <div
+            onPointerDown={handleTitleBarPointerDown}
+            onDoubleClick={onToggleMaximize}
+            className={`h-9 shrink-0 flex items-center justify-between select-none ${
+              isFocused ? "bg-white/[0.03]" : "bg-transparent"
+            } ${isMaximized ? "cursor-default" : isDragging ? "cursor-grabbing" : "cursor-default"}`}
+          >
           {/* Left: App Icon & Window Title */}
           <div className="flex items-center gap-2 pl-3 pointer-events-none">
             {iconSrc ? (
@@ -360,9 +359,17 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
             </button>
           </div>
         </div>
+        )}
 
         {/* Window Body Canvas */}
-        <div className="flex-1 overflow-y-auto p-5 text-neutral-200 selection:bg-blue-600/50 bg-[#1e1e1e]/60">
+        <div
+          key="window-body"
+          className={
+            isMobile
+              ? "flex-1 overflow-y-auto p-4 pb-20 text-neutral-200"
+              : "flex-1 overflow-y-auto p-5 text-neutral-200 selection:bg-blue-600/50 bg-[#1e1e1e]/60"
+          }
+        >
           {children}
         </div>
       </div>

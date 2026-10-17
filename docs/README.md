@@ -29,12 +29,16 @@ docs/
 │   │   styled prompt segmentation, sysinfo 4-tile geometric ASCII emblem, and CLI catalog.
 │   │
 │   ├── app-registry.md
-│   │   Complete manifest of the 7 default applications (About Me, Projects, Skills,
-│   │   Experience, Terminal, Settings, Recycle Bin), geometric constraints, and lifecycle state.
+│   │   Complete manifest of the 8 default applications (About Me, Projects, Skills,
+│   │   Experience, Terminal, Settings, Recycle Bin, Image Studio), geometric constraints, and lifecycle state.
 │   │
-│   └── app-content-standards.md
-│       Window canvas layouts, card design tokens (white/0.04 surface, 1px subtle border),
-│       buttons, status chips, modal lightboxes, and accessibility (a11y) standards.
+│   ├── app-content-standards.md
+│   │   Window canvas layouts, card design tokens (white/0.04 surface, 1px subtle border),
+│   │   buttons, status chips, modal lightboxes, and accessibility (a11y) standards.
+│   │
+│   └── image-studio-specification.md
+│       Neural background removal pipeline (ISNet FP16/INT8), hybrid subject-protection
+│       BFS algorithm, retouch brush engine, unified DOM tree preservation, and adaptive storage.
 │
 └── conventions/
     ├── code-style-and-linting.md
@@ -53,8 +57,9 @@ docs/
 | Document Path | Focus Area | Key Architectural Deliverables |
 | :--- | :--- | :--- |
 | [`docs/apps/terminal-specification.md`](./apps/terminal-specification.md) | Virtual CLI Runtime | - RadjaShell (`radja-sh`) tokenization pipeline<br>- Acrylic multi-tab navigation strip<br>- Oh My Posh powerline prompt segmentation<br>- RadjaOS 4-tile ASCII telemetry engine (`fetch`)<br>- Command execution registry and error codes |
-| [`docs/apps/app-registry.md`](./apps/app-registry.md) | Application Management | - Central 7-application registry manifest<br>- Initial dimensions and cascade offsets<br>- Window lifecycle state machine<br>- Single-instance process management<br>- Desktop and taskbar routing triggers |
+| [`docs/apps/app-registry.md`](./apps/app-registry.md) | Application Management | - Central 8-application registry manifest<br>- Initial dimensions and cascade offsets<br>- Window lifecycle state machine<br>- Single-instance process management<br>- Desktop and taskbar routing triggers |
 | [`docs/apps/app-content-standards.md`](./apps/app-content-standards.md) | Window UI & Design Tokens | - Standard vs Full-bleed layout containers<br>- Translucent card design tokens (`rgba(255,255,255,0.04)`)<br>- Four-tier button classification<br>- Lightbox modal and gallery specifications<br>- Accessibility and WCAG AA contrast rules |
+| [`docs/apps/image-studio-specification.md`](./apps/image-studio-specification.md) | Graphics & Neural Processing | - ISNet FP16 & INT8 ONNX neural segmentation<br>- Analytical boundary luminance BFS subject protection<br>- Unified WindowFrame DOM preservation across layout shifts<br>- Adaptive binary search native localStorage quota engine<br>- Modern Web Guidance: CSS container queries & main thread yielding |
 | [`docs/conventions/code-style-and-linting.md`](./conventions/code-style-and-linting.md) | Code Standards & Typing | - TypeScript strict mode compiler settings<br>- Interface vs Type structural conventions<br>- React 19 ref handling and rAF throttling<br>- 5-Tier Tailwind utility ordering rule<br>- Storage naming and IndexedDB binary cache |
 | [`docs/conventions/anti-patterns.md`](./conventions/anti-patterns.md) | Architectural Guardrails | - Forbidden third-party commercial trademarks<br>- Absolute ban on top-left traffic light buttons<br>- Ban on generic AI purple/neon radial glow orbs<br>- Strict zero emoji policy in documentation<br>- Performance regression countermeasures |
 

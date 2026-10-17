@@ -6,7 +6,9 @@ export type AppId =
   | "terminal"
   | "tools"
   | "trash"
-  | "settings";
+  | "settings"
+  | "studio";
+
 
 export interface WindowState {
   id: AppId;

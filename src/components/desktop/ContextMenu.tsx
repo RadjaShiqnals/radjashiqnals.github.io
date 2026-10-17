@@ -8,7 +8,9 @@ import {
   FolderPlus,
   Monitor,
   Info,
+  Image as ImageIcon,
 } from "lucide-react";
+
 import { type AppId } from "../../lib/os-state";
 import { playWindowOpen } from "../../lib/sound";
 
@@ -154,6 +156,20 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
         <LayoutGrid className="w-3.5 h-3.5 text-emerald-400" />
         <span>Open Dev Tools</span>
       </button>
+
+      {/* Open Image Studio */}
+      <button
+        onClick={() => {
+          playWindowOpen();
+          onOpenApp("studio");
+          onClose();
+        }}
+        className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/10 text-neutral-200 hover:text-white transition-colors cursor-pointer"
+      >
+        <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
+        <span>Image Studio (AI Cutout)</span>
+      </button>
+
 
       <div className="h-px bg-white/10 my-1" />
 

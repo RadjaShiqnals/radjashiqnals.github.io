@@ -44,6 +44,8 @@ export const dictionaries = {
     "app.tools": "Tools",
     "app.trash": "Recycle Bin",
     "app.settings": "Settings",
+    "app.studio": "Image Studio",
+
 
     // About App
     "about.title": "Welcome to RadjaOS",
@@ -152,6 +154,8 @@ export const dictionaries = {
     "app.tools": "Utilitas",
     "app.trash": "Kotak Sampah",
     "app.settings": "Pengaturan",
+    "app.studio": "Studio Gambar",
+
 
     // About App
     "about.title": "Selamat Datang di RadjaOS",
@@ -260,6 +264,8 @@ export const dictionaries = {
     "app.tools": "ツール",
     "app.trash": "ごみ箱",
     "app.settings": "設定",
+    "app.studio": "画像スタジオ",
+
 
     // About App
     "about.title": "RadjaOSへようこそ",
