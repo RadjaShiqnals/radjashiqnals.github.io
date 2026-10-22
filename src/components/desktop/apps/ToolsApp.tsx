@@ -123,13 +123,23 @@ const TOOLS_REGISTRY: ToolItem[] = [
   },
 ];
 
-interface ToolsAppProps {
+export interface ToolsAppProps {
   locale: Locale;
+  initialTool?: ToolId;
+  standalone?: boolean;
 }
 
-export const ToolsApp: React.FC<ToolsAppProps> = ({ locale }) => {
-  const [activeTool, setActiveTool] = useState<ToolId>("json");
+export const ToolsApp: React.FC<ToolsAppProps> = ({
+  locale,
+  initialTool = "json",
+  standalone = false,
+}) => {
+  const [activeTool, setActiveTool] = useState<ToolId>(initialTool);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (initialTool) setActiveTool(initialTool);
+  }, [initialTool]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
@@ -151,83 +161,85 @@ export const ToolsApp: React.FC<ToolsAppProps> = ({ locale }) => {
   return (
     <div className="h-full flex flex-col md:flex-row bg-[#181818]/90 text-neutral-200 select-none overflow-hidden">
       {/* ─── SIDEBAR (TOOL PICKER) ─── */}
-      <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 bg-black/30 flex flex-col shrink-0">
-        {/* Search Header */}
-        <div className="p-3 border-b border-white/10 flex flex-col gap-2">
-          <div className="relative">
-            <Search className="w-4 h-4 text-neutral-400 absolute left-2.5 top-2.5 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Filter tools..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40 transition-all"
-            />
-          </div>
+      {!standalone && (
+        <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-white/10 bg-black/30 flex flex-col shrink-0">
+          {/* Search Header */}
+          <div className="p-3 border-b border-white/10 flex flex-col gap-2">
+            <div className="relative">
+              <Search className="w-4 h-4 text-neutral-400 absolute left-2.5 top-2.5 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Filter tools..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/40 transition-all"
+              />
+            </div>
 
-          {/* Quick Category Badges */}
-          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-0.5 text-[10px]">
-            {["all", "formatters", "converters", "security", "generators"].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-2 py-0.5 rounded-full capitalize transition-colors shrink-0 ${
-                  selectedCategory === cat
-                    ? "bg-cyan-500/25 text-cyan-300 font-medium border border-cyan-500/40"
-                    : "bg-white/5 text-neutral-400 hover:text-white"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile Horizontal Tabs or Desktop Tool List */}
-        <div className="flex md:flex-col overflow-x-auto md:overflow-y-auto p-2 gap-1 scrollbar-none">
-          {filteredTools.map((tool) => {
-            const Icon = tool.icon;
-            const isActive = activeTool === tool.id;
-            return (
-              <button
-                key={tool.id}
-                onClick={() => setActiveTool(tool.id)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left text-xs transition-all shrink-0 md:shrink md:w-full ${
-                  isActive
-                    ? "bg-cyan-500/15 text-cyan-300 font-medium border border-cyan-500/30 shadow-sm"
-                    : "text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent"
-                }`}
-              >
-                <Icon
-                  className={`w-4 h-4 shrink-0 ${
-                    isActive ? "text-cyan-400" : "text-neutral-400"
+            {/* Quick Category Badges */}
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-0.5 text-[10px]">
+              {["all", "formatters", "converters", "security", "generators"].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-2 py-0.5 rounded-full capitalize transition-colors shrink-0 ${
+                    selectedCategory === cat
+                      ? "bg-cyan-500/25 text-cyan-300 font-medium border border-cyan-500/40"
+                      : "bg-white/5 text-neutral-400 hover:text-white"
                   }`}
-                />
-                <div className="hidden md:block truncate flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="truncate">{tool.name}</span>
-                    {tool.badge && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-400/15 text-cyan-300 border border-cyan-400/20 font-mono">
-                        {tool.badge}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <span className="md:hidden whitespace-nowrap">{tool.name}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Sidebar Footer Info */}
-        <div className="hidden md:flex mt-auto p-3 border-t border-white/10 text-[10px] text-neutral-500 flex-col gap-0.5">
-          <div className="flex items-center gap-1.5 text-neutral-400 font-medium">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>100% Client-Side Engine</span>
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
-          <span>Offline safe &bull; No API calls &bull; GitHub Pages</span>
+
+          {/* Mobile Horizontal Tabs or Desktop Tool List */}
+          <div className="flex md:flex-col overflow-x-auto md:overflow-y-auto p-2 gap-1 scrollbar-none">
+            {filteredTools.map((tool) => {
+              const Icon = tool.icon;
+              const isActive = activeTool === tool.id;
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => setActiveTool(tool.id)}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-left text-xs transition-all shrink-0 md:shrink md:w-full ${
+                    isActive
+                      ? "bg-cyan-500/15 text-cyan-300 font-medium border border-cyan-500/30 shadow-sm"
+                      : "text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent"
+                  }`}
+                >
+                  <Icon
+                    className={`w-4 h-4 shrink-0 ${
+                      isActive ? "text-cyan-400" : "text-neutral-400"
+                    }`}
+                  />
+                  <div className="hidden md:block truncate flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="truncate">{tool.name}</span>
+                      {tool.badge && (
+                        <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-400/15 text-cyan-300 border border-cyan-400/20 font-mono">
+                          {tool.badge}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <span className="md:hidden whitespace-nowrap">{tool.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Sidebar Footer Info */}
+          <div className="hidden md:flex mt-auto p-3 border-t border-white/10 text-[10px] text-neutral-500 flex-col gap-0.5">
+            <div className="flex items-center gap-1.5 text-neutral-400 font-medium">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>100% Client-Side Engine</span>
+            </div>
+            <span>Offline safe &bull; No API calls &bull; GitHub Pages</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ─── MAIN TOOL WORKSPACE ─── */}
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-black/10">

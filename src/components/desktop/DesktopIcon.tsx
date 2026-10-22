@@ -8,19 +8,38 @@ interface DesktopIconProps {
   iconSrc?: string;
   badge?: string;
   onClick: () => void;
+  onPointerDown?: (event: React.PointerEvent<HTMLButtonElement>) => void;
+  selected?: boolean;
+  dragging?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const DesktopIcon: React.FC<DesktopIconProps> = ({
+  id,
   label,
   icon,
   iconSrc,
   badge,
   onClick,
+  onPointerDown,
+  selected = false,
+  dragging = false,
+  className = "",
+  style,
 }) => {
   return (
     <button
+      type="button"
+      data-app-id={id}
       onClick={onClick}
-      className="group relative flex flex-col items-center justify-start w-full max-w-[84px] sm:w-[84px] py-1.5 px-1 mx-auto rounded-md text-center focus:outline-none hover:bg-white/10 border border-transparent hover:border-white/15 active:bg-blue-600/30 transition-colors duration-150 cursor-pointer select-none"
+      onPointerDown={onPointerDown}
+      style={style}
+      className={`group relative flex flex-col items-center justify-start w-full max-w-[84px] sm:w-[84px] py-1.5 px-1 mx-auto rounded-md text-center focus:outline-none border transition-colors duration-150 cursor-pointer select-none ${
+        selected
+          ? "bg-blue-500/25 border-blue-300/60"
+          : "border-transparent hover:border-white/15 hover:bg-white/10 active:bg-blue-600/30"
+      } ${dragging ? "opacity-60 cursor-grabbing" : ""} ${className}`}
     >
       {/* Icon Image Container */}
       <div className="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">

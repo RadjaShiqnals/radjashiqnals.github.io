@@ -17,21 +17,12 @@ import {
 } from "../../lib/wallpaper-state";
 import { getWallpaperBlob } from "../../lib/wallpaper-db";
 import { Taskbar } from "./Taskbar";
-import { DesktopIcon } from "./DesktopIcon";
+import { DesktopSurface, ARRANGE_ICONS_EVENT } from "./DesktopSurface";
 import { WindowFrame } from "./WindowFrame";
+import { AppHost } from "./AppHost";
 import { LoginScreen } from "./LoginScreen";
 import { ContextMenu } from "./ContextMenu";
-
-// Apps
-import { AboutApp } from "./apps/AboutApp";
-import { ProjectsApp } from "./apps/ProjectsApp";
-import { SkillsApp } from "./apps/SkillsApp";
-import { ExperienceApp } from "./apps/ExperienceApp";
-import { TerminalApp } from "./apps/TerminalApp";
-import { TrashApp } from "./apps/TrashApp";
-import { SettingsApp } from "./apps/SettingsApp";
-import { ToolsApp } from "./apps/ToolsApp";
-import { ImageStudioApp } from "./apps/ImageStudioApp";
+import { APPS } from "../../data/app-manifest";
 
 export const DesktopEnv: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,54 +40,36 @@ export const DesktopEnv: React.FC = () => {
   );
   const [wallpaperUrl, setWallpaperUrl] = useState<string>("");
 
-  // Window Management States
-  const [openWindows, setOpenWindows] = useState<Record<AppId, boolean>>({
-    about: true, // Default open on login
-    projects: false,
-    skills: false,
-    experience: false,
-    terminal: false,
-    tools: false,
-    trash: false,
-    settings: false,
-    studio: false,
-  });
+  // Window Management States (derived from the app registry)
+  const [openWindows, setOpenWindows] = useState<Record<AppId, boolean>>(
+    () =>
+      Object.fromEntries(
+        APPS.map((app) => [app.id, app.id === "about"])
+      ) as Record<AppId, boolean>
+  );
 
-  const [minimizedWindows, setMinimizedWindows] = useState<Record<AppId, boolean>>({
-    about: false,
-    projects: false,
-    skills: false,
-    experience: false,
-    terminal: false,
-    tools: false,
-    trash: false,
-    settings: false,
-    studio: false,
-  });
+  const [minimizedWindows, setMinimizedWindows] = useState<Record<AppId, boolean>>(
+    () =>
+      Object.fromEntries(APPS.map((app) => [app.id, false])) as Record<
+        AppId,
+        boolean
+      >
+  );
 
-  const [maximizedWindows, setMaximizedWindows] = useState<Record<AppId, boolean>>({
-    about: false,
-    projects: false,
-    skills: false,
-    experience: false,
-    terminal: false,
-    tools: false,
-    trash: false,
-    settings: false,
-    studio: false,
-  });
+  const [maximizedWindows, setMaximizedWindows] = useState<Record<AppId, boolean>>(
+    () =>
+      Object.fromEntries(APPS.map((app) => [app.id, false])) as Record<
+        AppId,
+        boolean
+      >
+  );
 
-  const [windowZIndices, setWindowZIndices] = useState<Record<AppId, number>>({
-    about: 10,
-    projects: 1,
-    skills: 1,
-    experience: 1,
-    terminal: 1,
-    tools: 1,
-    trash: 1,
-    settings: 1,
-    studio: 1,
-  });
+  const [windowZIndices, setWindowZIndices] = useState<Record<AppId, number>>(
+    () =>
+      Object.fromEntries(
+        APPS.map((app) => [app.id, app.id === "about" ? 10 : 1])
+      ) as Record<AppId, number>
+  );
 
 
   const [activeWindowId, setActiveWindowId] = useState<AppId | null>("about");
@@ -122,6 +95,53 @@ export const DesktopEnv: React.FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Global launcher shortcuts: Meta tap or Ctrl/Cmd + Shift + Space.
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    let metaDown = false;
+    let metaAt = 0;
+    let metaUsed = false;
+
+    const toggleStart = () => {
+      window.dispatchEvent(new Event("radjaos:toggle-start"));
+    };
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.code === "Space") {
+        event.preventDefault();
+        toggleStart();
+        return;
+      }
+      if (event.key === "Meta") {
+        metaDown = true;
+        metaAt = performance.now();
+        metaUsed = false;
+      } else if (metaDown) {
+        metaUsed = true;
+      }
+    };
+
+    const onKeyUp = (event: KeyboardEvent) => {
+      if (event.key !== "Meta" || !metaDown) return;
+      const elapsed = performance.now() - metaAt;
+      metaDown = false;
+      if (!metaUsed && elapsed < 420) toggleStart();
+    };
+
+    const onBlur = () => {
+      metaDown = false;
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, [isLoggedIn]);
 
   // Resolve and update dynamic wallpaper
   useEffect(() => {
@@ -247,36 +267,22 @@ export const DesktopEnv: React.FC = () => {
   };
 
   const toggleShowDesktop = () => {
-    const hasVisible = Object.entries(openWindows).some(
-      ([id, isOpen]) => isOpen && !minimizedWindows[id as AppId]
+    const hasVisible = APPS.some(
+      (app) => openWindows[app.id] && !minimizedWindows[app.id]
     );
 
-    if (hasVisible) {
-      setMinimizedWindows({
-        about: true,
-        projects: true,
-        skills: true,
-        experience: true,
-        terminal: true,
-        tools: true,
-        trash: true,
-        settings: true,
-        studio: true,
-      });
-      setActiveWindowId(null);
-    } else {
-      setMinimizedWindows({
-        about: false,
-        projects: false,
-        skills: false,
-        experience: false,
-        terminal: false,
-        tools: false,
-        trash: false,
-        settings: false,
-        studio: false,
-      });
-    }
+    setMinimizedWindows(
+      Object.fromEntries(APPS.map((app) => [app.id, hasVisible])) as Record<
+        AppId,
+        boolean
+      >
+    );
+    if (hasVisible) setActiveWindowId(null);
+  };
+
+  const simulateExpiry = () => {
+    setIsLoggedIn(false);
+    setExpiredNotice(true);
   };
 
   const triggerBSOD = () => {
@@ -361,6 +367,10 @@ export const DesktopEnv: React.FC = () => {
           onRefresh={() => {
             playWindowOpen();
           }}
+          onArrangeIcons={() => {
+            window.dispatchEvent(new Event(ARRANGE_ICONS_EVENT));
+            setContextMenu(null);
+          }}
         />
       )}
 
@@ -427,290 +437,52 @@ export const DesktopEnv: React.FC = () => {
         </div>
       </div>
 
-      {/* Desktop App Shortcuts (Mobile Grid vs Desktop Left Column) */}
-      <div className="pt-6 sm:pt-4 pb-20 px-4 sm:px-3 grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-col md:flex-wrap gap-y-5 gap-x-2 md:gap-2 w-full max-w-sm sm:max-w-md md:w-fit md:h-full z-10 pointer-events-auto">
-        <DesktopIcon
-          label={t("app.about", locale)}
-          iconSrc="/image/win11/thispc.png"
-          onClick={() => openApp("about")}
-        />
-        <DesktopIcon
-          label={t("app.projects", locale)}
-          badge="3"
-          iconSrc="/image/win11/explorer.png"
-          onClick={() => openApp("projects")}
-        />
-        <DesktopIcon
-          label={t("app.skills", locale)}
-          iconSrc="/image/win11/vscode.png"
-          onClick={() => openApp("skills")}
-        />
-        <DesktopIcon
-          label={t("app.experience", locale)}
-          iconSrc="/image/win11/experience.png"
-          onClick={() => openApp("experience")}
-        />
-        <DesktopIcon
-          label={t("app.terminal", locale)}
-          iconSrc="/image/win11/terminal.png"
-          onClick={() => openApp("terminal")}
-        />
-        <DesktopIcon
-          label={t("app.tools", locale)}
-          badge="NEW"
-          iconSrc="/image/win11/taskmanager.png"
-          onClick={() => openApp("tools")}
-        />
-        <DesktopIcon
-          label={t("app.studio", locale)}
-          badge="AI"
-          iconSrc="/image/win11/studio.png"
-          onClick={() => openApp("studio")}
-        />
-
-        <DesktopIcon
-          label={t("app.settings", locale)}
-          badge={potatoMode ? "🥔" : undefined}
-          iconSrc="/image/win11/settings.png"
-          onClick={() => openApp("settings")}
-        />
-        <DesktopIcon
-          label={t("app.trash", locale)}
-          badge="999GB"
-          iconSrc="/image/win11/bin0.png"
-          onClick={() => openApp("trash")}
-        />
-      </div>
+      {/* Desktop icon surface: free placement with grid snapping on desktop, grid on mobile */}
+      <DesktopSurface locale={locale} isMobile={isMobile} openApp={openApp} />
 
       {/* Floating Windows System */}
 
-      {/* 1. About Me App */}
-      <WindowFrame
-        id="about"
-        title={t("app.about", locale)}
-        iconSrc="/image/win11/thispc.png"
-        isOpen={openWindows.about}
-        isMinimized={minimizedWindows.about}
-        isMaximized={maximizedWindows.about}
-        isFocused={activeWindowId === "about"}
-        zIndex={windowZIndices.about}
-        initialWidth={720}
-        initialHeight={480}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("about")}
-        onMinimize={() => minimizeApp("about")}
-        onToggleMaximize={() => toggleMaximizeApp("about")}
-        onFocus={() => focusApp("about")}
-        onHoverFocus={() => focusApp("about")}
-      >
-        <AboutApp
-          locale={locale}
-          onOpenProjects={() => openApp("projects")}
-          onOpenTerminal={() => openApp("terminal")}
-        />
-      </WindowFrame>
-
-      {/* 2. Projects App */}
-      <WindowFrame
-        id="projects"
-        title={t("app.projects", locale)}
-        iconSrc="/image/win11/explorer.png"
-        isOpen={openWindows.projects}
-        isMinimized={minimizedWindows.projects}
-        isMaximized={maximizedWindows.projects}
-        isFocused={activeWindowId === "projects"}
-        zIndex={windowZIndices.projects}
-        initialWidth={820}
-        initialHeight={550}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("projects")}
-        onMinimize={() => minimizeApp("projects")}
-        onToggleMaximize={() => toggleMaximizeApp("projects")}
-        onFocus={() => focusApp("projects")}
-        onHoverFocus={() => focusApp("projects")}
-      >
-        <ProjectsApp locale={locale} />
-      </WindowFrame>
-
-      {/* 3. Skills App */}
-      <WindowFrame
-        id="skills"
-        title={t("app.skills", locale)}
-        iconSrc="/image/win11/vscode.png"
-        isOpen={openWindows.skills}
-        isMinimized={minimizedWindows.skills}
-        isMaximized={maximizedWindows.skills}
-        isFocused={activeWindowId === "skills"}
-        zIndex={windowZIndices.skills}
-        initialWidth={750}
-        initialHeight={490}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("skills")}
-        onMinimize={() => minimizeApp("skills")}
-        onToggleMaximize={() => toggleMaximizeApp("skills")}
-        onFocus={() => focusApp("skills")}
-        onHoverFocus={() => focusApp("skills")}
-      >
-        <SkillsApp locale={locale} />
-      </WindowFrame>
-
-      {/* 4. Experience App */}
-      <WindowFrame
-        id="experience"
-        title={t("app.experience", locale)}
-        iconSrc="/image/win11/experience.png"
-        isOpen={openWindows.experience}
-        isMinimized={minimizedWindows.experience}
-        isMaximized={maximizedWindows.experience}
-        isFocused={activeWindowId === "experience"}
-        zIndex={windowZIndices.experience}
-        initialWidth={700}
-        initialHeight={500}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("experience")}
-        onMinimize={() => minimizeApp("experience")}
-        onToggleMaximize={() => toggleMaximizeApp("experience")}
-        onFocus={() => focusApp("experience")}
-        onHoverFocus={() => focusApp("experience")}
-      >
-        <ExperienceApp locale={locale} />
-      </WindowFrame>
-
-      {/* 5. Terminal App */}
-      <WindowFrame
-        id="terminal"
-        title={t("app.terminal", locale)}
-        iconSrc="/image/win11/terminal.png"
-        isOpen={openWindows.terminal}
-        isMinimized={minimizedWindows.terminal}
-        isMaximized={maximizedWindows.terminal}
-        isFocused={activeWindowId === "terminal"}
-        zIndex={windowZIndices.terminal}
-        initialWidth={680}
-        initialHeight={520}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("terminal")}
-        onMinimize={() => minimizeApp("terminal")}
-        onToggleMaximize={() => toggleMaximizeApp("terminal")}
-        onFocus={() => focusApp("terminal")}
-        onHoverFocus={() => focusApp("terminal")}
-      >
-        <TerminalApp
-          locale={locale}
-          onOpenProjects={() => openApp("projects")}
-          onTriggerBSOD={triggerBSOD}
-          onOpenTools={() => openApp("tools")}
-        />
-      </WindowFrame>
-
-      {/* 6. Settings App */}
-      <WindowFrame
-        id="settings"
-        title={t("app.settings", locale)}
-        iconSrc="/image/win11/settings.png"
-        isOpen={openWindows.settings}
-        isMinimized={minimizedWindows.settings}
-        isMaximized={maximizedWindows.settings}
-        isFocused={activeWindowId === "settings"}
-        zIndex={windowZIndices.settings}
-        initialWidth={620}
-        initialHeight={520}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("settings")}
-        onMinimize={() => minimizeApp("settings")}
-        onToggleMaximize={() => toggleMaximizeApp("settings")}
-        onFocus={() => focusApp("settings")}
-        onHoverFocus={() => focusApp("settings")}
-      >
-        <SettingsApp
-          locale={locale}
-          setLocale={changeLocale}
-          isMuted={isMuted}
-          toggleMute={toggleMute}
-          potatoMode={potatoMode}
-          togglePotatoMode={togglePotatoMode}
-          onSimulateExpiry={() => {
-            setIsLoggedIn(false);
-            setExpiredNotice(true);
-          }}
-        />
-      </WindowFrame>
-
-      {/* 7. Trash App */}
-      <WindowFrame
-        id="trash"
-        title={t("app.trash", locale)}
-        iconSrc="/image/win11/bin0.png"
-        isOpen={openWindows.trash}
-        isMinimized={minimizedWindows.trash}
-        isMaximized={maximizedWindows.trash}
-        isFocused={activeWindowId === "trash"}
-        zIndex={windowZIndices.trash}
-        initialWidth={600}
-        initialHeight={420}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("trash")}
-        onMinimize={() => minimizeApp("trash")}
-        onToggleMaximize={() => toggleMaximizeApp("trash")}
-        onFocus={() => focusApp("trash")}
-        onHoverFocus={() => focusApp("trash")}
-      >
-        <TrashApp locale={locale} />
-      </WindowFrame>
-
-      {/* 8. Tools App */}
-      <WindowFrame
-        id="tools"
-        title={t("app.tools", locale)}
-        iconSrc="/image/win11/taskmanager.png"
-        isOpen={openWindows.tools}
-        isMinimized={minimizedWindows.tools}
-        isMaximized={maximizedWindows.tools}
-        isFocused={activeWindowId === "tools"}
-        zIndex={windowZIndices.tools}
-        initialWidth={860}
-        initialHeight={560}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("tools")}
-        onMinimize={() => minimizeApp("tools")}
-        onToggleMaximize={() => toggleMaximizeApp("tools")}
-        onFocus={() => focusApp("tools")}
-        onHoverFocus={() => focusApp("tools")}
-      >
-        <ToolsApp locale={locale} />
-      </WindowFrame>
-
-      {/* 9. Image Studio App */}
-      <WindowFrame
-        id="studio"
-        title={t("app.studio", locale)}
-        iconSrc="/image/win11/studio.png"
-        isOpen={openWindows.studio}
-        isMinimized={minimizedWindows.studio}
-        isMaximized={maximizedWindows.studio}
-        isFocused={activeWindowId === "studio"}
-        zIndex={windowZIndices.studio}
-        initialWidth={960}
-        initialHeight={620}
-        isMobile={isMobile}
-        potatoMode={potatoMode}
-        onClose={() => closeApp("studio")}
-        onMinimize={() => minimizeApp("studio")}
-        onToggleMaximize={() => toggleMaximizeApp("studio")}
-        onFocus={() => focusApp("studio")}
-        onHoverFocus={() => focusApp("studio")}
-      >
-        <ImageStudioApp locale={locale} />
-      </WindowFrame>
-
+      {APPS.map((app) => {
+        const title = t(app.nameKey, locale);
+        return (
+          <WindowFrame
+            key={app.id}
+            id={app.id}
+            title={title}
+            iconSrc={app.icon}
+            isOpen={openWindows[app.id]}
+            isMinimized={minimizedWindows[app.id]}
+            isMaximized={maximizedWindows[app.id]}
+            isFocused={activeWindowId === app.id}
+            zIndex={windowZIndices[app.id]}
+            initialWidth={app.size.w}
+            initialHeight={app.size.h}
+            isMobile={isMobile}
+            potatoMode={potatoMode}
+            onClose={() => closeApp(app.id)}
+            onMinimize={() => minimizeApp(app.id)}
+            onToggleMaximize={() => toggleMaximizeApp(app.id)}
+            onFocus={() => focusApp(app.id)}
+            onHoverFocus={() => focusApp(app.id)}
+          >
+            <AppHost
+              id={app.id}
+              name={title}
+              locale={locale}
+              openApp={openApp}
+              closeSelf={() => closeApp(app.id)}
+              isMobile={isMobile}
+              potatoMode={potatoMode}
+              setLocale={changeLocale}
+              isMuted={isMuted}
+              toggleMute={toggleMute}
+              togglePotatoMode={togglePotatoMode}
+              onSimulateExpiry={simulateExpiry}
+              onTriggerBSOD={triggerBSOD}
+            />
+          </WindowFrame>
+        );
+      })}
 
       {/* RadjaOS Bottom Taskbar */}
       <Taskbar
@@ -725,6 +497,7 @@ export const DesktopEnv: React.FC = () => {
         toggleMute={toggleMute}
         potatoMode={potatoMode}
         togglePotatoMode={togglePotatoMode}
+        onCloseApp={closeApp}
         onLockScreen={handleLogout}
         onTriggerBSOD={triggerBSOD}
         onToggleShowDesktop={toggleShowDesktop}

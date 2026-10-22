@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e1065"/>
+      <stop offset="100%" stop-color="#172554"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <rect x="14" y="16" width="100" height="100" rx="26" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Palette Wheel -->
+  <circle cx="64" cy="64" r="34" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="64" cy="42" r="10" fill="#f43f5e"/>
+  <circle cx="83" cy="53" r="10" fill="#fb923c"/>
+  <circle cx="83" cy="75" r="10" fill="#eab308"/>
+  <circle cx="64" cy="86" r="10" fill="#22c55e"/>
+  <circle cx="45" cy="75" r="10" fill="#06b6d4"/>
+  <circle cx="45" cy="53" r="10" fill="#8b5cf6"/>
+  <circle cx="64" cy="64" r="11" fill="#ffffff"/>
+  <circle cx="64" cy="64" r="8" fill="#0284c7"/>
+</svg>

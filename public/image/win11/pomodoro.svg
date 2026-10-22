@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6b6b"/>
+      <stop offset="100%" stop-color="#d93838"/>
+    </linearGradient>
+    <linearGradient id="leaf" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#51cf66"/>
+      <stop offset="100%" stop-color="#2f9e44"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="14" y="22" width="100" height="96" rx="28" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Top Leaf & Stem -->
+  <path d="M64 12 C64 12 60 24 54 26 C48 28 42 22 42 22 C42 22 48 32 58 30 C64 28 64 22 64 12 Z" fill="url(#leaf)"/>
+  <path d="M64 12 C64 12 68 24 74 26 C80 28 86 22 86 22 C86 22 80 32 70 30 C64 28 64 22 64 12 Z" fill="url(#leaf)"/>
+  <rect x="61" y="8" width="6" height="16" rx="3" fill="#2b8a3e"/>
+  <!-- Clock ticks inside tomato -->
+  <circle cx="64" cy="70" r="32" fill="#fff" fill-opacity="0.15"/>
+  <circle cx="64" cy="70" r="28" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="4 6" opacity="0.8"/>
+  <line x1="64" y1="70" x2="64" y2="52" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="64" y1="70" x2="78" y2="70" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="64" cy="70" r="5" fill="#fff"/>
+</svg>

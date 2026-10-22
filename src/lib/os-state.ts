@@ -7,7 +7,23 @@ export type AppId =
   | "tools"
   | "trash"
   | "settings"
-  | "studio";
+  | "studio"
+  | "pomodoro"
+  | "color"
+  | "text"
+  | "converter"
+  | "git"
+  | "formatter"
+  | "media"
+  | "documents"
+  | "code"
+  | "json"
+  | "base64"
+  | "hash"
+  | "jwt"
+  | "uuid"
+  | "epoch"
+  | "qr";
 
 
 export interface WindowState {

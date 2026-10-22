@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+    <linearGradient id="wand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8"/>
+      <stop offset="100%" stop-color="#f43f5e"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="14" y="16" width="100" height="100" rx="26" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- Magic Wand -->
+  <line x1="36" y1="92" x2="82" y2="46" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+  <line x1="82" y1="46" x2="92" y2="36" stroke="#38bdf8" stroke-width="8" stroke-linecap="round"/>
+  <!-- Sparkles -->
+  <path d="M48 38 L51 44 L57 47 L51 50 L48 56 L45 50 L39 47 L45 44 Z" fill="#fde047"/>
+  <path d="M88 68 L90 73 L95 75 L90 77 L88 82 L86 77 L81 75 L86 73 Z" fill="#67e8f9"/>
+  <path d="M84 22 L86 26 L90 27 L86 28 L84 32 L82 28 L78 27 L82 26 Z" fill="#fde047"/>
+</svg>

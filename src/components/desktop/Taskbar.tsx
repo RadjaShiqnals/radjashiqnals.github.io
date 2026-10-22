@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { type AppId } from "../../lib/os-state";
-import { type Locale, type TranslationKey, localeNames, t } from "../../lib/i18n";
+import { type Locale, localeNames, t } from "../../lib/i18n";
 import {
   Volume2,
   VolumeX,
@@ -17,6 +17,25 @@ import {
   Sparkles,
 } from "lucide-react";
 import { playWindowOpen } from "../../lib/sound";
+import { APPS } from "../../data/app-manifest";
+
+/** Lightweight subsequence scorer: rewards word starts and contiguous runs. */
+function fuzzyScore(query: string, target: string): number {
+  if (!query) return 1;
+  if (target.includes(query)) return 100 - target.indexOf(query);
+  let score = 0;
+  let cursor = 0;
+  let streak = 0;
+  for (const char of query) {
+    const found = target.indexOf(char, cursor);
+    if (found === -1) return 0;
+    const boundary = found === 0 || /[\s\-_/.]/.test(target[found - 1]);
+    score += 2 + (boundary ? 4 : 0) + streak;
+    streak = found === cursor ? streak + 2 : 0;
+    cursor = found + 1;
+  }
+  return score;
+}
 
 const GithubIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -42,6 +61,7 @@ interface TaskbarProps {
   toggleMute: () => void;
   potatoMode: boolean;
   togglePotatoMode: () => void;
+  onCloseApp: (id: AppId) => void;
   onLockScreen: () => void;
   onTriggerBSOD: () => void;
   onToggleShowDesktop: () => void;
@@ -59,6 +79,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   toggleMute,
   potatoMode,
   togglePotatoMode,
+  onCloseApp,
   onLockScreen,
   onTriggerBSOD,
   onToggleShowDesktop,
@@ -85,6 +106,9 @@ export const Taskbar: React.FC<TaskbarProps> = ({
   const quickSettingsRef = useRef<HTMLDivElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
+  const jumpListRef = useRef<HTMLDivElement>(null);
+
+  const [jumpListAppId, setJumpListAppId] = useState<AppId | null>(null);
 
   // Time & Date updater
   useEffect(() => {
@@ -108,6 +132,19 @@ export const Taskbar: React.FC<TaskbarProps> = ({
     updateTime();
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Listen for global shortcut toggle-start
+  useEffect(() => {
+    const handleToggleStart = () => {
+      setIsStartOpen((prev) => !prev);
+      setIsQuickSettingsOpen(false);
+      setIsCalendarOpen(false);
+      setIsLangMenuOpen(false);
+      setJumpListAppId(null);
+    };
+    window.addEventListener("radjaos:toggle-start", handleToggleStart);
+    return () => window.removeEventListener("radjaos:toggle-start", handleToggleStart);
   }, []);
 
   // Close flyouts on click outside
@@ -147,43 +184,63 @@ export const Taskbar: React.FC<TaskbarProps> = ({
       ) {
         setIsLangMenuOpen(false);
       }
+      if (
+        jumpListAppId &&
+        jumpListRef.current &&
+        !jumpListRef.current.contains(target) &&
+        !target.closest("[data-taskbar-item]")
+      ) {
+        setJumpListAppId(null);
+      }
     };
 
     window.addEventListener("pointerdown", handleClickOutside);
     return () => window.removeEventListener("pointerdown", handleClickOutside);
-  }, [isStartOpen, isQuickSettingsOpen, isCalendarOpen, isLangMenuOpen]);
+  }, [isStartOpen, isQuickSettingsOpen, isCalendarOpen, isLangMenuOpen, jumpListAppId]);
 
-  const taskbarApps: { id: AppId; nameKey: TranslationKey; iconSrc: string }[] = [
-    { id: "about", nameKey: "app.about", iconSrc: "/image/win11/thispc.png" },
-    { id: "projects", nameKey: "app.projects", iconSrc: "/image/win11/explorer.png" },
-    { id: "skills", nameKey: "app.skills", iconSrc: "/image/win11/vscode.png" },
-    { id: "experience", nameKey: "app.experience", iconSrc: "/image/win11/experience.png" },
-    { id: "terminal", nameKey: "app.terminal", iconSrc: "/image/win11/terminal.png" },
-    { id: "tools", nameKey: "app.tools", iconSrc: "/image/win11/taskmanager.png" },
-    { id: "studio", nameKey: "app.studio", iconSrc: "/image/win11/studio.png" },
-    { id: "settings", nameKey: "app.settings", iconSrc: "/image/win11/settings.png" },
-    { id: "trash", nameKey: "app.trash", iconSrc: "/image/win11/bin0.png" },
-  ];
-
+  // Dock apps: pinned apps + any active/running apps
+  const dockApps = useMemo(() => {
+    return APPS.filter((app) => app.pinTaskbar || openWindows[app.id]);
+  }, [openWindows]);
 
   const handleTaskbarItemClick = (id: AppId) => {
     if (openWindows[id]) {
-      if (activeWindowId === id) {
-        // Active window clicked: minimize it
+      if (activeWindowId === id && !minimizedWindows[id]) {
         onMinimizeApp(id);
       } else {
-        // Open window clicked: focus and bring to front
         onOpenApp(id);
       }
     } else {
-      // Not open: open it
       onOpenApp(id);
     }
+    setJumpListAppId(null);
   };
 
-  const filteredApps = taskbarApps.filter((app) =>
-    t(app.nameKey, locale).toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleTaskbarItemContextMenu = (e: React.MouseEvent, id: AppId) => {
+    e.preventDefault();
+    setJumpListAppId((prev) => (prev === id ? null : id));
+  };
+
+  // Start menu search with fuzzy scoring
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return APPS.filter((app) => app.pinTaskbar || app.desktop);
+    }
+    const q = searchQuery.toLowerCase().trim();
+    return APPS.map((app) => {
+      const name = t(app.nameKey, locale).toLowerCase();
+      const nameScore = fuzzyScore(q, name);
+      const keywordScore = Math.max(
+        0,
+        ...app.keywords.map((kw) => fuzzyScore(q, kw.toLowerCase()))
+      );
+      const best = Math.max(nameScore * 1.5, keywordScore);
+      return { app, score: best };
+    })
+      .filter((item) => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map((item) => item.app);
+  }, [searchQuery, locale]);
 
   return (
     <>
@@ -223,7 +280,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
 
               {/* Pinned Apps Grid (6 columns) */}
               <div className="grid grid-cols-4 sm:grid-cols-6 gap-y-3 gap-x-2">
-                {filteredApps.map((app) => (
+                {searchResults.map((app) => (
                   <button
                     key={app.id}
                     onClick={() => {
@@ -233,7 +290,7 @@ export const Taskbar: React.FC<TaskbarProps> = ({
                     className="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-white/10 active:bg-white/15 transition-all group cursor-pointer"
                   >
                     <img
-                      src={app.iconSrc}
+                      src={app.icon}
                       alt={t(app.nameKey, locale)}
                       className="w-8 h-8 object-contain drop-shadow group-hover:scale-105 transition-transform"
                     />
@@ -675,45 +732,96 @@ export const Taskbar: React.FC<TaskbarProps> = ({
             <Search className="w-4 h-4" />
           </button>
 
-          {/* Taskbar App Icons: On mobile show only open/active apps; on desktop show all pinned */}
-          {taskbarApps.map((app) => {
+          {/* Taskbar App Icons: On mobile show only open/active apps; on desktop show all pinned & open apps */}
+          {dockApps.map((app) => {
             const isOpen = openWindows[app.id];
             const isMin = minimizedWindows[app.id];
             const isActive = activeWindowId === app.id && !isMin;
+            const isJumpOpen = jumpListAppId === app.id;
 
             return (
-              <button
-                key={app.id}
-                onClick={() => handleTaskbarItemClick(app.id)}
-                className={`group relative w-9 h-9 sm:w-10 sm:h-10 rounded-md items-center justify-center transition-all cursor-pointer ${
-                  isOpen ? "flex" : "hidden md:flex"
-                } ${
-                  isActive
-                    ? "bg-white/10"
-                    : isOpen
-                    ? "hover:bg-white/10"
-                    : "hover:bg-white/5 active:scale-95"
-                }`}
-                title={t(app.nameKey, locale)}
-              >
-                {/* App Icon */}
-                <img
-                  src={app.iconSrc}
-                  alt={t(app.nameKey, locale)}
-                  className="w-5 h-5 sm:w-6 sm:h-6 object-contain group-hover:scale-105 transition-transform"
-                />
-
-                {/* RadjaOS Running App Indicator Pill */}
-                {isOpen && (
-                  <span
-                    className={`absolute bottom-0.5 rounded-full transition-all duration-200 ${
-                      isActive
-                        ? "w-3.5 sm:w-4 h-[3px] bg-[#60cdff] group-hover:w-5"
-                        : "w-1.5 h-[3px] bg-neutral-400 group-hover:w-3"
-                    }`}
+              <div key={app.id} className="relative">
+                <button
+                  data-taskbar-item
+                  onClick={() => handleTaskbarItemClick(app.id)}
+                  onContextMenu={(e) => handleTaskbarItemContextMenu(e, app.id)}
+                  className={`group relative w-9 h-9 sm:w-10 sm:h-10 rounded-md items-center justify-center transition-all cursor-pointer ${
+                    isOpen ? "flex" : "hidden md:flex"
+                  } ${
+                    isActive
+                      ? "bg-white/10"
+                      : isOpen
+                      ? "hover:bg-white/10"
+                      : "hover:bg-white/5 active:scale-95"
+                  }`}
+                  title={t(app.nameKey, locale)}
+                >
+                  {/* App Icon */}
+                  <img
+                    src={app.icon}
+                    alt={t(app.nameKey, locale)}
+                    className="w-5 h-5 sm:w-6 sm:h-6 object-contain group-hover:scale-105 transition-transform"
                   />
+
+                  {/* RadjaOS Running App Indicator Pill */}
+                  {isOpen && (
+                    <span
+                      className={`absolute bottom-0.5 rounded-full transition-all duration-200 ${
+                        isActive
+                          ? "w-3.5 sm:w-4 h-[3px] bg-[#60cdff] group-hover:w-5"
+                          : "w-1.5 h-[3px] bg-neutral-400 group-hover:w-3"
+                      }`}
+                    />
+                  )}
+                </button>
+
+                {/* Jump List Menu */}
+                {isJumpOpen && (
+                  <div
+                    ref={jumpListRef}
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 rounded-xl acrylic-surface border border-white/15 p-1.5 shadow-2xl z-50 text-xs flex flex-col gap-0.5 animate-win-flyout backdrop-blur-xl bg-[#1e1e1e]/90 text-white select-none"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center gap-2 px-2.5 py-1.5 text-neutral-300 font-medium border-b border-white/10 mb-0.5">
+                      <img src={app.icon} alt="" className="w-4 h-4 object-contain" />
+                      <span className="truncate">{t(app.nameKey, locale)}</span>
+                    </div>
+                    {isOpen ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            if (isMin) onOpenApp(app.id);
+                            else onMinimizeApp(app.id);
+                            setJumpListAppId(null);
+                          }}
+                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-neutral-200 hover:text-white transition-colors cursor-pointer"
+                        >
+                          {isMin ? "Restore" : "Minimize"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            onCloseApp(app.id);
+                            setJumpListAppId(null);
+                          }}
+                          className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-red-500/20 text-red-300 hover:text-red-200 transition-colors cursor-pointer"
+                        >
+                          Close Window
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          onOpenApp(app.id);
+                          setJumpListAppId(null);
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-neutral-200 hover:text-white transition-colors cursor-pointer"
+                      >
+                        Open Application
+                      </button>
+                    )}
+                  </div>
                 )}
-              </button>
+              </div>
             );
           })}
         </div>

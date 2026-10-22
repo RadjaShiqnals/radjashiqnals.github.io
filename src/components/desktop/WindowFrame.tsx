@@ -213,6 +213,7 @@ export const WindowFrame: React.FC<WindowFrameProps> = ({
       {/* Main RadjaOS Frame (Unified tree so responsive layout switches never unmount children) */}
       <div
         ref={windowRef}
+        data-window-id={id}
         onPointerDown={onFocus}
         onClick={isMobile ? onFocus : undefined}
         onMouseEnter={() => {

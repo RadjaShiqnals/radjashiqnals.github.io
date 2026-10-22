@@ -20,6 +20,7 @@ interface ContextMenuProps {
   onClose: () => void;
   onOpenApp: (id: AppId) => void;
   onRefresh: () => void;
+  onArrangeIcons: () => void;
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({
@@ -28,6 +29,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
   onClose,
   onOpenApp,
   onRefresh,
+  onArrangeIcons,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -69,13 +71,13 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
         <span>View</span>
       </button>
 
-      {/* Sort by */}
+      {/* Arrange icons */}
       <button
-        onClick={onClose}
+        onClick={onArrangeIcons}
         className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg hover:bg-white/10 text-neutral-200 hover:text-white transition-colors cursor-pointer"
       >
         <ArrowUpDown className="w-3.5 h-3.5 text-neutral-400" />
-        <span>Sort by</span>
+        <span>Arrange icons</span>
       </button>
 
       {/* Refresh */}
